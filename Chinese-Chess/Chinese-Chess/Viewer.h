@@ -1,5 +1,8 @@
 #pragma once
 #include <string>
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;
 
 // 用於把前端所需的資料包裝成 Json
 class Viewer {
