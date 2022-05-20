@@ -139,7 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Chinese-Chess.cpp" />
+    <ClCompile Include="Chess.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Position.cpp" />
+    <ClCompile Include="Record.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Chess.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Position.h" />
+    <ClInclude Include="Record.h" />
+    <ClInclude Include="Viewer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
