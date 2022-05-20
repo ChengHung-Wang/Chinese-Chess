@@ -6230,6 +6230,9 @@ class json_sax_dom_parser
 
     bool key(string_t& val)
     {
+        JSON_ASSERT(!ref_stack.empty());
+        JSON_ASSERT(ref_stack.back()->is_object());
+
         // add null at given key and store the reference for later
         object_element = &(ref_stack.back()->m_value.object->operator[](val));
         return true;
@@ -6237,6 +6240,9 @@ class json_sax_dom_parser
 
     bool end_object()
     {
+        JSON_ASSERT(!ref_stack.empty());
+        JSON_ASSERT(ref_stack.back()->is_object());
+
         ref_stack.back()->set_parents();
         ref_stack.pop_back();
         return true;
@@ -6256,6 +6262,9 @@ class json_sax_dom_parser
 
     bool end_array()
     {
+        JSON_ASSERT(!ref_stack.empty());
+        JSON_ASSERT(ref_stack.back()->is_array());
+
         ref_stack.back()->set_parents();
         ref_stack.pop_back();
         return true;
@@ -10494,6 +10503,11 @@ class binary_reader
                 {
                     return false;
                 }
+                if (number < 0)
+                {
+                    return sax->parse_error(chars_read, get_token_string(), parse_error::create(113, chars_read,
+                                            exception_message(input_format, "count in an optimized container must be positive", "size"), nullptr));
+                }
                 result = static_cast<std::size_t>(number); // NOLINT(bugprone-signed-char-misuse,cert-str34-c): number is not a char
                 return true;
             }
@@ -10504,6 +10518,11 @@ class binary_reader
                 if (JSON_HEDLEY_UNLIKELY(!get_number(input_format, number)))
                 {
                     return false;
+                }
+                if (number < 0)
+                {
+                    return sax->parse_error(chars_read, get_token_string(), parse_error::create(113, chars_read,
+                                            exception_message(input_format, "count in an optimized container must be positive", "size"), nullptr));
                 }
                 result = static_cast<std::size_t>(number);
                 return true;
@@ -10516,6 +10535,11 @@ class binary_reader
                 {
                     return false;
                 }
+                if (number < 0)
+                {
+                    return sax->parse_error(chars_read, get_token_string(), parse_error::create(113, chars_read,
+                                            exception_message(input_format, "count in an optimized container must be positive", "size"), nullptr));
+                }
                 result = static_cast<std::size_t>(number);
                 return true;
             }
@@ -10526,6 +10550,11 @@ class binary_reader
                 if (JSON_HEDLEY_UNLIKELY(!get_number(input_format, number)))
                 {
                     return false;
+                }
+                if (number < 0)
+                {
+                    return sax->parse_error(chars_read, get_token_string(), parse_error::create(113, chars_read,
+                                            exception_message(input_format, "count in an optimized container must be positive", "size"), nullptr));
                 }
                 result = static_cast<std::size_t>(number);
                 return true;
@@ -10594,6 +10623,15 @@ class binary_reader
                 }
                 if (!dim.empty())  // if ndarray, convert to an object in JData annotated array format
                 {
+                    for (auto i : dim) // test if any dimension in an ndarray is 0, if so, return a 1D empty container
+                    {
+                        if ( i == 0 )
+                        {
+                            result = 0;
+                            return true;
+                        }
+                    }
+
                     string_t key = "_ArraySize_";
                     if (JSON_HEDLEY_UNLIKELY(!sax->start_object(3) || !sax->key(key) || !sax->start_array(dim.size())))
                     {
@@ -22511,29 +22549,6 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::bjdata).sax_parse(input_format_t::bjdata, &sdp, strict);
         return res ? result : basic_json(value_t::discarded);
     }
-
-    template<typename T>
-    JSON_HEDLEY_WARN_UNUSED_RESULT
-    static basic_json from_bjdata(const T* ptr, std::size_t len,
-                                  const bool strict = true,
-                                  const bool allow_exceptions = true)
-    {
-        return from_bjdata(ptr, ptr + len, strict, allow_exceptions);
-    }
-
-    JSON_HEDLEY_WARN_UNUSED_RESULT
-    static basic_json from_bjdata(detail::span_input_adapter&& i,
-                                  const bool strict = true,
-                                  const bool allow_exceptions = true)
-    {
-        basic_json result;
-        detail::json_sax_dom_parser<basic_json> sdp(result, allow_exceptions);
-        auto ia = i.get();
-        // NOLINTNEXTLINE(hicpp-move-const-arg,performance-move-const-arg)
-        const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::bjdata).sax_parse(input_format_t::bjdata, &sdp, strict);
-        return res ? result : basic_json(value_t::discarded);
-    }
-
 
     /// @brief create a JSON value from an input in BSON format
     /// @sa https://json.nlohmann.me/api/basic_json/from_bson/
