@@ -1,34 +1,31 @@
 ﻿#include <iostream>
 #include <string>
+#include "GameManager.h"
 
 int main() {
+	GameManager gm = GameManager();
 	std::string opt;
-	std::cin >> opt;
-	if (opt == "haveLast") {
+	while (std::cin >> opt) {
+		if (opt == "save") {
 
-	}
-	else if (opt == "getLast") {
+		}
+		else if (opt == "setFile") {
 
-	}
-	else if (opt == "getNew") {
+		}
+		else if (opt == "setNew") {
 
-	}
-	else if (opt == "getRound") {
+		}
+		else if (opt == "getRound") {
 
-	}
-	else if (opt == "getMove") {
+		}
+		else if (opt == "getMove") {
 
-	}
-	else if (opt == "move") {
+		}
+		else if (opt == "move") {
 
-	}
-	else if (opt == "save") {
+		}
+		else if (opt == "getTime") {
 
-	}
-	else if (opt == "getTime") {
-
-	}
-	else if (opt == "getLast") {
-
+		}
 	}
 }

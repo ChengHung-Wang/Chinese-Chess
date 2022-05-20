@@ -21,6 +21,12 @@
     <ClCompile Include="Chess.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="Position.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Record.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chess.h">
@@ -35,7 +41,7 @@
     <ClInclude Include="Position.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="Board.h">
+    <ClInclude Include="Record.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

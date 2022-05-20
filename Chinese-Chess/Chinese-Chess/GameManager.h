@@ -1,13 +1,29 @@
 #pragma once
+#include <iostream>
+#include <string>
+#include <vector>
 #include "Chess.h"
-#include "Board.h"
 #include "Viewer.h"
+#include "Record.h"
 
 class GameManager {
 
 public:
-	std::vector<Chess> onBoard;
-	ChessEnum currentPlayer;
+	std::vector<Chess*> onBoard;
+	ColorEnum currentPlayer = ColorEnum::Red;
 	Board board;
 	Viewer viewer;
+	int rime = 600;
+	int bTime = 600;
+	std::vector<Record> record;
+
+public:
+	GameManager() {
+		// ³o¼Ë´ú¸Õ
+		General g(Position(4, 0), ColorEnum::Black);
+		std::vector<Position> move = g.canMove(this->board);
+	}
+
+	void readFile();
+
 };

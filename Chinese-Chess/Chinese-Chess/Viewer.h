@@ -1,21 +1,19 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
 
-// ¥Î©ó§â«eºÝ©Ò»Ýªº¸ê®Æ¥]¸Ë¦¨ Json
+// Use for exchange data with UI
 class Viewer {
 
 public:
-	std::string haveLast();
-	std::string getLast();
-	std::string getNew();
+	std::string setFile();
+	std::string setNew();
+	std::string getTime();
 	std::string getRound();
 	std::string getMove();
-	std::string move();
-	std::string save();
-	std::string getTime();
-	std::string getLast();
+	void move();
+	void save();
 
 };
