@@ -55,4 +55,21 @@ p {
     word-break: break-all!important;
 }
 
+.router-link-active {
+    color: red;
+}
 
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    transition: opacity .25s ease;
+}
+
+.fade-leave {}
+
+.fade-leave-active {
+    transition: opacity .25s ease;
+    opacity: 0;
+}
