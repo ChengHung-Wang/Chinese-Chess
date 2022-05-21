@@ -1,128 +1,148 @@
 <template>
-  <div id="wrapper">
-    <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
-    <main>
-      <div class="left-side">
-        <span class="title">
-          Welcome to your new project!
-        </span>
-        <system-information></system-information>
-      </div>
-
-      <div class="right-side">
-        <div class="doc">
-          <div class="title">Getting Started</div>
-          <p>
-            electron-vue comes packed with detailed documentation that covers everything from
-            internal configurations, using the project structure, building your application,
-            and so much more.
-          </p>
-          <button @click="open('https://simulatedgreg.gitbooks.io/electron-vue/content/')">Read the Docs</button><br><br>
+  <div id="content" class="fcc">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 fcc word-break">
+          <h1 class="text-center w-100">
+            歡迎！
+          </h1>
+          <p class="text-center">您希望怎麼開始遊戲？</p>
         </div>
-        <div class="doc">
-          <div class="title alt">Other Documentation</div>
-          <button class="alt" @click="open('https://electron.atom.io/docs/')">Electron</button>
-          <button class="alt" @click="open('https://vuejs.org/v2/guide/')">Vue.js</button>
+        <div class="col-6" @click="selected = true; hasConfig = true">
+          <el-badge :value="'已選'" class="badge-item w-100" type="success" :hidden="!(selected && hasConfig)">
+            <el-card class="box-card w-100" :shadow="selected && hasConfig ? 'always' : 'hover'">
+              <h4 class="text-center mb-3">從上次的地方開始</h4>
+              <el-upload
+                  class="fcc"
+                  ref="upload-sql"
+                  action=''
+                  accept=".txt,.sql, .js"
+                  :auto-upload="false"
+                  :on-change="changeFile"
+                  :http-request="uploadHandler">
+                <el-button class="w-100" plain slot="trigger" size="small">
+                  <i class="el-icon-upload mr-1 font-size-14"></i>上傳Config
+                </el-button>
+              </el-upload>
+            </el-card>
+          </el-badge>
+        </div>
+        <div class="col-6" @click="selected = true; hasConfig = false;">
+          <el-badge :value="'已選'" class="badge-item w-100" type="success" :hidden="!(selected && !hasConfig)">
+            <el-card class="box-card w-100" :shadow="selected && !hasConfig ? 'always' : 'hover'"  >
+              <h4 class="text-center mb-5">開始新的遊戲</h4>
+              <el-button type="primary" plain><i class="el-icon-right el-text-primary"></i></el-button>
+            </el-card>
+          </el-badge>
+        </div>
+        <div class="col-12 mt-5">
+          <el-button type="primary" plain @click="goToGame()">
+            <i class="el-icon-right el-text-primary"></i>
+            開始遊戲
+          </el-button>
         </div>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 
 <script>
   import SystemInformation from './LandingPage/SystemInformation'
-
   export default {
     name: 'landing-page',
+    data() {
+      return {
+        configText: '',
+        hasConfig: false,
+        selected: false
+      }
+    },
     components: { SystemInformation },
     methods: {
-      open (link) {
-        this.$electron.shell.openExternal(link)
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      getRandomNum (min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min)
+      },
+      changeFile (file, fileList) {
+        if (file.status === 'ready') {
+          // 已上传文件列表如果存在 2 条记录，移除第一条，实现替换效果
+          if (fileList.length === 2) {
+            fileList.shift()
+          }
+          // 手动开始上传
+          this.$refs['upload-sql'].submit()
+        }
+      },
+      uploadHandler (params) {
+        const isLt2M = params.file.size / 1024 / 1024 <= 2
+        if (!isLt2M) {
+          this.$notify({
+            message: '檔案超過2MB限制',
+            type: 'warning',
+            title: '警告'
+          })
+          return
+        }
+        params.onProgress({ percent: this.getRandomNum(19, 99) })
+        setTimeout(() => {
+          this.readText(params)
+        }, 100)
+      },
+      async readText (params) {
+        const readFile = new FileReader()
+        readFile.onload = (e) => {
+          this.configText = e.target.result
+          params.onProgress({ percent: 100 })
+          params.onSuccess()
+        }
+        readFile.readAsText(params.file)
+      },
+      goToGame() {
+        if (!this.selected) {
+          this.$message({
+            message: "尚未選擇遊戲模式",
+            type: "error",
+            showClose: true,
+            closable: true
+          });
+        } else if (this.hasConfig && this.configText.length <= 0) {
+          this.$message({
+            message: "請上傳文件",
+            type: "error",
+            showClose: true,
+            closable: true
+          });
+        }else {
+          //  TODO: 補足cli功能，config
+          this.$router.push("/game");
+        }
       }
     }
   }
 </script>
 
-<style>
-  @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
-
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  body { font-family: 'Source Sans Pro', sans-serif; }
-
-  #wrapper {
-    background:
-      radial-gradient(
-        ellipse at top left,
-        rgba(255, 255, 255, 1) 40%,
-        rgba(229, 229, 229, .9) 100%
-      );
+<style scoped>
+  #content {
+    position: absolute;
+    left: 0;
+    right: 0;
     height: 100vh;
-    padding: 60px 80px;
-    width: 100vw;
   }
-
-  #logo {
-    height: auto;
-    margin-bottom: 20px;
-    width: 420px;
+  .el-card {
+    border: 2px solid #c6e2ff;
+    height: 200px;
   }
-
-  main {
-    display: flex;
-    justify-content: space-between;
+  button {
+    width: 100%!important;
   }
-
-  main > div { flex-basis: 50%; }
-
-  .left-side {
-    display: flex;
-    flex-direction: column;
+</style>
+<style>
+  .el-upload-list {
+    width: 100% !important;
   }
-
-  .welcome {
-    color: #555;
-    font-size: 23px;
-    margin-bottom: 10px;
-  }
-
-  .title {
-    color: #2c3e50;
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 6px;
-  }
-
-  .title.alt {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-
-  .doc p {
-    color: black;
-    margin-bottom: 10px;
-  }
-
-  .doc button {
-    font-size: .8em;
-    cursor: pointer;
-    outline: none;
-    padding: 0.75em 2em;
-    border-radius: 2em;
-    display: inline-block;
-    color: #fff;
-    background-color: #4fc08d;
-    transition: all 0.15s ease;
-    box-sizing: border-box;
-    border: 1px solid #4fc08d;
-  }
-
-  .doc button.alt {
-    color: #42b983;
-    background-color: transparent;
+  .el-badge__content.is-fixed {
+    right: 20px!important;
   }
 </style>

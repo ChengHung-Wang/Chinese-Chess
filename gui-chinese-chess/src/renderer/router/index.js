@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import pinia from "../store/store.js";
+import { useGlobalStore } from "../store/global";
 
 Vue.use(Router)
 
@@ -8,11 +10,17 @@ export default new Router({
     {
       path: '/',
       name: 'landing-page',
-      component: require('@/components/LandingPage').default
+      component: require('@/components/LandingPage').default,
+      beforeEnter: (to, from, next) => {
+        const globalStore = useGlobalStore(pinia);
+        console.log(globalStore);
+        next();
+      }
     },
     {
-      path: '*',
-      redirect: '/'
+      path: '/game',
+      name: 'game',
+      component: require('@/components/Game').default
     }
   ]
 })

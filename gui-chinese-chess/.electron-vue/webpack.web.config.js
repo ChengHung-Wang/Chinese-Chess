@@ -77,7 +77,18 @@ let webConfig = {
             name: 'fonts/[name].[ext]'
           }
         }
-      }
+      },
+      // FIX: Can’t import the named export 'XXX' from non EcmaScript module
+      {
+        test: /\.cjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+      },
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+      },
     ]
   },
   plugins: [

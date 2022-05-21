@@ -1,0 +1,58 @@
+* {
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+div {
+    position: relative;
+}
+p {
+    color: #606266;
+}
+.mt-15 {margin-top: 15px;}
+.ml-15 {margin-left: 15px;}
+.mr-15 {margin-right: 15px;}
+.mb-15 {margin-bottom: 15px;}
+.row> *:last-child {
+    padding-right: 0!important;
+}
+.row> *:first-child {
+    padding-left: 0!important;
+}
+.fcc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.flc {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.fec {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+.fac {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.fbc {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.word-break {
+    word-break: break-all!important;
+}
+
+
