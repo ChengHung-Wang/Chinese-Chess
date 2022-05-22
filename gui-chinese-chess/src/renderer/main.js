@@ -18,8 +18,6 @@ Vue.use(PiniaVuePlugin);
 Vue.use(ElementUI);
 Vue.use(childProcess);
 
-
-
 childProcess.exec("g++ ../Chinese-Chess/Chinese-Chess/run.cpp -o run");
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))

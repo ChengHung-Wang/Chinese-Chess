@@ -73,3 +73,9 @@ p {
     transition: opacity .25s ease;
     opacity: 0;
 }
+.board-frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
