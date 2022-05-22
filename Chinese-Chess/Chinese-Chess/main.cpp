@@ -5,9 +5,10 @@
 using namespace std;
 
 int main() {
-	GameManager gm = GameManager();
-	std::string opt;
+	GameManager gm;
+	std::string opt, hash;
 	while (std::cin >> opt) {
+		std::cin >> hash;
 		if (opt == "save") {
 
 		}
@@ -15,7 +16,7 @@ int main() {
             cout << "as1234" << endl;
 		}
 		else if (opt == "setNew") {
-
+			std::cout << gm.setNew(hash);
 		}
 		else if (opt == "getRound") {
 
@@ -27,7 +28,7 @@ int main() {
 
 		}
 		else if (opt == "getTime") {
-
+			std::cout << gm.getTime(1, hash);
 		}
 	}
 }

@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <string>
+#include "ColorEnum.h"
+#include "Chess.h"
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -9,8 +11,8 @@ class Viewer {
 
 public:
 	std::string setFile();
-	std::string setNew();
-	std::string getTime();
+	std::string setNew(std::vector<Chess*> onBoard, int rTime, int bTime, std::string hash);
+	std::string getTime(int bTime, int rTime, int noTime, std::string hash);
 	std::string getRound();
 	std::string getMove();
 	void move();

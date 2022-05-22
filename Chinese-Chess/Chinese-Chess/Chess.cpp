@@ -51,14 +51,6 @@ std::string Chess::move(Board& board, Position& fromPos, Position& toPos) {
 	return "";
 }
 
-bool Board::applyMove(Position pos, ColorEnum color) {
-	return color == ColorEnum::Red ? this->board[pos.y][pos.x] <= 0 : this->board[pos.y][pos.x] >= 0; // black chess < 0 : red chess > 0
-}
-
-bool Board::applyEat(Position pos, ColorEnum color) {
-	return color == ColorEnum::Red ? this->board[pos.y][pos.x] < 0 : this->board[pos.y][pos.x] > 0; // black chess < 0 : red chess > 0
-}
-
 std::vector<Position> General::canMove(Board& board) {
 	std::vector<Position> movePos;
 	for (int x = 3; x <= 5; x++) {
