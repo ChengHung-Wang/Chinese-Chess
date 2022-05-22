@@ -30,6 +30,12 @@
     <ClCompile Include="Board.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chess.h">
