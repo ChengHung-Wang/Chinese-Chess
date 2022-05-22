@@ -139,13 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Board.cpp" />
     <ClCompile Include="Chess.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="Record.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Board.h" />
     <ClInclude Include="Chess.h" />
+    <ClInclude Include="ChessEnum.h" />
+    <ClInclude Include="ColorEnum.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="Record.h" />
