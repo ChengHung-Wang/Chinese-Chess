@@ -21,8 +21,7 @@
 </template>
 
 <script>
-import pinia from "../../store/store";
-import { useBoardStore } from "../../store/Game/board";
+import { useBoardStore } from "../../store/Game/board"
 import { defineComponent, ref } from 'vue-demi'
 
 export default defineComponent({
@@ -31,7 +30,7 @@ export default defineComponent({
     this.initBoardSize();
   },
   setup() {
-    const boardStore = ref(useBoardStore(pinia));
+    const boardStore = ref(useBoardStore());
     return {
       boardStore
     }

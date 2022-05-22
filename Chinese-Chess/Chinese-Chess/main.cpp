@@ -2,6 +2,8 @@
 #include <string>
 #include "GameManager.h"
 
+using namespace std;
+
 int main() {
 	GameManager gm = GameManager();
 	std::string opt;
@@ -10,7 +12,7 @@ int main() {
 
 		}
 		else if (opt == "setFile") {
-
+            cout << "as1234" << endl;
 		}
 		else if (opt == "setNew") {
 

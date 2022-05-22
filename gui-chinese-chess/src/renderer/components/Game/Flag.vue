@@ -6,10 +6,8 @@
 </template>
 
 <script>
-  import { defineComponent, ref } from 'vue-demi'
-  import { pinia } from '../../store/store.js'
   import { useFlagStore } from "../../store/Game/flag";
-
+  import { defineComponent, ref } from 'vue-demi'
   export default defineComponent({
     name: "flag",
     props: {
@@ -20,13 +18,10 @@
       specialStyle: Object
     },
     setup() {
-      const flagStore = ref(useFlagStore(pinia));
+      const flagStore = ref(useFlagStore());
       return {
         flagStore
       }
-    },
-    mounted() {
-      console.log(this.flagStore.$);
     }
   })
 </script>

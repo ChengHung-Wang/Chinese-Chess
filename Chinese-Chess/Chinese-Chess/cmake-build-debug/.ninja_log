@@ -1,0 +1,6 @@
+# ninja log v5
+1477	1541	1653218684727375731	Chinese_Chess	fc0731a549238280
+33	1477	1653218684655815349	CMakeFiles/Chinese_Chess.dir/main.cpp.o	d32edbf4b137af7f
+33	704	1653218683887966321	CMakeFiles/Chinese_Chess.dir/Chess.cpp.o	a779e2e996eb919
+34	689	1653218683872632701	CMakeFiles/Chinese_Chess.dir/Record.cpp.o	aa220a2e51bbd626
+33	93	1653218683279093773	CMakeFiles/Chinese_Chess.dir/Position.cpp.o	5bcaaa8e8ecf95ba

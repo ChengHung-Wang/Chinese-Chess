@@ -9,7 +9,7 @@ export const useBoardStore = defineStore('board', {
             borderWidth: 3
         },
         cubeSize: null,
-        init: false, // init status
+        init: false // init status
     }),
     actions: {
         getCubePosition(width, height) {

@@ -1,0 +1,3 @@
+/Applications/XAMPP/xamppfiles/htdocs/Chinese-Chess/Chinese-Chess/Chinese-Chess/cmake-build-debug/CMakeFiles/Chinese_Chess.dir
+/Applications/XAMPP/xamppfiles/htdocs/Chinese-Chess/Chinese-Chess/Chinese-Chess/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Applications/XAMPP/xamppfiles/htdocs/Chinese-Chess/Chinese-Chess/Chinese-Chess/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -1,9 +1,8 @@
 import Vue from 'vue'
+import VueCompositionAPI from "@vue/composition-api";
 import axios from 'axios'
-
 import App from './App'
 import router from './router'
-import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import childProcess from "child_process"
@@ -11,12 +10,13 @@ import { createPinia, PiniaVuePlugin } from 'pinia'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.js"
 import "./assets/css/style.css"
-// import log from 'electron-log'
-const pinia = createPinia();
 
-Vue.use(PiniaVuePlugin);
+Vue.use(VueCompositionAPI);
+Vue.use(PiniaVuePlugin)
 Vue.use(ElementUI);
 Vue.use(childProcess);
+
+const store = createPinia();
 
 childProcess.exec("g++ ../Chinese-Chess/Chinese-Chess/run.cpp -o run");
 
@@ -28,7 +28,6 @@ Vue.config.productionTip = false
 new Vue({
   components: { App },
   router,
-  store,
   template: '<App/>',
-  pinia
+  pinia: store
 }).$mount('#app')
