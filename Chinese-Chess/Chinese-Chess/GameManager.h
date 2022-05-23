@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <regex>
 #include "Chess.h"
 #include "Viewer.h"
 #include "Record.h"
@@ -54,7 +55,7 @@ public:
 		onBoard.push_back(new Soldier(Position(8, 6), ColorEnum::Red));
 	}
 
-	std::string setFile(std::string hash);
+	std::string setFile(int rows, std::string hash);
 	std::string setNew(std::string hash);
 	std::string getRound();
 	std::string getMove(ColorEnum color, ChessEnum chessId, int x, int y, std::string hash);
