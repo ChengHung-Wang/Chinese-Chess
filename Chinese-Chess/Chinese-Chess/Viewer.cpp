@@ -52,3 +52,12 @@ std::string Viewer::getMove(std::vector<Position> canMove, std::vector<Position>
 	}
 	return response.dump();
 }
+
+std::string Viewer::giveUp(ColorEnum color, std::string modal, std::string hash) {
+	json response = {
+		{"modal", modal},
+		{"winner", color},
+		{"hash", hash}
+	};
+	return response.dump();
+}

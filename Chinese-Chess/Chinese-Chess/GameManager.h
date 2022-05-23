@@ -61,6 +61,7 @@ public:
 	std::string getMove(ColorEnum color, ChessEnum chessId, int x, int y, std::string hash);
 	std::string getTime(ColorEnum color, std::string hash);
 	std::string save(std::string hash);
+	std::string giveUp(ColorEnum color, std::string hash);
 	void move(ColorEnum color, ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash);
 
 };
