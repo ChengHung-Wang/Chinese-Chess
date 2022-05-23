@@ -9,6 +9,20 @@ std::string GameManager::setNew(std::string hash) {
 	return this->viewer.setNew(this->onBoard, this->rTime, this->bTime, hash);
 }
 
+std::string GameManager::getMove(ColorEnum color, ChessEnum chessId, int x, int y, std::string hash) {
+	std::vector<Position> canMove;
+	std::vector<Position> canEat;
+	for (auto& c : this->onBoard) {
+		if (c->color == color && c->id == chessId && c->pos.x == x && c->pos.y == y) {
+			canMove = c->canMove(this->board);
+			canEat = c->canEat(this->board);
+			break;
+		}
+	}
+
+	return this->viewer.getMove(canMove, canEat, hash);
+}
+
 std::string GameManager::getTime(int color, std::string hash) {
 	if (color == 1) {
 		this->rTime--;

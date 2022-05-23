@@ -14,8 +14,7 @@ public:
 	std::string setNew(std::vector<Chess*> onBoard, int rTime, int bTime, std::string hash);
 	std::string getTime(int bTime, int rTime, int noTime, std::string hash);
 	std::string getRound();
-	std::string getMove();
-	void move();
+	std::string getMove(std::vector<Position> canMove, std::vector<Position> canEat, std::string hash);
 	void save();
 
 };
