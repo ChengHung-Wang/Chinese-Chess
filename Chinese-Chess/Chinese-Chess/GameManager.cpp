@@ -64,6 +64,20 @@ std::string GameManager::getTime(ColorEnum color, std::string hash) {
 	return this->viewer.getTime(this->bTime, this->rTime, noTime, hash);
 }
 
+std::string GameManager::giveUp(ColorEnum color, std::string hash) {
+	std::string modal;
+	ColorEnum winner;
+	if (color == ColorEnum::Red) {
+		modal = "Black Win!";
+		winner = ColorEnum::Black;
+	}
+	if (color == ColorEnum::Black) {
+		modal = "Red Win!";
+		winner = ColorEnum::Red;
+	}
+	return this->viewer.giveUp(winner, modal, hash);
+}
+
 void GameManager::move(ColorEnum color, ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash) {
 	std::string chessName;
 	switch (chessId)

@@ -15,6 +15,7 @@ public:
 	std::string getTime(int bTime, int rTime, int noTime, std::string hash);
 	std::string getRound();
 	std::string getMove(std::vector<Position> canMove, std::vector<Position> canEat, std::string hash);
+	std::string giveUp(ColorEnum color, std::string modal, std::string hash);
 	void save();
 
 };
