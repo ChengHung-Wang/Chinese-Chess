@@ -47,8 +47,10 @@ Cannon::Cannon(Position pos, ColorEnum color) : Chess(pos, color, ChessEnum::Can
 Soldier::Soldier(Position pos, ColorEnum color) : Chess(pos, color, ChessEnum::Soldier) {}
 
 
-std::string Chess::move(Board& board, Position& fromPos, Position& toPos) {
-	return "";
+std::string Chess::move(Board& board, Position fromPos, Position toPos) {
+	board.board[fromPos.y][fromPos.x] = 0;
+	board.board[toPos.y][toPos.x] = static_cast<int>(this->id) * (this->color == ColorEnum::Red ? 1 : -1);
+	return this->chessName + ": (" + std::to_string(toPos.x) + ", " + std::to_string(toPos.y) + ")";
 }
 
 std::vector<Position> General::canMove(Board& board) {

@@ -1,8 +1,6 @@
 #include "Record.h"
 
-Record::Record(Board board, ColorEnum player, std::string chessName, Position from, Position to, std::string move) {
-	this->onBoard = onBoard;
-	this->board = board;
+Record::Record(ColorEnum player, std::string chessName, Position from, Position to, std::string move) {
 	this->player = player;
 	this->chessName = chessName;
 	this->from = from;
