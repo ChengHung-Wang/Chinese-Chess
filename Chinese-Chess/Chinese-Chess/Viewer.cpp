@@ -9,8 +9,9 @@ std::string Viewer::setNew(std::vector<Chess*> onBoard, int rTime, int bTime, st
 	response["chess"] = json::array();
 	for (auto& c : onBoard) {
 		json chess = json::object({
-			{"name", c->id},
+			{"name", c->chessName},
 			{"color", c->color},
+			{"id", c->id},
 			{"x", c->pos.x},
 			{"y", c->pos.y}
 			});

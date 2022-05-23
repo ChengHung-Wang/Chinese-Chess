@@ -1,10 +1,14 @@
 ﻿#include <iostream>
 #include <string>
+
+
 #include "GameManager.h"
 
 using namespace std;
 
+
 int main() {
+	system("chcp 65001");
 	GameManager gm;
 	std::string opt, hash;
 	while (std::cin >> opt) {
@@ -13,7 +17,7 @@ int main() {
 
 		}
 		else if (opt == "setFile") {
-            cout << "as1234" << endl;
+			cout << "as1234" << endl;
 		}
 		else if (opt == "setNew") {
 			std::cout << gm.setNew(hash);
