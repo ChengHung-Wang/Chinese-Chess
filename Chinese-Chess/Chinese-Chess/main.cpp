@@ -35,7 +35,9 @@ int main() {
 			gm.move(static_cast<ColorEnum>(color), static_cast<ChessEnum>(chessId), fromX, fromY, toX, toY, hash);
 		}
 		else if (opt == "getTime") {
-			std::cout << gm.getTime(1, hash);
+			int color;
+			std::cin >> color;
+			std::cout << gm.getTime(static_cast<ColorEnum>(color), hash);
 		}
 	}
 }

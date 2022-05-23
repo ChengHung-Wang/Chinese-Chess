@@ -23,11 +23,11 @@ std::string GameManager::getMove(ColorEnum color, ChessEnum chessId, int x, int 
 	return this->viewer.getMove(canMove, canEat, hash);
 }
 
-std::string GameManager::getTime(int color, std::string hash) {
-	if (color == 1) {
+std::string GameManager::getTime(ColorEnum color, std::string hash) {
+	if (color == ColorEnum::Red) {
 		this->rTime--;
 	}
-	if (color == 2) {
+	if (color == ColorEnum::Black) {
 		this->bTime--;
 	}
 
