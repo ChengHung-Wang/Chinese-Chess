@@ -19,10 +19,6 @@ public:
 
 public:
 	GameManager() {
-		// 這樣測試
-		//General g(Position(4, 0), ColorEnum::Black);
-		//std::vector<Position> move = g.canMove(this->board);
-
 		onBoard.push_back(new General(Position(4, 0), ColorEnum::Black));
 		onBoard.push_back(new Advisor(Position(3, 0), ColorEnum::Black));
 		onBoard.push_back(new Advisor(Position(5, 0), ColorEnum::Black));
@@ -58,12 +54,12 @@ public:
 		onBoard.push_back(new Soldier(Position(8, 6), ColorEnum::Red));
 	}
 
-	std::string setFile();
+	std::string setFile(std::string hash);
 	std::string setNew(std::string hash);
 	std::string getRound();
 	std::string getMove();
 	std::string getTime(int color, std::string hash);
-	void save();
-	void move();
+	std::string save(std::string hash);
+	void move(ColorEnum color, ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash);
 
 };

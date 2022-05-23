@@ -6,8 +6,6 @@
 class Record {
 
 public:
-	std::vector<Chess*> onBoard;
-	Board board;
 	ColorEnum player;
 	std::string chessName;
 	Position from;
@@ -15,6 +13,6 @@ public:
 	std::string move;
 
 public:
-	Record(Board board, ColorEnum player, std::string chessName, Position from, Position to, std::string move);
+	Record(ColorEnum player, std::string chessName, Position from, Position to, std::string move);
 
 };
