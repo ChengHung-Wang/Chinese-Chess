@@ -57,7 +57,7 @@ public:
 	std::string setFile(std::string hash);
 	std::string setNew(std::string hash);
 	std::string getRound();
-	std::string getMove();
+	std::string getMove(ColorEnum color, ChessEnum chessId, int x, int y, std::string hash);
 	std::string getTime(int color, std::string hash);
 	std::string save(std::string hash);
 	void move(ColorEnum color, ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash);

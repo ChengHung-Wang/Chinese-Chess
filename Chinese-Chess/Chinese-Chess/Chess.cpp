@@ -95,43 +95,211 @@ std::vector<Position> General::canEat(Board& board) {
 }
 
 std::vector<Position> Advisor::canMove(Board& board) {
-	return std::vector<Position>();
+	std::vector<Position> movePos;
+	if (this->pos.x != 8 && board.applyMove(Position(this->pos.x + 1, this->pos.y), this->color)) {
+		movePos.push_back(Position(this->pos.x + 1, this->pos.y));
+	}
+	if (this->pos.x != 0 && board.applyMove(Position(this->pos.x - 1, this->pos.y), this->color)) {
+		movePos.push_back(Position(this->pos.x - 1, this->pos.y));
+	}
+	if (this->pos.y != 9 && board.applyMove(Position(this->pos.x, this->pos.y + 1), this->color)) {
+		movePos.push_back(Position(this->pos.x, this->pos.y + 1));
+	}
+	if (this->pos.y != 0 && board.applyMove(Position(this->pos.x, this->pos.y - 1), this->color)) {
+		movePos.push_back(Position(this->pos.x, this->pos.y - 1));
+	}
+
+	return movePos;
 }
 std::vector<Position> Advisor::canEat(Board& board) {
-	return std::vector<Position>();
+	std::vector<Position> eatPos;
+	if (this->pos.x != 8 && board.applyEat(Position(this->pos.x + 1, this->pos.y), this->color)) {
+		eatPos.push_back(Position(this->pos.x + 1, this->pos.y));
+	}
+	if (this->pos.x != 0 && board.applyEat(Position(this->pos.x - 1, this->pos.y), this->color)) {
+		eatPos.push_back(Position(this->pos.x - 1, this->pos.y));
+	}
+	if (this->pos.y != 9 && board.applyEat(Position(this->pos.x, this->pos.y + 1), this->color)) {
+		eatPos.push_back(Position(this->pos.x, this->pos.y + 1));
+	}
+	if (this->pos.y != 0 && board.applyEat(Position(this->pos.x, this->pos.y - 1), this->color)) {
+		eatPos.push_back(Position(this->pos.x, this->pos.y - 1));
+	}
+
+	return eatPos;
 }
 
 std::vector<Position> Elephant::canMove(Board& board) {
-	return std::vector<Position>();
+	std::vector<Position> movePos;
+	if (this->pos.x != 8 && board.applyMove(Position(this->pos.x + 1, this->pos.y), this->color)) {
+		movePos.push_back(Position(this->pos.x + 1, this->pos.y));
+	}
+	if (this->pos.x != 0 && board.applyMove(Position(this->pos.x - 1, this->pos.y), this->color)) {
+		movePos.push_back(Position(this->pos.x - 1, this->pos.y));
+	}
+	if (this->pos.y != 9 && board.applyMove(Position(this->pos.x, this->pos.y + 1), this->color)) {
+		movePos.push_back(Position(this->pos.x, this->pos.y + 1));
+	}
+	if (this->pos.y != 0 && board.applyMove(Position(this->pos.x, this->pos.y - 1), this->color)) {
+		movePos.push_back(Position(this->pos.x, this->pos.y - 1));
+	}
+
+	return movePos;
 }
 std::vector<Position> Elephant::canEat(Board& board) {
-	return std::vector<Position>();
+	std::vector<Position> eatPos;
+	if (this->pos.x != 8 && board.applyEat(Position(this->pos.x + 1, this->pos.y), this->color)) {
+		eatPos.push_back(Position(this->pos.x + 1, this->pos.y));
+	}
+	if (this->pos.x != 0 && board.applyEat(Position(this->pos.x - 1, this->pos.y), this->color)) {
+		eatPos.push_back(Position(this->pos.x - 1, this->pos.y));
+	}
+	if (this->pos.y != 9 && board.applyEat(Position(this->pos.x, this->pos.y + 1), this->color)) {
+		eatPos.push_back(Position(this->pos.x, this->pos.y + 1));
+	}
+	if (this->pos.y != 0 && board.applyEat(Position(this->pos.x, this->pos.y - 1), this->color)) {
+		eatPos.push_back(Position(this->pos.x, this->pos.y - 1));
+	}
+
+	return eatPos;
 }
 
 std::vector<Position> Chariot::canMove(Board& board) {
-	return std::vector<Position>();
+	std::vector<Position> movePos;
+	if (this->pos.x != 8 && board.applyMove(Position(this->pos.x + 1, this->pos.y), this->color)) {
+		movePos.push_back(Position(this->pos.x + 1, this->pos.y));
+	}
+	if (this->pos.x != 0 && board.applyMove(Position(this->pos.x - 1, this->pos.y), this->color)) {
+		movePos.push_back(Position(this->pos.x - 1, this->pos.y));
+	}
+	if (this->pos.y != 9 && board.applyMove(Position(this->pos.x, this->pos.y + 1), this->color)) {
+		movePos.push_back(Position(this->pos.x, this->pos.y + 1));
+	}
+	if (this->pos.y != 0 && board.applyMove(Position(this->pos.x, this->pos.y - 1), this->color)) {
+		movePos.push_back(Position(this->pos.x, this->pos.y - 1));
+	}
+
+	return movePos;
 }
 std::vector<Position> Chariot::canEat(Board& board) {
-	return std::vector<Position>();
+	std::vector<Position> eatPos;
+	if (this->pos.x != 8 && board.applyEat(Position(this->pos.x + 1, this->pos.y), this->color)) {
+		eatPos.push_back(Position(this->pos.x + 1, this->pos.y));
+	}
+	if (this->pos.x != 0 && board.applyEat(Position(this->pos.x - 1, this->pos.y), this->color)) {
+		eatPos.push_back(Position(this->pos.x - 1, this->pos.y));
+	}
+	if (this->pos.y != 9 && board.applyEat(Position(this->pos.x, this->pos.y + 1), this->color)) {
+		eatPos.push_back(Position(this->pos.x, this->pos.y + 1));
+	}
+	if (this->pos.y != 0 && board.applyEat(Position(this->pos.x, this->pos.y - 1), this->color)) {
+		eatPos.push_back(Position(this->pos.x, this->pos.y - 1));
+	}
+
+	return eatPos;
 }
 
 std::vector<Position> Horse::canMove(Board& board) {
-	return std::vector<Position>();
+	std::vector<Position> movePos;
+	if (this->pos.x != 8 && board.applyMove(Position(this->pos.x + 1, this->pos.y), this->color)) {
+		movePos.push_back(Position(this->pos.x + 1, this->pos.y));
+	}
+	if (this->pos.x != 0 && board.applyMove(Position(this->pos.x - 1, this->pos.y), this->color)) {
+		movePos.push_back(Position(this->pos.x - 1, this->pos.y));
+	}
+	if (this->pos.y != 9 && board.applyMove(Position(this->pos.x, this->pos.y + 1), this->color)) {
+		movePos.push_back(Position(this->pos.x, this->pos.y + 1));
+	}
+	if (this->pos.y != 0 && board.applyMove(Position(this->pos.x, this->pos.y - 1), this->color)) {
+		movePos.push_back(Position(this->pos.x, this->pos.y - 1));
+	}
+
+	return movePos;
 }
 std::vector<Position> Horse::canEat(Board& board) {
-	return std::vector<Position>();
+	std::vector<Position> eatPos;
+	if (this->pos.x != 8 && board.applyEat(Position(this->pos.x + 1, this->pos.y), this->color)) {
+		eatPos.push_back(Position(this->pos.x + 1, this->pos.y));
+	}
+	if (this->pos.x != 0 && board.applyEat(Position(this->pos.x - 1, this->pos.y), this->color)) {
+		eatPos.push_back(Position(this->pos.x - 1, this->pos.y));
+	}
+	if (this->pos.y != 9 && board.applyEat(Position(this->pos.x, this->pos.y + 1), this->color)) {
+		eatPos.push_back(Position(this->pos.x, this->pos.y + 1));
+	}
+	if (this->pos.y != 0 && board.applyEat(Position(this->pos.x, this->pos.y - 1), this->color)) {
+		eatPos.push_back(Position(this->pos.x, this->pos.y - 1));
+	}
+
+	return eatPos;
 }
 
 std::vector<Position> Cannon::canMove(Board& board) {
-	return std::vector<Position>();
+	std::vector<Position> movePos;
+	if (this->pos.x != 8 && board.applyMove(Position(this->pos.x + 1, this->pos.y), this->color)) {
+		movePos.push_back(Position(this->pos.x + 1, this->pos.y));
+	}
+	if (this->pos.x != 0 && board.applyMove(Position(this->pos.x - 1, this->pos.y), this->color)) {
+		movePos.push_back(Position(this->pos.x - 1, this->pos.y));
+	}
+	if (this->pos.y != 9 && board.applyMove(Position(this->pos.x, this->pos.y + 1), this->color)) {
+		movePos.push_back(Position(this->pos.x, this->pos.y + 1));
+	}
+	if (this->pos.y != 0 && board.applyMove(Position(this->pos.x, this->pos.y - 1), this->color)) {
+		movePos.push_back(Position(this->pos.x, this->pos.y - 1));
+	}
+
+	return movePos;
 }
 std::vector<Position> Cannon::canEat(Board& board) {
-	return std::vector<Position>();
+	std::vector<Position> eatPos;
+	if (this->pos.x != 8 && board.applyEat(Position(this->pos.x + 1, this->pos.y), this->color)) {
+		eatPos.push_back(Position(this->pos.x + 1, this->pos.y));
+	}
+	if (this->pos.x != 0 && board.applyEat(Position(this->pos.x - 1, this->pos.y), this->color)) {
+		eatPos.push_back(Position(this->pos.x - 1, this->pos.y));
+	}
+	if (this->pos.y != 9 && board.applyEat(Position(this->pos.x, this->pos.y + 1), this->color)) {
+		eatPos.push_back(Position(this->pos.x, this->pos.y + 1));
+	}
+	if (this->pos.y != 0 && board.applyEat(Position(this->pos.x, this->pos.y - 1), this->color)) {
+		eatPos.push_back(Position(this->pos.x, this->pos.y - 1));
+	}
+
+	return eatPos;
 }
 
 std::vector<Position> Soldier::canMove(Board& board) {
-	return std::vector<Position>();
+	std::vector<Position> movePos;
+	if (this->pos.x != 8 && board.applyMove(Position(this->pos.x + 1, this->pos.y), this->color)) {
+		movePos.push_back(Position(this->pos.x + 1, this->pos.y));
+	}
+	if (this->pos.x != 0 && board.applyMove(Position(this->pos.x - 1, this->pos.y), this->color)) {
+		movePos.push_back(Position(this->pos.x - 1, this->pos.y));
+	}
+	if (this->pos.y != 9 && board.applyMove(Position(this->pos.x, this->pos.y + 1), this->color)) {
+		movePos.push_back(Position(this->pos.x, this->pos.y + 1));
+	}
+	if (this->pos.y != 0 && board.applyMove(Position(this->pos.x, this->pos.y - 1), this->color)) {
+		movePos.push_back(Position(this->pos.x, this->pos.y - 1));
+	}
+
+	return movePos;
 }
 std::vector<Position> Soldier::canEat(Board& board) {
-	return std::vector<Position>();
+	std::vector<Position> eatPos;
+	if (this->pos.x != 8 && board.applyEat(Position(this->pos.x + 1, this->pos.y), this->color)) {
+		eatPos.push_back(Position(this->pos.x + 1, this->pos.y));
+	}
+	if (this->pos.x != 0 && board.applyEat(Position(this->pos.x - 1, this->pos.y), this->color)) {
+		eatPos.push_back(Position(this->pos.x - 1, this->pos.y));
+	}
+	if (this->pos.y != 9 && board.applyEat(Position(this->pos.x, this->pos.y + 1), this->color)) {
+		eatPos.push_back(Position(this->pos.x, this->pos.y + 1));
+	}
+	if (this->pos.y != 0 && board.applyEat(Position(this->pos.x, this->pos.y - 1), this->color)) {
+		eatPos.push_back(Position(this->pos.x, this->pos.y - 1));
+	}
+
+	return eatPos;
 }

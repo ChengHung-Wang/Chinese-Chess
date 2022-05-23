@@ -16,19 +16,7 @@ int main() {
 
 		}
 		else if (opt == "setFile") {
-			int player, fromX, fromY, toX, toY;
-			//std::string chessName, a, b, c;
-			char chessName[20];
-			//std::cin >> a;
-			//scanf_s("%d,", &player);
-			//std::cin >> b;
-			//std::cin >> chessName;
-			//scanf_s("(%d, %d)", &fromX, &fromY);
-			//std::cin >> c;
-			//scanf_s("(%d, %d)", &toX, &toY);
 
-			sscanf_s("Player: 1, Action: abc", "Player: %d, Action: %s", &player, &chessName);
-			//std::cout << gm.setFile(hash);
 		}
 		else if (opt == "setNew") {
 			std::cout << gm.setNew(hash);
@@ -37,7 +25,9 @@ int main() {
 
 		}
 		else if (opt == "getMove") {
-
+			int color, chessId, x, y;
+			std::cin >> color >> chessId >> x >> y;
+			std::cout << gm.getMove(static_cast<ColorEnum>(color), static_cast<ChessEnum>(chessId), x, y, hash);
 		}
 		else if (opt == "move") {
 			int color, chessId, fromX, fromY, toX, toY;
