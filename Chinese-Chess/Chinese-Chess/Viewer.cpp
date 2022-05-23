@@ -1,6 +1,6 @@
 #include "Viewer.h"
 
-std::string Viewer::setNew(std::vector<Chess*> onBoard, int rTime, int bTime, std::string hash) {
+std::string Viewer::setBoard(std::vector<Chess*> onBoard, int rTime, int bTime, std::string hash) {
 	json response = {
 		{"rTime", rTime},
 		{"bTime", bTime},

@@ -2,7 +2,6 @@
 #include <string>
 #include "GameManager.h"
 
-using namespace std;
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -16,7 +15,9 @@ int main() {
 
 		}
 		else if (opt == "setFile") {
-
+			int rows;
+			std::cin >> rows;
+			std::cout << gm.setFile(rows, hash);
 		}
 		else if (opt == "setNew") {
 			std::cout << gm.setNew(hash);
