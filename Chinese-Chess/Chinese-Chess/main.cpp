@@ -38,8 +38,7 @@ int main() {
 		}
 		else if (opt == "getTime") {
 			int color;
-			std::cin >> color;
-			std::cout << gm.getTime(static_cast<ColorEnum>(color), hash);
+			std::cout << gm.getTime(hash);
 		}
 		else if (opt == "giveUp") {
 			int color;
