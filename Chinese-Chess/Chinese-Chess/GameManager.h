@@ -60,12 +60,12 @@ public:
 	std::string setFile(std::string hash);
 	std::string setNew(std::string hash);
 	std::string getRound(std::string hash);
-	std::string getMove(ChessEnum chessId, int x, int y, std::string hash);
+	std::string getMove(int x, int y, std::string hash);
 	std::string getTime(std::string hash);
 	std::string save(std::string hash);
 	std::string giveUp(std::string hash);
 	std::string logs(std::string hash);
-	std::string move(ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash);
+	std::string move(int fromX, int fromY, int toX, int toY, std::string hash);
 	void addRecord(Chess* chess, Chess* eatChess, int fromX, int fromY, int toX, int toY);
 	Chess* eaten(Position eatPos);
 

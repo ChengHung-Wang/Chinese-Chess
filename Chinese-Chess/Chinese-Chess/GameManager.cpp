@@ -20,13 +20,12 @@ std::string GameManager::setFile(std::string hash) {
 			toX = std::atoi(sm.str(5).c_str());
 			toY = std::atoi(sm.str(6).c_str());
 
-			std::string move;
+			Chess* eatChess = NULL;
+			if (this->board.board[toY][toX] != 0) {
+				eatChess = this->eaten(Position(toX, toY));
+			}
 			for (auto& c : this->onBoard) {
 				if (c->enName == chessName && c->pos.x == fromX && c->pos.y == fromY) {
-					Chess* eatChess = NULL;
-					if (this->board.board[toY][toX] != 0) {
-						eatChess = this->eaten(Position(toX, toY));
-					}
 					c->move(this->board, Position(fromX, fromY), Position(toX, toY));
 					addRecord(c, eatChess, fromX, fromY, toX, toY);
 					break;
@@ -58,11 +57,11 @@ std::string GameManager::getRound(std::string hash) {
 	}
 }
 
-std::string GameManager::getMove(ChessEnum chessId, int x, int y, std::string hash) {
+std::string GameManager::getMove(int x, int y, std::string hash) {
 	std::vector<Position> canMove;
 	std::vector<Position> canEat;
 	for (auto& c : this->onBoard) {
-		if (c->color == this->currentPlayer && c->id == chessId && c->pos.x == x && c->pos.y == y) {
+		if (c->color == this->currentPlayer && c->pos.x == x && c->pos.y == y) {
 			canMove = c->canMove(this->board);
 			canEat = c->canEat(this->board);
 			break;
@@ -150,15 +149,16 @@ void GameManager::addRecord(Chess* chess, Chess* eatChess, int fromX, int fromY,
 	return;
 }
 
-std::string GameManager::move(ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash) {
+std::string GameManager::move(int fromX, int fromY, int toX, int toY, std::string hash) {
+	std::string action = "move";
+	Chess* eatChess = NULL;
+	if (this->board.board[toY][toX] != 0) {
+		eatChess = this->eaten(Position(toX, toY));
+		action = "replace";
+	}
+
 	for (auto& c : this->onBoard) {
-		if (c->color == this->currentPlayer && c->id == chessId && c->pos.x == fromX && c->pos.y == fromY) {
-			std::string action = "move";
-			Chess* eatChess = NULL;
-			if (this->board.board[toY][toX] != 0) {
-				eatChess = this->eaten(Position(toX, toY));
-				action = "replace";
-			}
+		if (c->color == this->currentPlayer && c->pos.x == fromX && c->pos.y == fromY) {
 			c->move(this->board, Position(fromX, fromY), Position(toX, toY));
 			addRecord(c, eatChess, fromX, fromY, toX, toY);
 			return this->viewer.move(action, hash);

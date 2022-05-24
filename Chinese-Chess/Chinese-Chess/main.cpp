@@ -25,14 +25,14 @@ int main() {
 			std::cout << gm.getRound(hash);
 		}
 		else if (opt == "getMove") {
-			int chessId, x, y;
-			std::cin >> chessId >> x >> y;
-			std::cout << gm.getMove(static_cast<ChessEnum>(chessId), x, y, hash);
+			int x, y;
+			std::cin >> x >> y;
+			std::cout << gm.getMove(x, y, hash);
 		}
 		else if (opt == "move") {
-			int chessId, fromX, fromY, toX, toY;
-			std::cin >> chessId >> fromX >> fromY >> toX >> toY;
-			std::cout << gm.move(static_cast<ChessEnum>(chessId), fromX, fromY, toX, toY, hash);
+			int fromX, fromY, toX, toY;
+			std::cin >> fromX >> fromY >> toX >> toY;
+			std::cout << gm.move(fromX, fromY, toX, toY, hash);
 		}
 		else if (opt == "getTime") {
 			std::cout << gm.getTime(hash);
