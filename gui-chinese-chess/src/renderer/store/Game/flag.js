@@ -8,7 +8,7 @@ export const useFlagStore = defineStore('flag', {
         },
     }),
     getters: {
-        red: () => "rgba(220, 53, 69, .5)",
+        red: () => "rgba(220, 53, 69, .8)",
         black: () => "rgba(0, 0, 0, .5)",
         getStyleConfig: (state) => {
             const boardStore = useBoardStore();
@@ -27,7 +27,6 @@ export const useFlagStore = defineStore('flag', {
         // get absolute position
         getStyle(x, y, color, specialStyle = {}) {
             let result = this.getStyleConfig;
-            console.log(result);
             let width = result.width;
             let offset = this.getOffset + 'px';
             result.left = `calc(((${width} + ${offset}) / 2) * (-1 + 2 * ${x}))`;

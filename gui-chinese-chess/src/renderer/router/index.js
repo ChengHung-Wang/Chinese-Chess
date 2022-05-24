@@ -10,11 +10,11 @@ export default new Router({
       path: '/',
       name: 'landing-page',
       component: require('@/components/LandingPage').default,
-      beforeEnter: (to, from, next) => {
-        const globalStore = useGlobalStore();
-        console.log(globalStore);
-        next();
-      }
+      // beforeEnter: (to, from, next) => {
+      //   const globalStore = useGlobalStore();
+      //   console.log(globalStore);
+      //   next();
+      // }
     },
     {
       path: '/game',

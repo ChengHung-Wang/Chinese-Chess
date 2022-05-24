@@ -21,6 +21,18 @@ p {
 .row> *:first-child {
     padding-left: 0!important;
 }
+.fsc {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.fec {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
 .fcc {
     display: flex;
     align-items: center;
@@ -78,4 +90,47 @@ p {
     align-items: center;
     justify-content: center;
     height: 100vh;
+}
+.flag {
+    position: absolute;
+    transition: .25s ease-in-out;
+    border-radius: 50%;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, .3);
+    backdrop-filter: blur(30px) saturate(180%);
+}
+.flag:hover {
+    animation-play-state: paused!important;
+}
+@keyframes faceMeme {
+    0% {
+        background-image: url('../../assets/images/person1.png');
+    }
+    16.6666667% {
+        background-image: url('../../assets/images/person2.png');
+    }
+    33.3333334% {
+        background-image: url('../../assets/images/person3.png');
+    }
+    49.9999998% {
+        background-image: url('../../assets/images/person4.png');
+    }
+    66.6666666% {
+        background-image: url('../../assets/images/person5.png');
+    }
+    83.3333333% {
+        background-image: url('../../assets/images/person6.png');
+    }
+    100% {
+        background-image: url('../../assets/images/person6.png');
+    }
+}
+.op-0 {
+    opacity: 0!important;
 }

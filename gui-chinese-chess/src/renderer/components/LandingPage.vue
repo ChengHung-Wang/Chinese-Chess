@@ -47,8 +47,11 @@
 </template>
 
 <script>
-  import SystemInformation from './LandingPage/SystemInformation'
-  export default {
+  import { ref, defineComponent } from 'vue-demi'
+  import { useGlobalStore } from "../store/global";
+  import { useGameStore } from "../store/game";
+
+  export default defineComponent({
     name: 'landing-page',
     data() {
       return {
@@ -57,8 +60,21 @@
         selected: false
       }
     },
-    components: { SystemInformation },
+    setup() {
+      const globalStore = ref(useGlobalStore());
+      const gameStore = ref(useGameStore());
+      return {
+        globalStore,
+        gameStore
+      }
+    },
+    mounted() {
+      this.globalStore.process.stdout.on("data", (response) => {
+        this.receiveData(response);
+      });
+    },
     methods: {
+      // I don't have any more time to plan the architecture
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
@@ -115,12 +131,38 @@
             closable: true
           });
         }else {
-          //  TODO: 補足cli功能，config
-          this.$router.push("/game");
+          if (! this.hasConfig) {
+            // call API
+            let token = this.globalStore.getHash();
+            let commend = `setNew ${token}`;
+            this.globalStore.process.stdin.write(commend + '\n');
+            this.gameStore.flagToken = token;
+            this.globalStore.responseStacks.push({
+              completed: false,
+              token: token,
+              result: null,
+              callback: (response) => {
+                this.gameStore.flagToken = response.hash;
+                this.gameStore.flags = response.chess;
+                this.gameStore.rTime = response.rTime;
+                this.gameStore.bTime = response.bTime;
+                this.$router.push("/game");
+              }
+            });
+          }
+          // this.$router.push("/game");
+        }
+      },
+      receiveData(response) {
+        const data = JSON.parse(response);
+        let thisResponseIndex = this.globalStore.responseStacks.map(e => e.token).indexOf(data.hash);
+        if (thisResponseIndex > -1) {
+          this.globalStore.responseStacks[thisResponseIndex].completed = true;
+          this.globalStore.responseStacks[thisResponseIndex].callback(data);
         }
       }
     }
-  }
+  })
 </script>
 
 <style scoped>

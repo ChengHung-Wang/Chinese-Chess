@@ -1,7 +1,9 @@
 <template>
-  <div class="flag"
-       v-bind:style="flagStore.getStyle(x, y, color == 'red' ? flagStore.red : flagStore.black, specialStyle)">
-    {{ name }}
+  <div
+      class="flag"
+      v-bind:style="flagStore.getStyle(x, y, color == 'red' ? flagStore.red : flagStore.black, specialStyle)">
+    <h4 class="m-0 fcc" v-if="name != '帥'">{{ name }}</h4>
+    <h4 class="m-0 fcc op-50" v-if="name == '帥'">{{ name }}</h4>
   </div>
 </template>
 
@@ -17,6 +19,11 @@
       color: String,
       specialStyle: Object
     },
+    data() {
+      return {
+        bool: true
+      }
+    },
     setup() {
       const flagStore = ref(useFlagStore());
       return {
@@ -25,19 +32,15 @@
     }
   })
 </script>
-<style scoped>
-  .flag {
-    position: absolute;
-    transition: .25s ease-in-out;
-    border-radius: 50%;
-    font-size: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: rgba(255, 255, 255, .3);
-    backdrop-filter: blur(30px) saturate(180%);
+<style>
+  h4 {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    overflow: hidden;
+    font-size: 120%!important;
+  }
+  .op-50 {
+    opacity: .4;
   }
 </style>

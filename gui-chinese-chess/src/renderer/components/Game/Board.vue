@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { useBoardStore } from "../../store/Game/board"
+import { useBoardStore } from "@/store/Game/board"
 import { defineComponent, ref } from 'vue-demi'
 
 export default defineComponent({
@@ -77,7 +77,7 @@ export default defineComponent({
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: .6;
+    opacity: .5;
   }
   .top::before {
     background-image: url('../../assets/images/ntu.png');

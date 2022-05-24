@@ -16,9 +16,9 @@ Vue.use(PiniaVuePlugin)
 Vue.use(ElementUI);
 Vue.use(childProcess);
 
-const store = createPinia();
+const pinia = createPinia();
 
-childProcess.exec("g++ ../Chinese-Chess/Chinese-Chess/run.cpp -o run");
+// childProcess.exec("g++ ../Chinese-Chess/Chinese-Chess/run.cpp -o run");
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
@@ -29,5 +29,5 @@ new Vue({
   components: { App },
   router,
   template: '<App/>',
-  pinia: store
+  pinia
 }).$mount('#app')

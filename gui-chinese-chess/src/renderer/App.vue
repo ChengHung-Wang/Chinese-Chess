@@ -8,16 +8,15 @@
 
 <script>
   window.jQuery = window.$ = require('jquery');
-  import childProcess from "child_process";
-  import pinia from "@/store/store.js";
-  import { useGlobalStore } from "@/store/global.js";
-  const globalStore = useGlobalStore(pinia);
+
+  // import { ref } from 'vue-demi'
+  // import { createPinia } from "pinia"
+  // import { useGlobalStore } from "./store/global.js"
+
   export default {
     name: 'chinese-chess',
     created() {
-      console.log(globalStore.testEnv);
-      globalStore.testEnv = "12334444";
-      console.log(globalStore.testEnv);
+      // this.globalStore.testEnv = "12334444";
       // console.log(global.testEnv);
       // const binary = childProcess.exec("./run", {});
       // binary.stdout.on("data", data => {
@@ -29,6 +28,21 @@
       // setInterval(() => {
       //   binary.stdin.write( "do something" + "\n");
       // }, 2000);
+    },
+    setup() {
+      // const pinia = createPinia();
+      // const globalStore = useGlobalStore(pinia);
+      return {
+        // globalStore
+      }
+    },
+    methods: {
+      // I don't have any more time to plan the architecture
+
+      // ************************************
+      // *************** API ****************
+      // ************************************
+
     }
   }
 </script>

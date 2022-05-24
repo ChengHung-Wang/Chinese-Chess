@@ -3,8 +3,8 @@ import childProcess from "child_process";
 export const useGlobalStore = defineStore('global', {
     state: () => {
         return {
-            testEnv: "1234",
-            process: childProcess.exec("./run", {})
+            process: childProcess.exec("../Chinese-Chess/Chinese-Chess/cmake-build-debug/Chinese_Chess", {}),
+            responseStacks: []
         }
     },
     actions: {
@@ -16,6 +16,15 @@ export const useGlobalStore = defineStore('global', {
             let cacheToken = Date.now().toString(16) + random + "";
             let token = cacheToken.split('').sort((a, b) => Math.floor(Math.random() - 0.5)).join("");
             return token;
+        },
+        downloadFile(filename, content) {
+            let blob = new Blob([content]);
+            let evt = document.createEvent("HTMLEvents");
+            evt.initEvent("click");
+            $("<a>", {
+                download: filename,
+                href: webkitURL.createObjectURL(blob)
+            }).get(0).dispatchEvent(evt);
         }
     }
 })
