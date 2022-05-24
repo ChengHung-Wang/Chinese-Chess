@@ -69,9 +69,7 @@
       }
     },
     mounted() {
-      this.globalStore.process.stdout.on("data", (response) => {
-        this.receiveData(response);
-      });
+      this.globalStore.process.stdout.on("data", this.receiveData);
     },
     methods: {
       // I don't have any more time to plan the architecture
@@ -115,6 +113,18 @@
         }
         readFile.readAsText(params.file)
       },
+      receiveData(response) {
+        const data = JSON.parse(response);
+        let thisResponseIndex = this.globalStore.responseStacks.map(e => e.token).indexOf(data.hash);
+        if (thisResponseIndex > -1 && !this.globalStore.responseStacks[thisResponseIndex].completed) {
+          this.globalStore.responseStacks[thisResponseIndex].completed = true;
+          this.globalStore.responseStacks[thisResponseIndex].callback(data);
+        }
+        console.log('receiveData in LandingPage');
+      },
+      // ************************************
+      // *************** API ****************
+      // ************************************
       goToGame() {
         if (!this.selected) {
           this.$message({
@@ -132,7 +142,7 @@
           });
         }else {
           if (! this.hasConfig) {
-            // call API
+            // call API(setNew)
             let token = this.globalStore.getHash();
             let commend = `setNew ${token}`;
             this.globalStore.process.stdin.write(commend + '\n');
@@ -149,18 +159,56 @@
                 this.$router.push("/game");
               }
             });
+          }else {
+            // call API(setFile)
+            let token = this.globalStore.getHash();
+            let commend = `setFile ${token} ${this.configText}\n@~!~@`;
+            this.globalStore.process.stdin.write(commend + '\n');
+            this.gameStore.flagToken = token;
+
+            this.globalStore.responseStacks.push({
+              completed: false,
+              token: token,
+              result: null,
+              callback: (response) => {
+                this.gameStore.flagToken = response.hash;
+                this.gameStore.flags = response.chess;
+                this.gameStore.rTime = response.rTime;
+                this.gameStore.bTime = response.bTime;
+                this.$router.push("/game");
+              }
+            });
           }
-          // this.$router.push("/game");
-        }
-      },
-      receiveData(response) {
-        const data = JSON.parse(response);
-        let thisResponseIndex = this.globalStore.responseStacks.map(e => e.token).indexOf(data.hash);
-        if (thisResponseIndex > -1) {
-          this.globalStore.responseStacks[thisResponseIndex].completed = true;
-          this.globalStore.responseStacks[thisResponseIndex].callback(data);
         }
       }
+    },
+    async beforeRouteLeave(to, from, next) {
+      await new Promise(resolve => {
+        const timeOut = setTimeout(() => {
+          // force complete all response
+          this.globalStore.responseStacks.map(e => {
+            e.completed = true;
+            clearTimeout(timeOut);
+            clearInterval(interval);
+            resolve();
+          });
+        }, this.globalStore.apiTimeOut);
+        const interval = setInterval(() => {
+          // if all api has response
+          if (this.globalStore.checkAllSet) {
+            clearInterval(interval);
+            clearTimeout(timeOut);
+            resolve();
+          }
+        }, 50);
+        if (this.globalStore.checkAllSet) {
+          clearInterval(interval);
+          clearTimeout(timeOut);
+          resolve();
+        }
+      });
+      this.globalStore.process.stdout.removeListener('data', this.receiveData);
+      next();
     }
   })
 </script>

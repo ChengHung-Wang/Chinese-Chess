@@ -134,3 +134,34 @@ p {
 .op-0 {
     opacity: 0!important;
 }
+.game {
+    background-size: cover;
+    background-color: white;
+}
+.play-meme {
+    background-image: url('../../assets/images/memeHotpot.gif') !important;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: transparent;
+}
+.play-meme::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .2)!important;
+}
+.play-meme .board {
+    border-color: white!important;
+}
+.play-meme .cube {
+    border-color: white!important;
+}
+.play-meme .center, .play-meme .center p {
+    color: white!important;
+}

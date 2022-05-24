@@ -14,7 +14,7 @@ export default new Router({
       //   const globalStore = useGlobalStore();
       //   console.log(globalStore);
       //   next();
-      // }
+      // },
     },
     {
       path: '/game',

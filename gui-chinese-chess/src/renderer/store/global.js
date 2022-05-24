@@ -1,10 +1,23 @@
 import { defineStore } from "pinia";
 import childProcess from "child_process";
+import ElementUI from 'element-ui'
 export const useGlobalStore = defineStore('global', {
     state: () => {
         return {
             process: childProcess.exec("../Chinese-Chess/Chinese-Chess/cmake-build-debug/Chinese_Chess", {}),
-            responseStacks: []
+            responseStacks: [],
+            apiTimeOut: 2000
+        }
+    },
+    getters: {
+        // check all the api has response
+        checkAllSet(state) {
+            return state.responseStacks.every(e => {
+                if (e.completed) {
+                    return true;
+                }
+                return false;
+            });
         }
     },
     actions: {
@@ -17,14 +30,41 @@ export const useGlobalStore = defineStore('global', {
             let token = cacheToken.split('').sort((a, b) => Math.floor(Math.random() - 0.5)).join("");
             return token;
         },
-        downloadFile(filename, content) {
-            let blob = new Blob([content]);
-            let evt = document.createEvent("HTMLEvents");
-            evt.initEvent("click");
-            $("<a>", {
-                download: filename,
-                href: webkitURL.createObjectURL(blob)
-            }).get(0).dispatchEvent(evt);
+        async downloadFile(filename, content) {
+            const result = await new Promise(resolve => {
+                const electron = require('electron');
+                const path = require('path');
+                const fs = require('fs');
+                const dialog = electron.remote.dialog;
+                dialog.showSaveDialog({
+                    title: 'Select the File Path to save',
+                    defaultPath: path.join(__dirname, '../assets/' + filename),
+                    buttonLabel: 'Save',
+                    // Restricting the user to only Text Files.
+                    filters: [
+                        {
+                            name: 'Text Files',
+                            extensions: ['txt']
+                        },],
+                    properties: []
+                }).then((file) => {
+                    if (!file.canceled) {
+                        fs.writeFile(file.filePath.toString(), content, function (err) {
+                            if (err) {
+                                console.log(err);
+                                resolve(false);
+                            }
+                            resolve(true);
+                        });
+                    } else {
+                        resolve(false);
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    resolve(false);
+                });
+            });
+            return result;
         }
-    }
+    },
 })

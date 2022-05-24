@@ -17,11 +17,10 @@
       y: Number,
       name: String,
       color: String,
-      specialStyle: Object
+      specialStyle: Object,
     },
     data() {
       return {
-        bool: true
       }
     },
     setup() {

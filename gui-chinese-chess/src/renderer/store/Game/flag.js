@@ -29,8 +29,14 @@ export const useFlagStore = defineStore('flag', {
             let result = this.getStyleConfig;
             let width = result.width;
             let offset = this.getOffset + 'px';
-            result.left = `calc(((${width} + ${offset}) / 2) * (-1 + 2 * ${x}))`;
-            result.top = `calc(((${width} + ${offset}) / 2) * (-1 + 2 * ${y}))`;
+            if (x > -1 && y > -1) {
+                result.left = `calc(((${width} + ${offset}) / 2) * (-1 + 2 * ${x}))`;
+                result.top = `calc(((${width} + ${offset}) / 2) * (-1 + 2 * ${y}))`;
+            }else {
+                result.left = "unset";
+                result.top = "unset";
+                result.position = "relative";
+            }
             result.color = color;
             result.borderColor = color
             return Object.assign(result, specialStyle);

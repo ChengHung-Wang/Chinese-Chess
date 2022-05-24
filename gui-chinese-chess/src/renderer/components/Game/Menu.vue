@@ -11,10 +11,12 @@
       <span slot="title">返回首頁</span>
     </el-menu-item>
     <el-menu-item index="3">
-      <i class="el-icon-circle-close"></i>
-      <span slot="title">投降</span>
+      <div class="w-100" @mouseover="memePlay = true" @mouseleave="memePlay = false" @click="$emit('giveUp')">
+        <i class="el-icon-circle-close"></i>
+        <span slot="title">投降</span>
+      </div>
     </el-menu-item>
-    <el-menu-item index="4">
+    <el-menu-item index="4" @click="downloadFile('logs.txt', 'test content')">
       <i class="el-icon-download"></i>
       <span slot="title">儲存狀態</span>
     </el-menu-item>
@@ -40,6 +42,8 @@
   .el-menu {
     min-height: 100vh;
     position: relative;
+    background-color: rgba(255, 255, 255, .7);
+    backdrop-filter: blur(30px) saturate(180%);
   }
   .el-menu-item {
     padding-left: 10px;
@@ -64,6 +68,7 @@
   }
 </style>
 <script>
+  import { storeToRefs } from "pinia";
   import { useGlobalStore } from "../../store/global";
   import { useGameStore } from "../../store/game"
   import { ref, defineComponent } from "vue-demi"
@@ -73,13 +78,41 @@
     setup() {
       const globalStore = ref(useGlobalStore());
       const gameStore = ref(useGameStore());
+      const { memePlay } = storeToRefs(useGameStore());
       return {
         globalStore,
-        gameStore
+        gameStore,
+        memePlay
       }
     },
     methods: {
-
+      async downloadFile() {
+        // TODO: call API(this)
+        const saveResult = await this.globalStore.downloadFile("status.txt", "testContent!!! wait for API");
+        if (saveResult) {
+          this.$message({
+            showClose: true,
+            message: '成功儲存遊戲狀態',
+            type: 'success'
+          });
+        }
+      },
+      // I don't have any more time to plan the architecture
+      receiveData(response) {
+        const data = JSON.parse(response);
+        let thisResponseIndex = this.globalStore.responseStacks.map(e => e.token).indexOf(data.hash);
+        if (thisResponseIndex > -1 && !this.globalStore.responseStacks[thisResponseIndex].completed) {
+          this.globalStore.responseStacks[thisResponseIndex].completed = true;
+          this.globalStore.responseStacks[thisResponseIndex].callback(data);
+        }
+        console.log('receiveData in Game/Menu.vue');
+      },
+      // ************************************
+      // *************** API ****************
+      // ************************************
+      save() {
+        // TODO: call save api(c++)
+      }
     }
   })
 </script>
