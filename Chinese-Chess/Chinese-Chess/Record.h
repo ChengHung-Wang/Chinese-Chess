@@ -7,6 +7,7 @@ class Record {
 
 public:
 	std::vector<Chess*> onBoard;
+	Board board;
 	Chess* chess;
 	Chess* eatChess = NULL;
 	Position from;
@@ -16,6 +17,6 @@ public:
 
 
 public:
-	Record(std::vector<Chess*> onBoard, Chess* chess, Chess* eatChess, Position from, Position to, int rTime, int bTime);
+	Record(std::vector<Chess*> onBoard, Board board, Chess* chess, Chess* eatChess, Position from, Position to, int rTime, int bTime);
 
 };

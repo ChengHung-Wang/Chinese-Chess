@@ -42,11 +42,34 @@ std::string GameManager::setNew(std::string hash) {
 
 std::string GameManager::getRound(std::string hash) {
 	std::string modal = "";
+	int lastCheckmate = 0;
 	int checkmate = 0;
-	if (isCheckmate(this->onBoard, this->currentPlayer, this->board)) {
-		checkmate = static_cast<int>(this->currentPlayer);
-		std::string site = this->currentPlayer == ColorEnum::Red ? "Red" : "Black";
-		modal = site + " Checkmate";
+	int winner = 0;
+	if (this->records.size() > 1) {
+		Record last = this->records[this->records.size() - 2];
+		if (isCheckmate(last.onBoard, ColorEnum::Black, last.board)) {
+			lastCheckmate = static_cast<int>(ColorEnum::Black);
+		}
+		if (isCheckmate(last.onBoard, ColorEnum::Red, last.board)) {
+			lastCheckmate = static_cast<int>(ColorEnum::Red);
+		}
+	}
+	//only one checkmate
+	if (isCheckmate(this->onBoard, ColorEnum::Black, this->board)) {
+		checkmate = static_cast<int>(ColorEnum::Black);
+		modal = "Black Checkmate";
+		if (lastCheckmate == static_cast<int>(ColorEnum::Black)) {
+			winner = static_cast<int>(ColorEnum::Black);
+			modal = "Black Win!";
+		}
+	}
+	if (winner == 0 && isCheckmate(this->onBoard, ColorEnum::Red, this->board)) {
+		checkmate = static_cast<int>(ColorEnum::Red);
+		modal = "Red Checkmate";
+		if (lastCheckmate == static_cast<int>(ColorEnum::Red)) {
+			winner = static_cast<int>(ColorEnum::Red);
+			modal = "Red Win!";
+		}
 	}
 
 	if (!newGame) {
@@ -56,24 +79,25 @@ std::string GameManager::getRound(std::string hash) {
 		this->newGame = false;
 	}
 
-	int winner = 0;
-	for (auto& c : onBoard) {
-		if (c->id == ChessEnum::General) {
-			winner += this->board.board[c->pos.y][c->pos.x];
-		}
-	}
 	if (winner == 0) {
-		//Check Stalemate
-	}
-	else {
-		//Die
-		if (winner == 1) {
-			modal = "Red Win!";
-			winner = 1;
+		for (auto& c : onBoard) {
+			if (c->id == ChessEnum::General) {
+				winner += this->board.board[c->pos.y][c->pos.x];
+			}
 		}
-		else if (winner == -1) {
-			modal = "Black Win!";
-			winner = 2;
+		if (winner == 0) {
+			//Check Stalemate
+		}
+		else {
+			//Die
+			if (winner == 1) {
+				modal = "Red Win!";
+				winner = 1;
+			}
+			else if (winner == -1) {
+				modal = "Black Win!";
+				winner = 2;
+			}
 		}
 	}
 
@@ -186,7 +210,7 @@ void GameManager::addRecord(Chess* chess, Chess* eatChess, int fromX, int fromY,
 			break;
 		}
 	}
-	Record r = Record(cOnBoard, chess, eatChess, Position(fromX, fromY), Position(toX, toY), this->rTime, this->bTime);
+	Record r = Record(cOnBoard, this->board, chess, eatChess, Position(fromX, fromY), Position(toX, toY), this->rTime, this->bTime);
 	this->records.push_back(r);
 
 	return;
