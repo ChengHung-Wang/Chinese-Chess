@@ -186,31 +186,9 @@
       }
     },
     async beforeRouteLeave(to, from, next) {
-      await new Promise(resolve => {
-        const timeOut = setTimeout(() => {
-          // force complete all response
-          this.globalStore.responseStacks.map(e => {
-            e.completed = true;
-            clearTimeout(timeOut);
-            clearInterval(interval);
-            resolve();
-          });
-        }, this.globalStore.apiTimeOut);
-        const interval = setInterval(() => {
-          // if all api has response
-          if (this.globalStore.checkAllSet) {
-            clearInterval(interval);
-            clearTimeout(timeOut);
-            resolve();
-          }
-        }, 50);
-        if (this.globalStore.checkAllSet) {
-          clearInterval(interval);
-          clearTimeout(timeOut);
-          resolve();
-        }
-      });
+      await this.globalStore.waitAllReqCompleted();
       this.globalStore.process.stdout.removeAllListeners();
+      console.log("Completed: action beforeRouteLeave in LandingPage.vuw");
       next();
     }
   })

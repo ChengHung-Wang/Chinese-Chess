@@ -72,7 +72,6 @@ export default defineComponent({
   created() {
     this.gameStore.loading = true;
     this.gameStore.stop = true;
-    console.log('enter Game.vue created');
     this.globalStore.process.stdout.on("data", (response) => {
       this.receiveData(response);
     })
@@ -175,6 +174,8 @@ export default defineComponent({
       let token = this.globalStore.getHash();
       let commend = `getRound ${token}`;
 
+      await this.globalStore.waitAllReqCompleted();
+
       this.globalStore.process.stdin.write(commend + '\n');
       this.gameStore.flagToken = token;
       this.globalStore.responseStacks.push({
@@ -249,8 +250,9 @@ export default defineComponent({
             }
           ],
           "hash": "hash"
-          }
+         }
       */
+
     },
     async save() {
       let token = this.globalStore.getHash();
@@ -275,32 +277,9 @@ export default defineComponent({
     }
   },
   async beforeRouteLeave(to, from, next) {
-    await new Promise(resolve => {
-      const timeOut = setTimeout(() => {
-        // force complete all response
-        this.globalStore.responseStacks.map(e => {
-          e.completed = true;
-          clearTimeout(timeOut);
-          clearInterval(interval);
-          resolve();
-        });
-      }, this.globalStore.apiTimeOut);
-      const interval = setInterval(() => {
-        // if all api has response
-        if (this.globalStore.checkAllSet) {
-          clearInterval(interval);
-          clearTimeout(timeOut);
-          resolve();
-        }
-      }, 50);
-      if (this.globalStore.checkAllSet) {
-        clearInterval(interval);
-        clearTimeout(timeOut);
-        resolve();
-      }
-    });
     this.gameStore.stop = true;
     clearInterval(this.loopEnv);
+    await this.globalStore.waitAllReqCompleted();
     this.globalStore.process.stdout.removeAllListeners();
     console.log("Completed: action beforeRouteLeave in Game.vuw");
     next();
