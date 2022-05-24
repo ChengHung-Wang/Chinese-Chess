@@ -43,17 +43,10 @@ std::string GameManager::setNew(std::string hash) {
 std::string GameManager::getRound(std::string hash) {
 	std::string modal = "";
 	int checkmate = 0;
-	for (auto& c : this->onBoard) {
-		if (c->color == this->currentPlayer) {
-			std::vector<Position> canEat = c->canEat(this->board);
-			for (auto& e : canEat) {
-				if (this->board.board[e.y][e.x] == abs(static_cast<int>(ChessEnum::General))) {
-					checkmate = static_cast<int>(c->color);
-					std::string site = c->color == ColorEnum::Red ? "Red" : "Black";
-					modal = site + " Checkmate";
-				}
-			}
-		}
+	if (isCheckmate(this->onBoard, this->currentPlayer, this->board)) {
+		checkmate = static_cast<int>(this->currentPlayer);
+		std::string site = this->currentPlayer == ColorEnum::Red ? "Red" : "Black";
+		modal = site + " Checkmate";
 	}
 
 	if (!newGame) {
@@ -73,6 +66,20 @@ std::string GameManager::getRound(std::string hash) {
 		Record last = this->records[this->records.size() - 1];
 		return this->viewer.getRound(this->currentPlayer, checkmate, winner, modal, last.chess, last.eatChess, &(last.from), &(last.to), hash);
 	}
+}
+
+bool GameManager::isCheckmate(std::vector<Chess*> onBoard, ColorEnum color, Board board) {
+	for (auto& c : onBoard) {
+		if (c->color == color) {
+			std::vector<Position> canEat = c->canEat(board);
+			for (auto& e : canEat) {
+				if (abs(board.board[e.y][e.x]) == abs(static_cast<int>(ChessEnum::General))) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }
 
 std::string GameManager::getMove(int x, int y, std::string hash) {
