@@ -63,6 +63,7 @@ export default defineComponent({
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    margin-top: -15px;
   }
   .top, .bottom {
     display: flex;

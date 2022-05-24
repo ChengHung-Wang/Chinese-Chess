@@ -1,7 +1,6 @@
 <template>
   <el-menu
-      default-active="2"
-      class="el-menu-vertical-demo">
+      default-active="2">
     <el-menu-item class="fsc" index="1">
       <img class="mt-3 mb-3" style="height: 60px; width: 60px" src="../../assets/icon.png" />
       <p class="m-0" style="margin-left: 15px!important; font-size: 18px;">1102 - OOP<br>Chinese Chess</p>
@@ -16,7 +15,7 @@
         <span slot="title">投降</span>
       </div>
     </el-menu-item>
-    <el-menu-item index="4" @click="downloadFile('logs.txt', 'test content')">
+    <el-menu-item index="4" @click="$emit('save')">
       <i class="el-icon-download"></i>
       <span slot="title">儲存狀態</span>
     </el-menu-item>
@@ -40,9 +39,9 @@
 </template>
 <style scoped>
   .el-menu {
-    min-height: 100vh;
+    min-height: calc(100vh);
     position: relative;
-    background-color: rgba(255, 255, 255, .7);
+    background-color: rgba(246, 246, 246, .7);
     backdrop-filter: blur(30px) saturate(180%);
   }
   .el-menu-item {
@@ -83,35 +82,6 @@
         globalStore,
         gameStore,
         memePlay
-      }
-    },
-    methods: {
-      async downloadFile() {
-        // TODO: call API(this)
-        const saveResult = await this.globalStore.downloadFile("status.txt", "testContent!!! wait for API");
-        if (saveResult) {
-          this.$message({
-            showClose: true,
-            message: '成功儲存遊戲狀態',
-            type: 'success'
-          });
-        }
-      },
-      // I don't have any more time to plan the architecture
-      receiveData(response) {
-        const data = JSON.parse(response);
-        let thisResponseIndex = this.globalStore.responseStacks.map(e => e.token).indexOf(data.hash);
-        if (thisResponseIndex > -1 && !this.globalStore.responseStacks[thisResponseIndex].completed) {
-          this.globalStore.responseStacks[thisResponseIndex].completed = true;
-          this.globalStore.responseStacks[thisResponseIndex].callback(data);
-        }
-        console.log('receiveData in Game/Menu.vue');
-      },
-      // ************************************
-      // *************** API ****************
-      // ************************************
-      save() {
-        // TODO: call save api(c++)
       }
     }
   })

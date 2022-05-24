@@ -24,7 +24,7 @@ function createWindow () {
     width: 1280,
     webPreferences: {
       nodeIntegration: true,
-      nodeIntegrationInWorker: true
+      nodeIntegrationInWorker: true,
     }
   })
 
@@ -47,6 +47,11 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+const { ipcMain } = require('electron')
+ipcMain.on('close-me', (evt, arg) => {
+  app.quit()
 })
 
 /**

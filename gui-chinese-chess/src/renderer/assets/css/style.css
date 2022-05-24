@@ -16,10 +16,10 @@ p {
 .mr-15 {margin-right: 15px;}
 .mb-15 {margin-bottom: 15px;}
 .row> *:last-child {
-    padding-right: 0!important;
+    padding-right: 0;
 }
 .row> *:first-child {
-    padding-left: 0!important;
+    padding-left: 0;
 }
 .fsc {
     display: flex;
@@ -164,4 +164,7 @@ p {
 }
 .play-meme .center, .play-meme .center p {
     color: white!important;
+}
+.w-33 {
+    width: 33.33333333% !important;
 }

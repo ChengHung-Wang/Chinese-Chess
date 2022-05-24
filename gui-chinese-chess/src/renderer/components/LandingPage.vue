@@ -68,6 +68,9 @@
         gameStore
       }
     },
+    created() {
+      this.gameStore.stop = true;
+    },
     mounted() {
       this.globalStore.process.stdout.on("data", this.receiveData);
     },
@@ -207,7 +210,7 @@
           resolve();
         }
       });
-      this.globalStore.process.stdout.removeListener('data', this.receiveData);
+      this.globalStore.process.stdout.removeAllListeners();
       next();
     }
   })

@@ -8,21 +8,49 @@ import { ref } from 'vue-demi'
 export const useGameStore = defineStore('game', {
     state: () => ({
         flags: [],
-        hints: [],
+        moveAble: null, // null || Array
+        replaceAble: null,// null || Array
         flagToken: "",
         hintToken: "",
         rTime: 0,
         bTime: 0,
+        mate: 0,
         displayHint: false,
         loading: true,
-        action: 1, // TODO: switchBy to getRound API. This is fake data,
-        stop: false, // It will turn to ture when the game being end or replaying logs
+        actionAble: 0, // 0 => not set, 1 || 2 => member color
+        stop: true, // It will turn to ture when the game being end or replaying log or landingPage
         winner: 0, // 0 means the game hasn't stop.( 0 | 1 | 2 ),
         modal: "", // return by API,
-        memePlay: ref(false)
+        memePlay: ref(false), // play meme background
+        beforeMovePosition: ref({
+            x: 0,
+            y: 0
+        })
     }),
     getters: {
-
+        hints: (state) => {
+            let result = [];
+            if (Array.isArray(state.moveAble)) {
+                state.moveAble.forEach(e => {
+                    result.push({
+                        x: e.x,
+                        y: e.y
+                    });
+                })
+            }
+            if (Array.isArray(state.replaceAble)) {
+                state.moveAble.forEach(e => {
+                    result.push({
+                        x: e.x,
+                        y: e.y
+                    });
+                })
+            }
+            return Array.from(new Set(result)); // bring each item is unique in Array by ES6
+        },
+        flagsHasInit: (state) => { // check flag has init
+            return state.flags.map(e => e.color).every(e => !Number.isInteger(e));
+        }
     },
     actions: {
         getMemberName(id, side = 'black') {
@@ -47,6 +75,9 @@ export const useGameStore = defineStore('game', {
             }else {
                 return config.red[id];
             }
+        },
+        getNumColor(id) {
+            return ["red", "black"][id - 1];
         }
     }
 });
