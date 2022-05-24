@@ -12,6 +12,7 @@ class GameManager {
 
 public:
 	std::vector<Chess*> onBoard;
+	bool newGame = true;
 	ColorEnum currentPlayer = ColorEnum::Red;
 	Board board;
 	Viewer viewer;
@@ -58,14 +59,14 @@ public:
 
 	std::string setFile(int rows, std::string hash);
 	std::string setNew(std::string hash);
-	std::string getRound();
+	std::string getRound(std::string hash);
 	std::string getMove(ChessEnum chessId, int x, int y, std::string hash);
 	std::string getTime(std::string hash);
 	std::string save(std::string hash);
 	std::string giveUp(std::string hash);
 	std::string logs(std::string hash);
 	std::string move(ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash);
-	void addRecord(Chess* chess, int fromX, int fromY, int toX, int toY);
-	void eaten(Position eatPos);
+	void addRecord(Chess* chess, Chess* eatChess, int fromX, int fromY, int toX, int toY);
+	Chess* eaten(Position eatPos);
 
 };
