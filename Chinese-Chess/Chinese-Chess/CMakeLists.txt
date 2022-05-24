@@ -13,6 +13,7 @@ add_executable(Chinese_Chess
         GameManager.h
         GameManager.cpp
         ChessEnum.h
+	    ColorEnum.h
         main.cpp
         Position.cpp
         Position.h
