@@ -12,7 +12,7 @@ int main() {
 	while (std::cin >> opt) {
 		std::cin >> hash;
 		if (opt == "save") {
-
+			std::cout << gm.save(hash);
 		}
 		else if (opt == "setFile") {
 			int rows;

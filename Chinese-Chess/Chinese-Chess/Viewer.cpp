@@ -95,3 +95,11 @@ std::string Viewer::move(std::string action, std::string hash) {
 	};
 	return response.dump();
 }
+
+std::string Viewer::save(std::string content, std::string hash) {
+	json response = {
+		{"content", content},
+		{"hash", hash}
+	};
+	return response.dump();
+}
