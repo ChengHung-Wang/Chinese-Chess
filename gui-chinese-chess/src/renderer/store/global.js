@@ -11,7 +11,7 @@ export const useGlobalStore = defineStore('global', {
     },
     getters: {
         // check all the api has response
-        checkAllSet(state) {
+        checkAllSet: (state) => {
             return state.responseStacks.every(e => {
                 if (e.completed) {
                     return true;
@@ -21,9 +21,6 @@ export const useGlobalStore = defineStore('global', {
         }
     },
     actions: {
-        setNew() {
-            this.process.stdin.write("setNew");
-        },
         getHash() {
             let random = [...Array(8).keys()].map(e => String.fromCharCode(Math.floor((Math.random() * (126 - 47)) + 48))).join("");
             let cacheToken = Date.now().toString(16) + random + "";
@@ -65,6 +62,34 @@ export const useGlobalStore = defineStore('global', {
                 });
             });
             return result;
+        },
+        // wait all the request are completed
+        async waitAllReqCompleted(forceCompleted = false) {
+            await new Promise(resolve => {
+                const timeOut = setTimeout(() => {
+                    // force complete all response
+                    if (! this.checkAllSet) {
+                        this.responseStacks.map(e => {
+                            e.completed = true;
+                        });
+                        clearTimeout(timeOut);
+                        clearInterval(interval);
+                    }
+                    resolve();
+                }, this.apiTimeOut);
+                const interval = setInterval(() => {
+                    if (this.checkAllSet) {
+                        clearInterval(interval);
+                        clearTimeout(timeOut);
+                        resolve();
+                    }
+                }, 50);
+                if (this.checkAllSet) {
+                    clearInterval(interval);
+                    clearTimeout(timeOut);
+                    resolve();
+                }
+            });
         }
     },
 })
