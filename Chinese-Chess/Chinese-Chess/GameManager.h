@@ -68,6 +68,7 @@ public:
 	std::string move(int fromX, int fromY, int toX, int toY, std::string hash);
 	void addRecord(Chess* chess, Chess* eatChess, int fromX, int fromY, int toX, int toY);
 	bool isCheckmate(std::vector<Chess*> onBoard, ColorEnum color, Board board);
+	bool isStalemate(std::vector<Chess*> onBoard, ColorEnum color, Board board);
 	Chess* eaten(Position eatPos);
 
 };

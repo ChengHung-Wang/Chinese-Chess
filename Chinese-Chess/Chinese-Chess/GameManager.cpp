@@ -86,7 +86,15 @@ std::string GameManager::getRound(std::string hash) {
 			}
 		}
 		if (winner == 0) {
-			//Check Stalemate
+			//Stalemate
+			if (isStalemate(this->onBoard, ColorEnum::Black, this->board)) {
+				winner = static_cast<int>(ColorEnum::Red);
+				modal = "Red Win!";
+			}
+			if (winner == 0 && isStalemate(this->onBoard, ColorEnum::Red, this->board)) {
+				winner = static_cast<int>(ColorEnum::Black);
+				modal = "Black Win!";
+			}
 		}
 		else {
 			//Die
@@ -122,6 +130,58 @@ bool GameManager::isCheckmate(std::vector<Chess*> onBoard, ColorEnum color, Boar
 		}
 	}
 	return false;
+}
+
+bool GameManager::isStalemate(std::vector<Chess*> onBoard, ColorEnum color, Board board) {
+	for (auto& c : onBoard) {
+		if (c->color == color) {
+			std::vector<Position> canMove = c->canMove(board);
+			for (auto& m : canMove) {
+				std::vector<Chess*> cOnBoard;
+				for (auto chess : onBoard) {
+					switch (chess->id)
+					{
+					case ChessEnum::General:
+						cOnBoard.push_back(new General(chess->pos, chess->color));
+						break;
+					case ChessEnum::Advisor:
+						cOnBoard.push_back(new Advisor(chess->pos, chess->color));
+						break;
+					case ChessEnum::Elephant:
+						cOnBoard.push_back(new Elephant(chess->pos, chess->color));
+						break;
+					case ChessEnum::Chariot:
+						cOnBoard.push_back(new Chariot(chess->pos, chess->color));
+						break;
+					case ChessEnum::Horse:
+						cOnBoard.push_back(new Horse(chess->pos, chess->color));
+						break;
+					case ChessEnum::Cannon:
+						cOnBoard.push_back(new Cannon(chess->pos, chess->color));
+						break;
+					case ChessEnum::Soldier:
+						cOnBoard.push_back(new Soldier(chess->pos, chess->color));
+						break;
+					}
+				}
+				Board cBoard;
+				for (int i = 0; i < 10; i++) {
+					for (int j = 0; j < 9; j++) {
+						cBoard.board[i][j] = board.board[i][j];
+					}
+				}
+				for (auto& cc : cOnBoard) {
+					if (cc->pos.x == c->pos.x && cc->pos.y == cc->pos.y) {
+						cc->move(cBoard, c->pos, m);
+					}
+				}
+				if (!isCheckmate(cOnBoard, color == ColorEnum::Red ? ColorEnum::Black : ColorEnum::Red, cBoard)) {
+					return false;
+				}
+			}
+		}
+	}
+	return true;
 }
 
 std::string GameManager::getMove(int x, int y, std::string hash) {
