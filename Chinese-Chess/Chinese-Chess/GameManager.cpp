@@ -19,7 +19,11 @@ std::string GameManager::setFile(int rows, std::string hash) {
 			std::string move;
 			for (auto& c : this->onBoard) {
 				if (c->enName == chessName && c->pos.x == fromX && c->pos.y == fromY) {
-					move = c->move(this->board, Position(fromX, fromY), Position(toX, toY));
+					if (this->board.board[toY][toX] != 0) {
+						this->eaten(Position(toX, toY));
+					}
+					c->move(this->board, Position(fromX, fromY), Position(toX, toY));
+					addRecord(c, fromX, fromY, toX, toY);
 					break;
 				}
 			}
@@ -78,13 +82,68 @@ std::string GameManager::giveUp(ColorEnum color, std::string hash) {
 	return this->viewer.giveUp(winner, modal, hash);
 }
 
-void GameManager::move(ColorEnum color, ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash) {
+std::string GameManager::logs(std::string hash) {
+	return this->viewer.logs(this->records, hash);
+}
+
+void GameManager::addRecord(Chess* chess, int fromX, int fromY, int toX, int toY) {
+	std::vector<Chess*> cOnBoard;
+	for (auto c : onBoard) {
+		switch (c->id)
+		{
+		case ChessEnum::General:
+			cOnBoard.push_back(new General(c->pos, c->color));
+			break;
+		case ChessEnum::Advisor:
+			cOnBoard.push_back(new Advisor(c->pos, c->color));
+			break;
+		case ChessEnum::Elephant:
+			cOnBoard.push_back(new Elephant(c->pos, c->color));
+			break;
+		case ChessEnum::Chariot:
+			cOnBoard.push_back(new Chariot(c->pos, c->color));
+			break;
+		case ChessEnum::Horse:
+			cOnBoard.push_back(new Horse(c->pos, c->color));
+			break;
+		case ChessEnum::Cannon:
+			cOnBoard.push_back(new Cannon(c->pos, c->color));
+			break;
+		case ChessEnum::Soldier:
+			cOnBoard.push_back(new Soldier(c->pos, c->color));
+			break;
+		}
+	}
+	Record r = Record(cOnBoard, chess, Position(fromX, fromY), Position(toX, toY), this->rTime, this->bTime);
+	this->records.push_back(r);
+
+	return;
+}
+
+std::string GameManager::move(ColorEnum color, ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash) {
 	for (auto& c : this->onBoard) {
 		if (c->color == color && c->id == chessId && c->pos.x == fromX && c->pos.y == fromY) {
+			std::string action = "move";
+			if (this->board.board[toY][toX] != 0) {
+				this->eaten(Position(toX, toY));
+				action = "replace";
+			}
 			c->move(this->board, Position(fromX, fromY), Position(toX, toY));
-			Record r = Record(this->onBoard, c, Position(fromX, fromY), Position(toX, toY), this->rTime, this->bTime);
-			this->record.push_back(r);
+			addRecord(c, fromX, fromY, toX, toY);
+			return this->viewer.move(action, hash);
+		}
+	}
+}
+
+void GameManager::eaten(Position eatPos) {
+	auto it = std::begin(this->onBoard);
+	while (it != std::end(this->onBoard)) {
+		if ((*it)->pos.x == eatPos.x && (*it)->pos.y == eatPos.y) {
+			it = this->onBoard.erase(it);
 			break;
+		}
+		else {
+			++it;
 		}
 	}
 }
