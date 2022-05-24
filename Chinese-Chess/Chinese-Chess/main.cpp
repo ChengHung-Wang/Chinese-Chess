@@ -29,22 +29,21 @@ int main() {
 		else if (opt == "getMove") {
 			int color, chessId, x, y;
 			std::cin >> color >> chessId >> x >> y;
-			std::cout << gm.getMove(static_cast<ColorEnum>(color), static_cast<ChessEnum>(chessId), x, y, hash);
+			std::cout << gm.getMove(static_cast<ChessEnum>(chessId), x, y, hash);
 		}
 		else if (opt == "move") {
 			int color, chessId, fromX, fromY, toX, toY;
 			std::cin >> color >> chessId >> fromX >> fromY >> toX >> toY;
-			std::cout << gm.move(static_cast<ColorEnum>(color), static_cast<ChessEnum>(chessId), fromX, fromY, toX, toY, hash);
+			std::cout << gm.move(static_cast<ChessEnum>(chessId), fromX, fromY, toX, toY, hash);
 		}
 		else if (opt == "getTime") {
 			int color;
-			std::cin >> color;
-			std::cout << gm.getTime(static_cast<ColorEnum>(color), hash);
+			std::cout << gm.getTime(hash);
 		}
 		else if (opt == "giveUp") {
 			int color;
 			std::cin >> color;
-			std::cout << gm.giveUp(static_cast<ColorEnum>(color), hash);
+			std::cout << gm.giveUp(hash);
 		}
 		else if (opt == "logs") {
 			std::cout << gm.logs(hash);
