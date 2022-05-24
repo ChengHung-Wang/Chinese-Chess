@@ -41,13 +41,31 @@ std::string GameManager::setNew(std::string hash) {
 }
 
 std::string GameManager::getRound(std::string hash) {
+	std::string modal = "";
+	int checkmate = 0;
+	for (auto& c : this->onBoard) {
+		if (c->color == this->currentPlayer) {
+			std::vector<Position> canEat = c->canEat(this->board);
+			for (auto& e : canEat) {
+				if (this->board.board[e.y][e.x] == abs(static_cast<int>(ChessEnum::General))) {
+					checkmate = static_cast<int>(c->color);
+					std::string site = c->color == ColorEnum::Red ? "Red" : "Black";
+					modal = site + " Checkmate";
+				}
+			}
+		}
+	}
+
 	if (!newGame) {
 		this->currentPlayer = this->currentPlayer == ColorEnum::Red ? ColorEnum::Black : ColorEnum::Red; //change current player
 	}
-	this->newGame = false;
-	int checkmate = 0;
+	else {
+		this->newGame = false;
+	}
+
 	int winner = 0;
-	std::string modal = "";
+	//TO DO ±N¦º¡B¤í¦æ
+
 	if (this->records.size() == 0) {
 		return this->viewer.getRound(this->currentPlayer, checkmate, winner, modal, NULL, NULL, NULL, NULL, hash);
 	}

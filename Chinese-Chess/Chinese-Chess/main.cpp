@@ -2,9 +2,6 @@
 #include <string>
 #include "GameManager.h"
 
-
-#define _CRT_SECURE_NO_WARNINGS
-
 int main() {
 	system("chcp 65001");
 	GameManager gm;
