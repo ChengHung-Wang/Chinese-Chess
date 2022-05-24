@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <regex>
+#include <sstream>
 #include "Chess.h"
 #include "Viewer.h"
 #include "Record.h"

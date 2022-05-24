@@ -11,7 +11,6 @@ using json = nlohmann::json;
 class Viewer {
 
 public:
-	std::string setFile();
 	std::string setBoard(std::vector<Chess*> onBoard, int rTime, int bTime, std::string hash);
 	std::string getTime(int bTime, int rTime, int noTime, std::string hash);
 	std::string getRound();
@@ -19,6 +18,6 @@ public:
 	std::string giveUp(ColorEnum color, std::string modal, std::string hash);
 	std::string logs(std::vector<Record> records, std::string hash);
 	std::string move(std::string action, std::string hash);
-	void save();
+	std::string save(std::string content, std::string hash);
 
 };
