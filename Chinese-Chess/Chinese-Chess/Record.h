@@ -6,13 +6,15 @@
 class Record {
 
 public:
-	ColorEnum player;
-	std::string chessName;
+	std::vector<Chess*> onBoard;
+	Chess* chess;
 	Position from;
 	Position to;
-	std::string move;
+	int rTime;
+	int bTime;
+
 
 public:
-	Record(ColorEnum player, std::string chessName, Position from, Position to, std::string move);
+	Record(std::vector<Chess*> onBoard, Chess* chess, Position from, Position to, int rTime, int bTime);
 
 };

@@ -1,9 +1,10 @@
 #include "Record.h"
 
-Record::Record(ColorEnum player, std::string chessName, Position from, Position to, std::string move) {
-	this->player = player;
-	this->chessName = chessName;
+Record::Record(std::vector<Chess*> onBoard, Chess* chess, Position from, Position to, int rTime, int bTime) {
+	this->onBoard = onBoard;
+	this->chess = chess;
 	this->from = from;
 	this->to = to;
-	this->move = move;
+	this->rTime = rTime;
+	this->bTime = bTime;
 }

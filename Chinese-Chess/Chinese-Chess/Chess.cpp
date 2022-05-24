@@ -48,6 +48,8 @@ Soldier::Soldier(Position pos, ColorEnum color) : Chess(pos, color, ChessEnum::S
 
 
 std::string Chess::move(Board& board, Position fromPos, Position toPos) {
+	this->pos.x = toPos.x;
+	this->pos.y = toPos.y;
 	board.board[fromPos.y][fromPos.x] = 0;
 	board.board[toPos.y][toPos.x] = static_cast<int>(this->id) * (this->color == ColorEnum::Red ? 1 : -1);
 	return this->chessName + ": (" + std::to_string(toPos.x) + ", " + std::to_string(toPos.y) + ")";
