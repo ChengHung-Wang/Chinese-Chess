@@ -30,6 +30,38 @@ std::string Viewer::getTime(int bTime, int rTime, int noTime, std::string hash) 
 	return response.dump();
 }
 
+std::string Viewer::getRound(ColorEnum color, int checkmate, int winner, std::string modal, Chess* moveChess, Chess* eatChess, Position* from, Position* to, std::string hash) {
+	json response = {
+		{"color", color},
+		{"checkmate", checkmate},
+		{"winner", winner},
+		{"modal", modal}
+	};
+	if (moveChess != NULL) {
+		response["move"] = json::object({
+			{"id", moveChess->id},
+			{"fromX", from->x},
+			{"fromY", from->y},
+			{"toX", to->x},
+			{"toY", to->y}
+			});
+	}
+	else {
+		response["move"] = nullptr;
+	}
+	if (eatChess != NULL) {
+		response["delete"] = json::object({
+			{"id", eatChess->id},
+			{"x", to->x},
+			{"y", to->y}
+			});
+	}
+	else {
+		response["delete"] = nullptr;
+	}
+	return response.dump();
+}
+
 std::string Viewer::getMove(std::vector<Position> canMove, std::vector<Position> canEat, std::string hash) {
 	json response = {
 		{"hash", hash}

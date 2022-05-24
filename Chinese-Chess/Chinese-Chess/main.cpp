@@ -24,7 +24,7 @@ int main() {
 			std::cout << gm.setNew(hash);
 		}
 		else if (opt == "getRound") {
-
+			std::cout << gm.getRound(hash);
 		}
 		else if (opt == "getMove") {
 			int chessId, x, y;
