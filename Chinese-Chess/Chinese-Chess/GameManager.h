@@ -58,12 +58,12 @@ public:
 	std::string setFile(int rows, std::string hash);
 	std::string setNew(std::string hash);
 	std::string getRound();
-	std::string getMove(ColorEnum color, ChessEnum chessId, int x, int y, std::string hash);
+	std::string getMove(ChessEnum chessId, int x, int y, std::string hash);
 	std::string getTime(std::string hash);
 	std::string save(std::string hash);
-	std::string giveUp(ColorEnum color, std::string hash);
+	std::string giveUp(std::string hash);
 	std::string logs(std::string hash);
-	std::string move(ColorEnum color, ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash);
+	std::string move(ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash);
 	void addRecord(Chess* chess, int fromX, int fromY, int toX, int toY);
 	void eaten(Position eatPos);
 

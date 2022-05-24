@@ -36,11 +36,11 @@ std::string GameManager::setNew(std::string hash) {
 	return this->viewer.setBoard(this->onBoard, this->rTime, this->bTime, hash);
 }
 
-std::string GameManager::getMove(ColorEnum color, ChessEnum chessId, int x, int y, std::string hash) {
+std::string GameManager::getMove(ChessEnum chessId, int x, int y, std::string hash) {
 	std::vector<Position> canMove;
 	std::vector<Position> canEat;
 	for (auto& c : this->onBoard) {
-		if (c->color == color && c->id == chessId && c->pos.x == x && c->pos.y == y) {
+		if (c->color == this->currentPlayer && c->id == chessId && c->pos.x == x && c->pos.y == y) {
 			canMove = c->canMove(this->board);
 			canEat = c->canEat(this->board);
 			break;
@@ -68,14 +68,14 @@ std::string GameManager::getTime(std::string hash) {
 	return this->viewer.getTime(this->bTime, this->rTime, noTime, hash);
 }
 
-std::string GameManager::giveUp(ColorEnum color, std::string hash) {
+std::string GameManager::giveUp(std::string hash) {
 	std::string modal;
 	ColorEnum winner;
-	if (color == ColorEnum::Red) {
+	if (this->currentPlayer == ColorEnum::Red) {
 		modal = "Black Win!";
 		winner = ColorEnum::Black;
 	}
-	if (color == ColorEnum::Black) {
+	if (this->currentPlayer == ColorEnum::Black) {
 		modal = "Red Win!";
 		winner = ColorEnum::Red;
 	}
@@ -120,9 +120,9 @@ void GameManager::addRecord(Chess* chess, int fromX, int fromY, int toX, int toY
 	return;
 }
 
-std::string GameManager::move(ColorEnum color, ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash) {
+std::string GameManager::move(ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash) {
 	for (auto& c : this->onBoard) {
-		if (c->color == color && c->id == chessId && c->pos.x == fromX && c->pos.y == fromY) {
+		if (c->color == this->currentPlayer && c->id == chessId && c->pos.x == fromX && c->pos.y == fromY) {
 			std::string action = "move";
 			if (this->board.board[toY][toX] != 0) {
 				this->eaten(Position(toX, toY));
