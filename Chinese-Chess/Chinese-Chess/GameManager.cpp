@@ -57,7 +57,25 @@ std::string GameManager::getRound(std::string hash) {
 	}
 
 	int winner = 0;
-	//TO DO ±N¦º¡B¤í¦æ
+	for (auto& c : onBoard) {
+		if (c->id == ChessEnum::General) {
+			winner += this->board.board[c->pos.y][c->pos.x];
+		}
+	}
+	if (winner == 0) {
+		//Check Stalemate
+	}
+	else {
+		//Die
+		if (winner == 1) {
+			modal = "Red Win!";
+			winner = 1;
+		}
+		else if (winner == -1) {
+			modal = "Black Win!";
+			winner = 2;
+		}
+	}
 
 	if (this->records.size() == 0) {
 		return this->viewer.getRound(this->currentPlayer, checkmate, winner, modal, NULL, NULL, NULL, NULL, hash);
