@@ -20,6 +20,7 @@ int main() {
 			std::cout << gm.setFile(rows, hash);
 		}
 		else if (opt == "setNew") {
+			gm = GameManager();
 			std::cout << gm.setNew(hash);
 		}
 		else if (opt == "getRound") {
@@ -33,7 +34,7 @@ int main() {
 		else if (opt == "move") {
 			int color, chessId, fromX, fromY, toX, toY;
 			std::cin >> color >> chessId >> fromX >> fromY >> toX >> toY;
-			gm.move(static_cast<ColorEnum>(color), static_cast<ChessEnum>(chessId), fromX, fromY, toX, toY, hash);
+			std::cout << gm.move(static_cast<ColorEnum>(color), static_cast<ChessEnum>(chessId), fromX, fromY, toX, toY, hash);
 		}
 		else if (opt == "getTime") {
 			int color;
@@ -44,6 +45,9 @@ int main() {
 			int color;
 			std::cin >> color;
 			std::cout << gm.giveUp(static_cast<ColorEnum>(color), hash);
+		}
+		else if (opt == "logs") {
+			std::cout << gm.logs(hash);
 		}
 	}
 }

@@ -61,3 +61,37 @@ std::string Viewer::giveUp(ColorEnum color, std::string modal, std::string hash)
 	};
 	return response.dump();
 }
+
+std::string Viewer::logs(std::vector<Record> records, std::string hash) {
+	json response = {
+		{"hash", hash}
+	};
+	response["logs"] = json::array();
+	for (auto& r : records) {
+		json record = json::object({
+			{"rTime", r.rTime},
+			{"bTime", r.bTime}
+			});
+		record["chess"] = json::array();
+		for (auto& c : r.onBoard) {
+			json chess = json::object({
+				{"name", c->chessName},
+				{"color", c->color},
+				{"id", c->id},
+				{"x", c->pos.x},
+				{"y", c->pos.y},
+				});
+			record["chess"].push_back(chess);
+		}
+		response["logs"].push_back(record);
+	}
+	return response.dump();
+}
+
+std::string Viewer::move(std::string action, std::string hash) {
+	json response = {
+		{"action", action},
+		{"hash", hash}
+	};
+	return response.dump();
+}

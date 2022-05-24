@@ -16,7 +16,7 @@ public:
 	Viewer viewer;
 	int rTime = 600;
 	int bTime = 600;
-	std::vector<Record> record;
+	std::vector<Record> records;
 
 public:
 	GameManager() {
@@ -62,6 +62,9 @@ public:
 	std::string getTime(ColorEnum color, std::string hash);
 	std::string save(std::string hash);
 	std::string giveUp(ColorEnum color, std::string hash);
-	void move(ColorEnum color, ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash);
+	std::string logs(std::string hash);
+	std::string move(ColorEnum color, ChessEnum chessId, int fromX, int fromY, int toX, int toY, std::string hash);
+	void addRecord(Chess* chess, int fromX, int fromY, int toX, int toY);
+	void eaten(Position eatPos);
 
 };

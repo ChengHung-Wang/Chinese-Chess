@@ -19,7 +19,7 @@ public:
 	Chess();
 	Chess(Position pos, ColorEnum color, ChessEnum id);
 
-	std::string move(Board& board, Position fromPos, Position toPos);
+	void move(Board& board, Position fromPos, Position toPos);
 
 	virtual std::vector<Position> canMove(Board& board) = 0;
 	virtual std::vector<Position> canEat(Board& board) = 0;
