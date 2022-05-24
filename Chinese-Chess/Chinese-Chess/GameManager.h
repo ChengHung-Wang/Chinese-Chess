@@ -57,7 +57,7 @@ public:
 		onBoard.push_back(new Soldier(Position(8, 6), ColorEnum::Red));
 	}
 
-	std::string setFile(int rows, std::string hash);
+	std::string setFile(std::string hash);
 	std::string setNew(std::string hash);
 	std::string getRound(std::string hash);
 	std::string getMove(ChessEnum chessId, int x, int y, std::string hash);

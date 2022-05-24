@@ -1,12 +1,15 @@
 #include "GameManager.h"
 
-std::string GameManager::setFile(int rows, std::string hash) {
+std::string GameManager::setFile(std::string hash) {
 	this->newGame = false;
 	std::regex reg("Player: (\\d+), Action: (\\w+) \\((\\d+), (\\d+)\\) -> \\((\\d+), (\\d+)\\)");
 	std::string input;
 	std::cin.ignore();
-	for (int i = 0; i < rows; i++) {
+	while (true) {
 		std::getline(std::cin, input);
+		if (input == "@~!~@") {
+			break;
+		}
 		std::smatch sm;
 		if (regex_search(input, sm, reg)) {
 			this->currentPlayer = static_cast<ColorEnum>(std::atoi(sm.str(1).c_str()));

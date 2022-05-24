@@ -15,9 +15,7 @@ int main() {
 			std::cout << gm.save(hash);
 		}
 		else if (opt == "setFile") {
-			int rows;
-			std::cin >> rows;
-			std::cout << gm.setFile(rows, hash);
+			std::cout << gm.setFile(hash);
 		}
 		else if (opt == "setNew") {
 			gm = GameManager();
