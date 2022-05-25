@@ -62,13 +62,48 @@ std::vector<Position> General::canMove(Board& board) {
 		if (this->color == ColorEnum::Red) {
 			for (int y = 7; y <= 9; y++) {
 				if (board.applyMove(Position(x, y), this->color) && abs(this->pos.x - x) + abs(this->pos.y - y) == 1) {
+					if (board.board[0][x] == -1 || board.board[1][x] == -1 || board.board[2][x] == -1) {
+						int check = 0, yAdd = -1;
+						while (1) {
+							if (y + yAdd < 0) {
+								break;
+							}
+							if (board.board[y + yAdd][x] != 0 && board.board[y + yAdd][x] != -1) {
+								check = 1;
+								break;
+							}
+							yAdd--;
+						}
+						if (check == 1) {
+							movePos.push_back(Position(x, y));
+						}
+					}
+					else {
 						movePos.push_back(Position(x, y));
+					}
 				}
 			}
 		}
 		else {
 			for (int y = 0; y <= 2; y++) {
 				if (board.applyMove(Position(x, y), this->color) && abs(this->pos.x - x) + abs(this->pos.y - y) == 1) {
+					if (board.board[9][x] == 1 || board.board[8][x] == 1 || board.board[7][x] == 1) {
+						int check = 0, yAdd = 1;
+						while (1) {
+							if (y + yAdd > 9) {
+								break;
+							}
+							if (board.board[y + yAdd][x] != 0 && board.board[y + yAdd][x] != 1) {
+								check = 1;
+								break;
+							}
+							yAdd--;
+						}
+						if (check == 1) {
+							movePos.push_back(Position(x, y));
+						}
+					}
+					else
 						movePos.push_back(Position(x, y));
 				}
 			}
@@ -123,13 +158,48 @@ std::vector<Position> General::canEat(Board& board) {
 		if (this->color == ColorEnum::Red) {
 			for (int y = 7; y <= 9; y++) {
 				if (board.applyEat(Position(x, y), this->color) && abs(this->pos.x - x) + abs(this->pos.y - y) == 1) {
+					if (board.board[0][x] == -1 || board.board[1][x] == -1 || board.board[2][x] == -1) {
+						int check = 0, yAdd = -1;
+						while (1) {
+							if (y + yAdd < 0) {
+								break;
+							}
+							if (board.board[y + yAdd][x] != 0 && board.board[y + yAdd][x] != -1) {
+								check = 1;
+								break;
+							}
+							yAdd--;
+						}
+						if (check == 1) {
+							movePos.push_back(Position(x, y));
+						}
+					}
+					else {
 						movePos.push_back(Position(x, y));
+					}
 				}
 			}
 		}
 		else {
 			for (int y = 0; y <= 2; y++) {
 				if (board.applyEat(Position(x, y), this->color) && abs(this->pos.x - x) + abs(this->pos.y - y) == 1) {
+					if (board.board[9][x] == 1 || board.board[8][x] == 1 || board.board[7][x] == 1) {
+						int check = 0, yAdd = 1;
+						while (1) {
+							if (y + yAdd > 9) {
+								break;
+							}
+							if (board.board[y + yAdd][x] != 0 && board.board[y + yAdd][x] != 1) {
+								check = 1;
+								break;
+							}
+							yAdd--;
+						}
+						if (check == 1) {
+							movePos.push_back(Position(x, y));
+						}
+					}
+					else
 						movePos.push_back(Position(x, y));
 				}
 			}
@@ -310,10 +380,10 @@ std::vector<Position> Chariot::canMove(Board& board) {
 		while (board.applyMove(Position(pos.x + xAdd, pos.y + yAdd), this->color) && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
 			int check = 0;
 			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
-			if (this->color == ColorEnum::Black&&board.board[pos.y+yAdd][pos.x+xAdd]>0) {
+			if (this->color == ColorEnum::Black && board.board[pos.y + yAdd][pos.x + xAdd] > 0) {
 				check = 1;
 			}
-			if(this->color == ColorEnum::Red && board.board[pos.y + yAdd][pos.x + xAdd] < 0){
+			if (this->color == ColorEnum::Red && board.board[pos.y + yAdd][pos.x + xAdd] < 0) {
 				check = 1;
 			}
 			if (check == 1) {
@@ -493,8 +563,8 @@ std::vector<Position> Cannon::canMove(Board& board) {
 			yAdd = 0;
 		}
 		while (board.board[pos.y + yAdd][pos.x + xAdd] == 0 && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
-			if(board.applyMove(Position(pos.x + xAdd, pos.y + yAdd), this->color))
-			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
+			if (board.applyMove(Position(pos.x + xAdd, pos.y + yAdd), this->color))
+				movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
 			if (i == 0) {
 				yAdd--;
 			}
