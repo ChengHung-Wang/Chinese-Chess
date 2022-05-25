@@ -57,83 +57,72 @@ void Chess::move(Board& board, Position fromPos, Position toPos) {
 
 std::vector<Position> General::canMove(Board& board) {
 	std::vector<Position> movePos;
+	int gen = 0;
 	for (int x = 3; x <= 5; x++) {
 		if (this->color == ColorEnum::Red) {
 			for (int y = 7; y <= 9; y++) {
 				if (board.applyMove(Position(x, y), this->color) && abs(this->pos.x - x) + abs(this->pos.y - y) == 1) {
-					if (board.board[0][x] == -1 || board.board[1][x] == -1 || board.board[2][x] == -1) {
-						int check = 0, yAdd = -1;
-						while (1) {
-							if (y + yAdd < 0) {
-								break;
-							}
-							if (board.board[y + yAdd][x] != 0 && board.board[y + yAdd][x] != -1) {
-								check = 1;
-								break;
-							}
-							yAdd--;
-						}
-						if (check == 1) {
-							movePos.push_back(Position(x, y));
-						}
-					}
-					else {
 						movePos.push_back(Position(x, y));
-					}
 				}
 			}
 		}
 		else {
 			for (int y = 0; y <= 2; y++) {
 				if (board.applyMove(Position(x, y), this->color) && abs(this->pos.x - x) + abs(this->pos.y - y) == 1) {
-					if (board.board[9][x] == 1 || board.board[8][x] == 1 || board.board[7][x] == 1) {
-						int check = 0, yAdd = 1;
-						while (1) {
-							if (y + yAdd > 9) {
-								break;
-							}
-							if (board.board[y + yAdd][x] != 0 && board.board[y + yAdd][x] != 1) {
-								check = 1;
-								break;
-							}
-							yAdd--;
-						}
-						if (check == 1) {
-							movePos.push_back(Position(x, y));
-						}
-					}
-					else
 						movePos.push_back(Position(x, y));
-					movePos.push_back(Position(x, y));
 				}
+			}
+		}
+	}
+	if (this->color == ColorEnum::Red) {
+		if (board.board[0][pos.x] == -1 || board.board[1][pos.x] == -1 || board.board[2][pos.x] == -1) {
+			int check = 0;
+			int yAdd = -1;
+			while (1) {
+				if (board.board[pos.y + yAdd][pos.x] != 0 && board.board[pos.y + yAdd][pos.x] != -1) {
+					check = 1;
+					break;
+				}
+				if (board.board[pos.y + yAdd][pos.x] == -1) {
+					gen = pos.y + yAdd;
+					break;
+				}
+				yAdd--;
+			}
+			if (check == 0) {
+				movePos.push_back(Position(pos.x, gen));
+			}
+		}
+	}
+	else {
+		if (board.board[9][pos.x] == 1 || board.board[8][pos.x] == 1 || board.board[7][pos.x] == 1) {
+			int check = 0;
+			int yAdd = 1;
+			while (1) {
+				if (board.board[pos.y + yAdd][pos.x] != 0 && board.board[pos.y + yAdd][pos.x] != -1) {
+					check = 1;
+					break;
+				}
+				if (board.board[pos.y + yAdd][pos.x] == -1) {
+					gen = pos.y + yAdd;
+					break;
+				}
+				yAdd++;
+			}
+			if (check == 0) {
+				movePos.push_back(Position(pos.x, gen));
 			}
 		}
 	}
 	return movePos;
 }
 std::vector<Position> General::canEat(Board& board) {
+	int gen = 0;
 	std::vector<Position> movePos;
 	for (int x = 3; x <= 5; x++) {
 		if (this->color == ColorEnum::Red) {
 			for (int y = 7; y <= 9; y++) {
 				if (board.applyEat(Position(x, y), this->color) && abs(this->pos.x - x) + abs(this->pos.y - y) == 1) {
-					if (board.board[0][x] == -1 || board.board[1][x] == -1 || board.board[2][x] == -1) {
-						int check = 0, yAdd = -1;
-						while (1) {
-							if (y + yAdd < 0) {
-								break;
-							}
-							if (board.board[y + yAdd][x] != 0 && board.board[y + yAdd][x] != -1) {
-								check = 1;
-								break;
-							}
-							yAdd++;
-						}
-						if (check == 1) {
-							movePos.push_back(Position(x, y));
-						}
-					}
-					else
 						movePos.push_back(Position(x, y));
 				}
 			}
@@ -141,26 +130,48 @@ std::vector<Position> General::canEat(Board& board) {
 		else {
 			for (int y = 0; y <= 2; y++) {
 				if (board.applyEat(Position(x, y), this->color) && abs(this->pos.x - x) + abs(this->pos.y - y) == 1) {
-					if (board.board[9][x] == 1 || board.board[8][x] == 1 || board.board[7][x] == 1) {
-						int check = 0, yAdd = 1;
-						while (1) {
-							if (y + yAdd > 9) {
-								break;
-							}
-							if (board.board[y + yAdd][x] != 0 && board.board[y + yAdd][x] != 1) {
-								check = 1;
-								break;
-							}
-							yAdd++;
-						}
-						if (check == 1) {
-							movePos.push_back(Position(x, y));
-						}
-					}
-					else
 						movePos.push_back(Position(x, y));
-					movePos.push_back(Position(x, y));
 				}
+			}
+		}
+	}
+	if (this->color == ColorEnum::Red) {
+		if (board.board[0][pos.x] == -1 || board.board[1][pos.x] == -1 || board.board[2][pos.x] == -1) {
+			int check = 0;
+			int yAdd = -1;
+			while (1) {
+				if (board.board[pos.y + yAdd][pos.x] != 0 && board.board[pos.y + yAdd][pos.x] != -1) {
+					check = 1;
+					break;
+				}
+				if (board.board[pos.y + yAdd][pos.x] == -1) {
+					gen = pos.y + yAdd;
+					break;
+				}
+				yAdd--;
+			}
+			if (check == 0) {
+				movePos.push_back(Position(pos.x, gen));
+			}
+		}
+	}
+	else {
+		if (board.board[9][pos.x] == 1 || board.board[8][pos.x] == 1 || board.board[7][pos.x] == 1) {
+			int check = 0;
+			int yAdd = 1;
+			while (1) {
+				if (board.board[pos.y + yAdd][pos.x] != 0 && board.board[pos.y + yAdd][pos.x] != -1) {
+					check = 1;
+					break;
+				}
+				if (board.board[pos.y + yAdd][pos.x] == -1) {
+					gen = pos.y + yAdd;
+					break;
+				}
+				yAdd++;
+			}
+			if (check == 0) {
+				movePos.push_back(Position(pos.x, gen));
 			}
 		}
 	}
@@ -465,6 +476,7 @@ std::vector<Position> Cannon::canMove(Board& board) {
 			yAdd = 0;
 		}
 		while (board.board[pos.y + yAdd][pos.x + xAdd] == 0 && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
+			if(board.applyMove(Position(pos.x + xAdd, pos.y + yAdd), this->color))
 			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
 			if (i == 0) {
 				yAdd--;
@@ -531,6 +543,7 @@ std::vector<Position> Cannon::canEat(Board& board) {
 			yAdd = 0;
 		}
 		while (board.board[pos.y + yAdd][pos.x + xAdd] == 0 && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
+			if(board.applyEat(Position(pos.x + xAdd, pos.y + yAdd), this->color))
 			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
 			if (i == 0) {
 				yAdd--;
