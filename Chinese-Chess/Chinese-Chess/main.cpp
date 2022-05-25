@@ -3,6 +3,7 @@
 #include "GameManager.h"
 
 int main() {
+	system("chcp 65001");
 	GameManager gm;
 	std::string opt, hash;
 	while (std::cin >> opt) {
