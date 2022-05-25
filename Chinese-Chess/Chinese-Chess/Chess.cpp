@@ -71,14 +71,15 @@ std::vector<Position> General::canMove(Board& board) {
 								check = 1;
 								break;
 							}
-							yAdd++;
+							yAdd--;
 						}
 						if (check == 1) {
 							movePos.push_back(Position(x, y));
 						}
 					}
-					else
+					else {
 						movePos.push_back(Position(x, y));
+					}
 				}
 			}
 		}
@@ -95,7 +96,7 @@ std::vector<Position> General::canMove(Board& board) {
 								check = 1;
 								break;
 							}
-							yAdd++;
+							yAdd--;
 						}
 						if (check == 1) {
 							movePos.push_back(Position(x, y));
@@ -538,12 +539,12 @@ std::vector<Position> Soldier::canMove(Board& board) {
 		}
 	}
 	else {
-		if (pos.y <5) {
+		if (pos.y < 5) {
 			if (board.applyMove(Position(pos.x, pos.y + 1), this->color)) {
 				movePos.push_back(Position(pos.x, pos.y + 1));
 			}
 		}
-		else if (pos.y >= 5&& pos.y <9) {
+		else if (pos.y >= 5 && pos.y < 9) {
 			if (board.applyMove(Position(pos.x, pos.y + 1), this->color)) {
 				movePos.push_back(Position(pos.x, pos.y + 1));
 			}
