@@ -1,14 +1,18 @@
 <template>
   <div
       class="flag"
-      v-bind:style="flagStore.getStyle(x, y, color == 'red' ? flagStore.red : flagStore.black, specialStyle)">
+      v-bind:style="flagStore.getStyle(x, y, color == 'red' ? flagStore.red : flagStore.black, specialStyle)"
+      v-bind:class="{shadowDeep: x == selectedFlag.x && y == selectedFlag.y}"
+      @click="$emit('getMove', {x: x, y: y})">
     <h4 class="m-0 fcc" v-if="name != '帥'">{{ name }}</h4>
     <h4 class="m-0 fcc op-50" v-if="name == '帥'">{{ name }}</h4>
   </div>
 </template>
 
 <script>
-  import { useFlagStore } from "../../store/Game/flag";
+  import { storeToRefs } from 'pinia'
+  import { useGameStore } from "../../store/game"
+  import { useFlagStore } from "../../store/Game/flag"
   import { defineComponent, ref } from 'vue-demi'
   export default defineComponent({
     name: "flag",
@@ -24,9 +28,11 @@
       }
     },
     setup() {
+      const { selectedFlag } = storeToRefs(useGameStore());
       const flagStore = ref(useFlagStore());
       return {
-        flagStore
+        flagStore,
+        selectedFlag
       }
     }
   })
@@ -41,5 +47,8 @@
   }
   .op-50 {
     opacity: .4;
+  }
+  .shadowDeep {
+     box-shadow: 0 .5rem 1rem rgba(0,0,0,.45)!important;
   }
 </style>

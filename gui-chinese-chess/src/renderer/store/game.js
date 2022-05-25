@@ -7,7 +7,7 @@ import { ref } from 'vue-demi'
 */
 export const useGameStore = defineStore('game', {
     state: () => ({
-        flags: [],
+        flags: ref([]),
         moveAble: null, // null || Array
         replaceAble: null,// null || Array
         flagToken: "",
@@ -22,32 +22,9 @@ export const useGameStore = defineStore('game', {
         winner: 0, // 0 means the game hasn't stop.( 0 | 1 | 2 ),
         modal: "", // return by API,
         memePlay: ref(false), // play meme background
-        beforeMovePosition: ref({
-            x: 0,
-            y: 0
-        })
+        selectedFlag: ref({x: null, y: null}) // selected flag, {x: NULL, y: NULL} || {x: Number, y: Number}
     }),
     getters: {
-        hints: (state) => {
-            let result = [];
-            if (Array.isArray(state.moveAble)) {
-                state.moveAble.forEach(e => {
-                    result.push({
-                        x: e.x,
-                        y: e.y
-                    });
-                })
-            }
-            if (Array.isArray(state.replaceAble)) {
-                state.moveAble.forEach(e => {
-                    result.push({
-                        x: e.x,
-                        y: e.y
-                    });
-                })
-            }
-            return Array.from(new Set(result)); // bring each item is unique in Array by ES6
-        },
         flagsHasInit: (state) => { // check flag has init
             return state.flags.map(e => e.color).every(e => !Number.isInteger(e));
         }
@@ -76,8 +53,21 @@ export const useGameStore = defineStore('game', {
                 return config.red[id];
             }
         },
+        // get color string by color id
         getNumColor(id) {
             return ["red", "black"][id - 1];
+        },
+        getFlagIndex(x, y) {
+            let result = -1;
+            if (x == null || y == null) {
+                return result;
+            }
+            this.flags.forEach((flag, index) => {
+                if (flag.x == x && flag.y == y) {
+                   result = index;
+                }
+            })
+            return result;
         }
     }
 });

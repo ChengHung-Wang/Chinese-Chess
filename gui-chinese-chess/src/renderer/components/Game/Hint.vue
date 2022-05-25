@@ -44,5 +44,6 @@ export default defineComponent({
   backdrop-filter: blur(30px) saturate(180%);
   opacity: .5;
   cursor: pointer;
+  z-index: 2;
 }
 </style>
