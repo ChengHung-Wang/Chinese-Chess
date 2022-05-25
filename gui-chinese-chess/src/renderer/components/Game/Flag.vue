@@ -2,8 +2,7 @@
   <div
       class="flag"
       v-bind:style="flagStore.getStyle(x, y, color == 'red' ? flagStore.red : flagStore.black, specialStyle)"
-      v-bind:class="{shadowDeep: x == selectedFlag.x && y == selectedFlag.y}">
-    <p>{{ uni }}</p>
+      v-bind:class="{shadowDeep: x == selectedFlag.x && y == selectedFlag.y && uni === selectedFlag.uni}">
     <h4 class="m-0 fcc" v-if="name != '帥'">{{ name }}</h4>
     <h4 class="m-0 fcc op-50" v-if="name == '帥'">{{ name }}</h4>
   </div>

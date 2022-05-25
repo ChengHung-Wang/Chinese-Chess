@@ -10,7 +10,7 @@
             <Board />
             <Flag
                 v-if="boardStore.init && item.disabled === undefined"
-                v-for="item in flags"
+                v-for="item in gameStore.flags"
                 :name="item.name"
                 :x="item.x" :y="item.y" :color="item.color" :uni="item.uni"
                 :special-style="item.specialStyle"
@@ -61,13 +61,12 @@ export default defineComponent({
     const globalStore = ref(useGlobalStore());
     const gameStore = ref(useGameStore());
     const boardStore = ref(useBoardStore());
-    const { memePlay, flags } = storeToRefs(useGameStore());
+    const { memePlay } = storeToRefs(useGameStore());
     return {
       globalStore,
       gameStore,
       boardStore,
       memePlay,
-      flags
     }
   },
   components: {
@@ -84,14 +83,14 @@ export default defineComponent({
       this.receiveData(response);
     })
     // no data
-    if (this.flags.length == 0) {
+    if (this.gameStore.flags.length == 0) {
       this.gameStore.stop = true;
       clearInterval(this.loopEnv);
       this.globalStore.process.stdout.removeAllListeners();
       this.$router.push("/");
     }else {
       if (! this.gameStore.flagsHasInit) {
-        this.flags = this.flags.map(e => {
+        this.gameStore.flags = this.gameStore.flags.map(e => {
           let result = e;
           result.specialStyle = {
             'pointer-events': "auto"
@@ -109,8 +108,8 @@ export default defineComponent({
         })
       }
       // flag animation
-      const backup = JSON.parse(JSON.stringify(this.flags));
-      this.flags = this.flags.map(e => {
+      const backup = JSON.parse(JSON.stringify(this.gameStore.flags));
+      this.gameStore.flags = JSON.parse(JSON.stringify(this.gameStore.flags.map(e => {
         if (e.color == 'black') {
           e.x = 4;
           e.y = 0;
@@ -119,11 +118,11 @@ export default defineComponent({
           e.y = 9;
         }
         return e;
-      });
+      })));
       // init
       setTimeout(async () => {
         clearInterval(this.loopEnv);
-        this.flags = backup;
+        this.gameStore.flags = JSON.parse(JSON.stringify(backup));
         this.gameStore.stop = false;
         this.loopEvent();
         await this.getRound();
@@ -222,50 +221,39 @@ export default defineComponent({
         token: token,
         result: null,
         callback: (response) => {
+          /*
+            move": {
+              "id": 2,
+              "fromX": 0,
+              "fromY": 0,
+              "toX": 1,
+              "toY": 1,
+              "uni": 1
+            },
+            "delete": {
+              "id": 2,
+              "x": 3,
+              "y": 0,
+              "uni": 1
+            }
+          */
+          // remove flag
+          if (response.delete) {
+            this.gameStore.flags = JSON.parse(JSON.stringify(this.gameStore.flags.map(flag => {
+              if (flag.uni === response.delete.uni) {
+                flag.disabled = true;
+              }
+              return flag;
+            })));
+          }
+
           // change flag position
           if (response.move) {
-            const changeId = this.gameStore.getFlagIndex(response.move.fromX, response.move.fromY, response.uni);
-            // remove flag
-            if (response.delete) {
-              const removeID = this.gameStore.getFlagIndex(response.delete.x, response.delete.y, response.uni);
-              // if (removeID > -1) {
-              //   let targetRemoveFlag = this.flags[removeID];
-              //   if (targetRemoveFlag.uni == response.delete.uni) {
-              //     debugger;
-              //     this.flags[removeID].specialStyle.zIndex = -1;
-              //     this.flags[removeID].specialStyle.opacity = 0;
-              //     this.flags[removeID].specialStyle.pointerEvents = "none";
-              //     this.flags[removeID].specialStyle.background = "green";
-              //     this.flags[removeID].disabled = true;
-              //   }
-              // }
-              this.flags[removeID].disabled = true;
-              // this.flags = this.flags.map(flag => {
-              //   flag = JSON.parse(JSON.stringify(flag));
-              //   if (flag.uni === response.delete.uni) {
-              //     flag.specialStyle.pointerEvents = "none";
-              //     flag.specialStyle.display = "none";
-              //     flag.specialStyle.zIndex = -1;
-              //     setTimeout(() => {
-              //       flag.disabled = true;
-              //     }, 500);
-              //   }else {
-              //     flag.specialStyle.pointerEvents = "auto";
-              //     flag.specialStyle.display = "flex";
-              //     flag.specialStyle.zIndex = 2;
-              //   }
-              //   return flag;
-              // })
-
-            }
-            if (changeId > -1) {
-              if (this.flags[changeId].uni == response.move.uni) {
-                // find target
-                this.flags[changeId].x = response.move.toX;
-                this.flags[changeId].y = response.move.toY;
-              }
-            }
+            this.gameStore.flags[this.gameStore.flags.map(e => e.uni).indexOf(response.move.uni)].x = response.move.toX;
+            this.gameStore.flags[this.gameStore.flags.map(e => e.uni).indexOf(response.move.uni)].y = response.move.toY;
+            this.gameStore.selectedFlag = {x: null, y: null, uni: null};
           }
+
           // update actionAble
           this.gameStore.actionAble = response.color;
           // update winner
@@ -273,10 +261,10 @@ export default defineComponent({
           // update modal
           this.gameStore.modal = response.modal;
           // update mate
-          this.gameStore.mate = response.mate;
+          this.gameStore.mate = response.checkmate;
           if (this.gameStore.mate > 0) {
             this.$message({
-              message: `${this.gameStore.getNumColor(this.gameStore.mate)}方 ${this.gameStore.modal}`,
+              message: `${this.gameStore.modal}`,
               type: 'warning',
               showClose: true
             });
@@ -288,17 +276,26 @@ export default defineComponent({
     },
     async getMove(position) {
       // getMove {hash} {x} {y} {uni}
-      console.log(position);
-      const thisFlag = this.flags[this.gameStore.getFlagIndex(position.x, position.y, position.uni)];
-
+      await this.globalStore.waitAllReqCompleted();
+      const thisFlag = this.gameStore.flags[this.gameStore.getFlagIndex(position.x, position.y, position.uni)];
       if (this.gameStore.actionAble == 0 || thisFlag.color != this.gameStore.getNumColor(this.gameStore.actionAble)) {
+        // this.$notify({
+        //   title: 'flag not valid in gatMove',
+        //   message: `thisFlag.color: ${thisFlag.color}, getNumColor: ${this.gameStore.getNumColor(this.gameStore.actionAble)}, actionAble: ${this.gameStore.actionAble}`,
+        //   position: 'bottom-left'
+        // });
         this.$message.error("不可移動的棋子");
         return ;
       }else {
+        // this.$notify({
+        //   title: 'getMove debug',
+        //   message: `(${position.x}, ${position.y}) uni: ${position.uni}`,
+        //   position: 'bottom-left'
+        // });
         this.gameStore.selectedFlag = {
-          x: thisFlag.x,
-          y: thisFlag.y,
-          uni: thisFlag.uni
+          x: position.x,
+          y: position.y,
+          uni: position.uni
         };
       }
       let token = this.globalStore.getHash();
@@ -306,7 +303,6 @@ export default defineComponent({
       let commend = `getMove ${token} ${position.uni}`;
       console.log(commend);
 
-      await this.globalStore.waitAllReqCompleted();
 
       this.globalStore.process.stdin.write(commend + '\n');
       this.gameStore.flagToken = token;
@@ -328,6 +324,11 @@ export default defineComponent({
       console.log(commend);
       await this.globalStore.waitAllReqCompleted();
       this.globalStore.process.stdin.write(commend + '\n');
+      // this.$notify({
+      //   title: 'move debug',
+      //   message: `move ${token} ${beforePosition.x} ${beforePosition.y} ${position.x} ${position.y}`,
+      //   position: 'bottom-left'
+      // });
       this.gameStore.flagToken = token;
       this.globalStore.responseStacks.push({
         completed: false,

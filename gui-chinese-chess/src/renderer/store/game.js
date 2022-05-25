@@ -62,7 +62,7 @@ export const useGameStore = defineStore('game', {
             if (x == null || y == null) {
                 return result;
             }
-            this.flags.filter(e => e.disabled !== true).forEach((flag, index) => {
+            this.flags.forEach((flag, index) => {
                 if (flag.x === x && flag.y === y) {
                     if (uni !== null) {
                         if (flag.uni === uni) {
@@ -91,7 +91,7 @@ export const useGameStore = defineStore('game', {
             this.winner =  0; // 0 means the game hasn't stop.( 0 | 1 | 2 );
             this.modal =  ""; // return by API
             this.memePlay =  ref(false); // play meme background
-            this.selectedFlag =  ref({x: null, y: null}); // selected flag, {x: NULL, y: NULL} || {x: Number, y: Number}
+            this.selectedFlag =  ref({x: null, y: null, uni: null}); // selected flag, {x: NULL, y: NULL} || {x: Number, y: Number}
         }
     }
 });
