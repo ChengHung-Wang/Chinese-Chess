@@ -68,8 +68,11 @@ std::string Viewer::getRound(ColorEnum color, int checkmate, int winner, std::st
 	return response.dump();
 }
 
-std::string Viewer::getMove(std::vector<Position> canMove, std::vector<Position> canEat, std::string hash) {
+std::string Viewer::getMove(Chess* moveChess, std::vector<Position> canMove, std::vector<Position> canEat, std::string hash) {
 	json response = {
+		{"uni", moveChess->uni},
+		{"x", moveChess->pos.x},
+		{"y", moveChess->pos.y},
 		{"hash", hash}
 	};
 	response["canMove"] = json::array();
