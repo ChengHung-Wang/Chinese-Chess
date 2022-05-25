@@ -280,10 +280,9 @@ std::vector<Position> Elephant::canEat(Board& board) {
 std::vector<Position> Chariot::canMove(Board& board) {
 	std::vector<Position> movePos;
 	for (int i = 0, xAdd = 0, yAdd = 0; i < 4; i++) {
-		int count = 2;
 		if (i == 0) {
 			xAdd = 0;
-			yAdd = 1;
+			yAdd = -1;
 		}
 		else if (i == 1) {
 			xAdd = 1;
@@ -291,17 +290,26 @@ std::vector<Position> Chariot::canMove(Board& board) {
 		}
 		else if (i == 2) {
 			xAdd = 0;
-			yAdd = -1;
+			yAdd = 1;
 		}
 		else if (i == 3) {
 			xAdd = -1;
 			yAdd = 0;
 		}
-		while (board.applyMove(Position(pos.x + xAdd, pos.y + yAdd), this->color)) {
+		while (board.applyMove(Position(pos.x + xAdd, pos.y + yAdd), this->color) && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
 			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
-			xAdd *= count;
-			yAdd *= count;
-			count++;
+			if (i == 0) {
+				yAdd--;
+			}
+			else if (i == 1) {
+				xAdd++;
+			}
+			else if (i == 2) {
+				yAdd++;
+			}
+			else {
+				xAdd--;
+			}
 		}
 	}
 	return movePos;
@@ -309,7 +317,6 @@ std::vector<Position> Chariot::canMove(Board& board) {
 std::vector<Position> Chariot::canEat(Board& board) {
 	std::vector<Position> movePos;
 	for (int i = 0, xAdd = 0, yAdd = 0; i < 4; i++) {
-		int count = 2;
 		if (i == 0) {
 			xAdd = 0;
 			yAdd = 1;
@@ -326,11 +333,20 @@ std::vector<Position> Chariot::canEat(Board& board) {
 			xAdd = -1;
 			yAdd = 0;
 		}
-		while (board.applyEat(Position(pos.x + xAdd, pos.y + yAdd), this->color)) {
+		while (board.applyEat(Position(pos.x + xAdd, pos.y + yAdd), this->color) && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
 			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
-			xAdd *= count;
-			yAdd *= count;
-			count++;
+			if (i == 0) {
+				yAdd--;
+			}
+			else if (i == 1) {
+				xAdd++;
+			}
+			else if (i == 2) {
+				yAdd++;
+			}
+			else {
+				xAdd--;
+			}
 		}
 	}
 	return movePos;
