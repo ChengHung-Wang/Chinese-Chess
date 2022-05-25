@@ -195,16 +195,13 @@ bool GameManager::isStalemate(std::vector<Chess*> onBoard, ColorEnum color, Boar
 std::string GameManager::getMove(int x, int y, std::string hash) {
 	std::vector<Position> canMove;
 	std::vector<Position> canEat;
-	Chess* moveChess;
 	for (auto& c : this->onBoard) {
 		if (c->color == this->currentPlayer && c->pos.x == x && c->pos.y == y) {
 			canMove = c->canMove(this->board);
 			canEat = c->canEat(this->board);
-			moveChess = c;
-			break;
+			return this->viewer.getMove(c, canMove, canEat, hash);
 		}
 	}
-	return this->viewer.getMove(moveChess, canMove, canEat, hash);
 }
 
 std::string GameManager::getTime(std::string hash) {
