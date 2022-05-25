@@ -28,9 +28,9 @@ int main() {
 			std::cout << gm.getRound(hash);
 		}
 		else if (opt == "getMove") {
-			int x, y;
-			std::cin >> x >> y;
-			std::cout << gm.getMove(x, y, hash);
+			int uni;
+			std::cin >> uni;
+			std::cout << gm.getMove(uni, hash);
 		}
 		else if (opt == "move") {
 			int fromX, fromY, toX, toY;

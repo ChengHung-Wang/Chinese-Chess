@@ -60,7 +60,7 @@ public:
 	std::string setFile(std::string hash);
 	std::string setNew(std::string hash);
 	std::string getRound(std::string hash);
-	std::string getMove(int x, int y, std::string hash);
+	std::string getMove(int uni, std::string hash);
 	std::string getTime(std::string hash);
 	std::string save(std::string hash);
 	std::string giveUp(std::string hash);
