@@ -543,8 +543,6 @@ std::vector<Position> Cannon::canEat(Board& board) {
 			yAdd = 0;
 		}
 		while (board.board[pos.y + yAdd][pos.x + xAdd] == 0 && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
-			if(board.applyEat(Position(pos.x + xAdd, pos.y + yAdd), this->color))
-			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
 			if (i == 0) {
 				yAdd--;
 			}
