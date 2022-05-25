@@ -62,11 +62,19 @@ std::string GameManager::getRound(std::string hash) {
 			winner = static_cast<int>(ColorEnum::Black);
 			modal = "Black Win!";
 		}
+		else if (this->currentPlayer == ColorEnum::Red) { //last player
+			winner = static_cast<int>(ColorEnum::Black);
+			modal = "Black Win!";
+		}
 	}
 	if (winner == 0 && isCheckmate(this->onBoard, ColorEnum::Red, this->board)) {
 		checkmate = static_cast<int>(ColorEnum::Red);
 		modal = "Red Checkmate";
 		if (lastCheckmate == static_cast<int>(ColorEnum::Red)) {
+			winner = static_cast<int>(ColorEnum::Red);
+			modal = "Red Win!";
+		}
+		else if (this->currentPlayer == ColorEnum::Black) { //last player
 			winner = static_cast<int>(ColorEnum::Red);
 			modal = "Red Win!";
 		}
