@@ -69,11 +69,19 @@ export const useGlobalStore = defineStore('global', {
                 const timeOut = setTimeout(() => {
                     // force complete all response
                     if (! this.checkAllSet) {
-                        this.responseStacks.map(e => {
-                            e.completed = true;
+                        let fails= [];
+                        this.responseStacks = this.responseStacks.map(e => {
+                            if (! e.completed) {
+                                fails.push(e);
+                            }
+                            if (forceCompleted) {
+                                e.completed = true;
+                            }
+                            return e;
                         });
                         clearTimeout(timeOut);
                         clearInterval(interval);
+                        console.error('ERROR: API response time out', fails, this.responseStacks);
                     }
                     resolve();
                 }, this.apiTimeOut);

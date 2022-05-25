@@ -62,11 +62,19 @@ std::string GameManager::getRound(std::string hash) {
 			winner = static_cast<int>(ColorEnum::Black);
 			modal = "Black Win!";
 		}
+		else if (this->currentPlayer == ColorEnum::Red) { //last player
+			winner = static_cast<int>(ColorEnum::Black);
+			modal = "Black Win!";
+		}
 	}
 	if (winner == 0 && isCheckmate(this->onBoard, ColorEnum::Red, this->board)) {
 		checkmate = static_cast<int>(ColorEnum::Red);
 		modal = "Red Checkmate";
 		if (lastCheckmate == static_cast<int>(ColorEnum::Red)) {
+			winner = static_cast<int>(ColorEnum::Red);
+			modal = "Red Win!";
+		}
+		else if (this->currentPlayer == ColorEnum::Black) { //last player
 			winner = static_cast<int>(ColorEnum::Red);
 			modal = "Red Win!";
 		}
@@ -206,14 +214,17 @@ std::string GameManager::getTime(std::string hash) {
 		this->bTime--;
 	}
 
-	int noTime = 0;
+	int winner = 0;
+	std::string modal = "";
 	if (bTime <= 0) {
-		noTime = static_cast<int>(ColorEnum::Black);
+		winner = static_cast<int>(ColorEnum::Red);
+		modal = "Red Win!";
 	}
 	if (rTime <= 0) {
-		noTime = static_cast<int>(ColorEnum::Red);
+		winner = static_cast<int>(ColorEnum::Black);
+		modal = "Black Win!";
 	}
-	return this->viewer.getTime(this->bTime, this->rTime, noTime, hash);
+	return this->viewer.getTime(this->bTime, this->rTime, winner, modal, hash);
 }
 
 std::string GameManager::save(std::string hash) {

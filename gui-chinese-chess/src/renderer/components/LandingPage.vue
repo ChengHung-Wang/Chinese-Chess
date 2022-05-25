@@ -186,9 +186,9 @@
       }
     },
     async beforeRouteLeave(to, from, next) {
-      await this.globalStore.waitAllReqCompleted();
+      await this.globalStore.waitAllReqCompleted(true);
       this.globalStore.process.stdout.removeAllListeners();
-      console.log("Completed: action beforeRouteLeave in LandingPage.vuw");
+      console.log("Completed: action beforeRouteLeave in LandingPage.vue");
       next();
     }
   })

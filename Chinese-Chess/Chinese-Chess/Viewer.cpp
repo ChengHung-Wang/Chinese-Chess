@@ -20,11 +20,12 @@ std::string Viewer::setBoard(std::vector<Chess*> onBoard, int rTime, int bTime, 
 	return response.dump();
 }
 
-std::string Viewer::getTime(int bTime, int rTime, int noTime, std::string hash) {
+std::string Viewer::getTime(int bTime, int rTime, int winner, std::string modal, std::string hash) {
 	json response = {
 		{"rTime", rTime},
 		{"bTime", bTime},
-		{"noTime", noTime},
+		{"winner", winner},
+		{"modal", modal},
 		{"hash", hash}
 	};
 	return response.dump();

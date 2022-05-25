@@ -407,48 +407,13 @@ std::vector<Position> Chariot::canMove(Board& board) {
 	return movePos;
 }
 std::vector<Position> Chariot::canEat(Board& board) {
-	std::vector<Position> movePos;
-	for (int i = 0, xAdd = 0, yAdd = 0; i < 4; i++) {
-		if (i == 0) {
-			xAdd = 0;
-			yAdd = 1;
-		}
-		else if (i == 1) {
-			xAdd = 1;
-			yAdd = 0;
-		}
-		else if (i == 2) {
-			xAdd = 0;
-			yAdd = -1;
-		}
-		else if (i == 3) {
-			xAdd = -1;
-			yAdd = 0;
-		}
-		while (board.applyEat(Position(pos.x + xAdd, pos.y + yAdd), this->color) && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
-			int check = 0;
-			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
-			if (this->color == ColorEnum::Black && board.board[pos.y + yAdd][pos.x + xAdd] > 0) {
-				check = 1;
-			}
-			if (this->color == ColorEnum::Red && board.board[pos.y + yAdd][pos.x + xAdd] < 0) {
-				check = 1;
-			}
-			if (i == 0) {
-				yAdd--;
-			}
-			else if (i == 1) {
-				xAdd++;
-			}
-			else if (i == 2) {
-				yAdd++;
-			}
-			else {
-				xAdd--;
-			}
+	std::vector<Position> eatPos;
+	for (auto& pos : Chariot::canMove(board)) {
+		if (board.applyEat(pos, this->color)) {
+			eatPos.push_back(pos);
 		}
 	}
-	return movePos;
+	return eatPos;
 }
 
 std::vector<Position> Horse::canMove(Board& board) {
