@@ -10,10 +10,12 @@ std::string Viewer::setBoard(std::vector<Chess*> onBoard, int rTime, int bTime, 
 	for (auto& c : onBoard) {
 		json chess = json::object({
 			{"name", c->chessName},
+			{"uni", c->uni},
 			{"color", c->color},
 			{"id", c->id},
 			{"x", c->pos.x},
-			{"y", c->pos.y}
+			{"y", c->pos.y},
+			{"uni", c->uni}
 			});
 		response["chess"].push_back(chess);
 	}
@@ -42,6 +44,7 @@ std::string Viewer::getRound(ColorEnum color, int checkmate, int winner, std::st
 	if (moveChess != NULL) {
 		response["move"] = json::object({
 			{"id", moveChess->id},
+			{"uni", moveChess->uni},
 			{"fromX", from->x},
 			{"fromY", from->y},
 			{"toX", to->x},
@@ -54,6 +57,7 @@ std::string Viewer::getRound(ColorEnum color, int checkmate, int winner, std::st
 	if (eatChess != NULL) {
 		response["delete"] = json::object({
 			{"id", eatChess->id},
+			{"uni", eatChess->uni},
 			{"x", to->x},
 			{"y", to->y}
 			});
@@ -110,6 +114,7 @@ std::string Viewer::logs(std::vector<Record> records, std::string hash) {
 		for (auto& c : r.onBoard) {
 			json chess = json::object({
 				{"name", c->chessName},
+				{"uni", c->uni},
 				{"color", c->color},
 				{"id", c->id},
 				{"x", c->pos.x},
