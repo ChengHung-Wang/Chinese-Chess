@@ -35,7 +35,8 @@ std::string Viewer::getRound(ColorEnum color, int checkmate, int winner, std::st
 		{"color", color},
 		{"checkmate", checkmate},
 		{"winner", winner},
-		{"modal", modal}
+		{"modal", modal},
+		{"hash", hash}
 	};
 	if (moveChess != NULL) {
 		response["move"] = json::object({
