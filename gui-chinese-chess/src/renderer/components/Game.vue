@@ -9,14 +9,14 @@
           <div>
             <Board />
             <Flag
-                v-if="boardStore.init"
+                v-if="boardStore.init && item.disabled === undefined"
                 v-for="item in flags"
                 :name="item.name"
-                :x="item.x" :y="item.y" :color="item.color"
+                :x="item.x" :y="item.y" :color="item.color" :uni="item.uni"
                 :special-style="item.specialStyle"
-                @getMove="getMove">
+                @click.native="item.disabled === undefined && getMove({x: item.x, y: item.y, uni: item.uni})">
             </Flag>
-            <Hint v-if="boardStore.init" v-for="item in hints()" :x="item.x" :y="item.y" @click.native="move({x: item.x, y: item.y})" />
+            <Hint v-if="boardStore.init" v-for="item in hints()" :x="item.x" :y="item.y" @click.native="move({x: item.x, y: item.y, uni: item.uni})" />
             <el-dialog
                 title="遊戲結束"
                 :visible.sync="gameStore.winner != 0"
@@ -93,7 +93,9 @@ export default defineComponent({
       if (! this.gameStore.flagsHasInit) {
         this.flags = this.flags.map(e => {
           let result = e;
-          result.specialStyle = {};
+          result.specialStyle = {
+            'pointer-events': "auto"
+          };
           result.color = this.gameStore.getNumColor(result.color);
           if (result.name == '帥') {
             result.specialStyle.animation = "faceMeme 1s steps(1, end) infinite";
@@ -103,7 +105,6 @@ export default defineComponent({
           }
           result.specialStyle.zIndex = 1;
           result.specialStyle.opacity = 1;
-          result.pointerEvents = "auto";
           return result;
         })
       }
@@ -137,6 +138,7 @@ export default defineComponent({
       if (thisResponseIndex > -1 && !this.globalStore.responseStacks[thisResponseIndex].completed) {
         this.globalStore.responseStacks[thisResponseIndex].completed = true;
         this.globalStore.responseStacks[thisResponseIndex].callback(data);
+        console.log(data);
       }
     },
     loopEvent() {
@@ -172,6 +174,7 @@ export default defineComponent({
     async getTime() {
       let token = this.globalStore.getHash();
       let commend = `getTime ${token}`;
+      console.log(commend);
       this.globalStore.process.stdin.write(commend + '\n');
       this.gameStore.flagToken = token;
       this.globalStore.responseStacks.push({
@@ -189,6 +192,7 @@ export default defineComponent({
     async giveUp() {
       let token = this.globalStore.getHash();
       let commend = `giveUp ${token}`;
+      console.log(commend);
 
       await this.globalStore.waitAllReqCompleted();
 
@@ -207,6 +211,7 @@ export default defineComponent({
     async getRound() {
       let token = this.globalStore.getHash();
       let commend = `getRound ${token}`;
+      console.log(commend);
 
       await this.globalStore.waitAllReqCompleted();
 
@@ -219,19 +224,46 @@ export default defineComponent({
         callback: (response) => {
           // change flag position
           if (response.move) {
-            const changeId = this.gameStore.getFlagIndex(response.move.fromX, response.move.fromY);
+            const changeId = this.gameStore.getFlagIndex(response.move.fromX, response.move.fromY, response.uni);
             // remove flag
             if (response.delete) {
-              console.log("delete", response.delete);
-              const removeID = this.gameStore.getFlagIndex(response.delete.x, response.delete.y);
-              this.flags[removeID].specialStyle.zIndex = -1;
-              this.flags[removeID].specialStyle.opacity = 0;
-              this.flags[removeID].specialStyle.pointerEvents = "none";
+              const removeID = this.gameStore.getFlagIndex(response.delete.x, response.delete.y, response.uni);
+              // if (removeID > -1) {
+              //   let targetRemoveFlag = this.flags[removeID];
+              //   if (targetRemoveFlag.uni == response.delete.uni) {
+              //     debugger;
+              //     this.flags[removeID].specialStyle.zIndex = -1;
+              //     this.flags[removeID].specialStyle.opacity = 0;
+              //     this.flags[removeID].specialStyle.pointerEvents = "none";
+              //     this.flags[removeID].specialStyle.background = "green";
+              //     this.flags[removeID].disabled = true;
+              //   }
+              // }
+              this.flags[removeID].disabled = true;
+              // this.flags = this.flags.map(flag => {
+              //   flag = JSON.parse(JSON.stringify(flag));
+              //   if (flag.uni === response.delete.uni) {
+              //     flag.specialStyle.pointerEvents = "none";
+              //     flag.specialStyle.display = "none";
+              //     flag.specialStyle.zIndex = -1;
+              //     setTimeout(() => {
+              //       flag.disabled = true;
+              //     }, 500);
+              //   }else {
+              //     flag.specialStyle.pointerEvents = "auto";
+              //     flag.specialStyle.display = "flex";
+              //     flag.specialStyle.zIndex = 2;
+              //   }
+              //   return flag;
+              // })
+
             }
-            // find target
             if (changeId > -1) {
-              this.flags[changeId].x = response.move.toX;
-              this.flags[changeId].y = response.move.toY;
+              if (this.flags[changeId].uni == response.move.uni) {
+                // find target
+                this.flags[changeId].x = response.move.toX;
+                this.flags[changeId].y = response.move.toY;
+              }
             }
           }
           // update actionAble
@@ -255,9 +287,9 @@ export default defineComponent({
       });
     },
     async getMove(position) {
-      // getMove {hash} {x} {y}
+      // getMove {hash} {x} {y} {uni}
       console.log(position);
-      const thisFlag = this.flags[this.gameStore.getFlagIndex(position.x, position.y)];
+      const thisFlag = this.flags[this.gameStore.getFlagIndex(position.x, position.y, position.uni)];
 
       if (this.gameStore.actionAble == 0 || thisFlag.color != this.gameStore.getNumColor(this.gameStore.actionAble)) {
         this.$message.error("不可移動的棋子");
@@ -265,11 +297,14 @@ export default defineComponent({
       }else {
         this.gameStore.selectedFlag = {
           x: thisFlag.x,
-          y: thisFlag.y
+          y: thisFlag.y,
+          uni: thisFlag.uni
         };
       }
       let token = this.globalStore.getHash();
-      let commend = `getMove ${token} ${thisFlag.x} ${thisFlag.y}`;
+      // let commend = `getMove ${token} ${thisFlag.x} ${thisFlag.y}`;
+      let commend = `getMove ${token} ${position.uni}`;
+      console.log(commend);
 
       await this.globalStore.waitAllReqCompleted();
 
@@ -280,19 +315,18 @@ export default defineComponent({
             token: token,
             result: null,
             callback: (response) => {
-              console.log('run getMove callback');
+              // console.log('run getMove callback');
               this.gameStore.moveAble = response.canMove;
               this.gameStore.replaceAble = response.canEat;
             }
       })
-
     },
     async move(position) {
       let beforePosition = this.gameStore.selectedFlag;
       let token = this.globalStore.getHash();
       let commend = `move ${token} ${beforePosition.x} ${beforePosition.y} ${position.x} ${position.y}`;
+      console.log(commend);
       await this.globalStore.waitAllReqCompleted();
-
       this.globalStore.process.stdin.write(commend + '\n');
       this.gameStore.flagToken = token;
       this.globalStore.responseStacks.push({
@@ -300,43 +334,17 @@ export default defineComponent({
         token: token,
         result: null,
         callback: async (response) => {
-          // if (response.action == "replace") {
-          //   this.flags = this.flags.filter(e => {
-          //     return !(e.x == position.x && e.y == position.y);
-          //   })
-          // }
-          // let beChangePositionIndex = this.flags.map(el => {
-          //   return {
-          //     x: el.x,
-          //     y: el.y
-          //   }
-          // }).indexOf({
-          //   x: this.gameStore.selectedFlag.x,
-          //   y: this.gameStore.selectedFlag.y
-          // });
-          // console.log(this.flags.map(el => {
-          //   return {
-          //     x: el.x,
-          //     y: el.y
-          //   }
-          // }));
-          // console.log(this.gameStore.selectedFlag)
-          // if (beChangePositionIndex > -1) {
-          //   this.flags[beChangePositionIndex].x = position.x;
-          //   this.flags[beChangePositionIndex].y = position.y;
-          //   this.gameStore.loading = true;
-          // }
-          // console.log(beChangePositionIndex);
+          console.log(response, 'move callback')
           await this.getRound();
           this.gameStore.moveAble = [];
           this.gameStore.replaceAble = [];
-          // await this.getMove();
         }
       })
     },
     async save() {
       let token = this.globalStore.getHash();
       let commend = `save ${token}`;
+      console.log(commend);
 
       await this.globalStore.waitAllReqCompleted();
 

@@ -2,8 +2,8 @@
   <div
       class="flag"
       v-bind:style="flagStore.getStyle(x, y, color == 'red' ? flagStore.red : flagStore.black, specialStyle)"
-      v-bind:class="{shadowDeep: x == selectedFlag.x && y == selectedFlag.y}"
-      @click="$emit('getMove', {x: x, y: y})">
+      v-bind:class="{shadowDeep: x == selectedFlag.x && y == selectedFlag.y}">
+    <p>{{ uni }}</p>
     <h4 class="m-0 fcc" v-if="name != '帥'">{{ name }}</h4>
     <h4 class="m-0 fcc op-50" v-if="name == '帥'">{{ name }}</h4>
   </div>
@@ -19,6 +19,7 @@
     props: {
       x: Number,
       y: Number,
+      uni: Number,
       name: String,
       color: String,
       specialStyle: Object,
@@ -50,5 +51,8 @@
   }
   .shadowDeep {
      box-shadow: 0 .5rem 1rem rgba(0,0,0,.45)!important;
+  }
+  p {
+    font-size: 14px;
   }
 </style>

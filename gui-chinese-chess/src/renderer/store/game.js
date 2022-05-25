@@ -22,7 +22,7 @@ export const useGameStore = defineStore('game', {
         winner: 0, // 0 means the game hasn't stop.( 0 | 1 | 2 ),
         modal: "", // return by API,
         memePlay: ref(false), // play meme background
-        selectedFlag: ref({x: null, y: null}) // selected flag, {x: NULL, y: NULL} || {x: Number, y: Number}
+        selectedFlag: ref({x: null, y: null, uni: null}) // selected flag, {x: NULL, y: NULL} || {x: Number, y: Number, uni: Number}
     }),
     getters: {
         flagsHasInit: (state) => { // check flag has init
@@ -57,14 +57,20 @@ export const useGameStore = defineStore('game', {
         getNumColor(id) {
             return ["red", "black"][id - 1];
         },
-        getFlagIndex(x, y) {
+        getFlagIndex(x, y, uni = null) {
             let result = -1;
             if (x == null || y == null) {
                 return result;
             }
-            this.flags.forEach((flag, index) => {
-                if (flag.x == x && flag.y == y) {
-                   result = index;
+            this.flags.filter(e => e.disabled !== true).forEach((flag, index) => {
+                if (flag.x === x && flag.y === y) {
+                    if (uni !== null) {
+                        if (flag.uni === uni) {
+                            result = index;
+                        }
+                    }else if (uni === null){
+                        result = index;
+                    }
                 }
             })
             return result;
