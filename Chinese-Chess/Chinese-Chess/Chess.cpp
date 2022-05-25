@@ -1,10 +1,11 @@
 ﻿#include "Chess.h" 
 
 Chess::Chess() {}
-Chess::Chess(Position pos, ColorEnum color, ChessEnum id) {
+Chess::Chess(Position pos, ColorEnum color, ChessEnum id, int uni) {
 	this->pos = pos;
 	this->color = color;
 	this->id = id;
+	this->uni = uni;
 	switch (id)
 	{
 	case ChessEnum::General:
@@ -38,13 +39,13 @@ Chess::Chess(Position pos, ColorEnum color, ChessEnum id) {
 	}
 }
 
-General::General(Position pos, ColorEnum color) : Chess(pos, color, ChessEnum::General) {}
-Advisor::Advisor(Position pos, ColorEnum color) : Chess(pos, color, ChessEnum::Advisor) {}
-Elephant::Elephant(Position pos, ColorEnum color) : Chess(pos, color, ChessEnum::Elephant) {}
-Chariot::Chariot(Position pos, ColorEnum color) : Chess(pos, color, ChessEnum::Chariot) {}
-Horse::Horse(Position pos, ColorEnum color) : Chess(pos, color, ChessEnum::Horse) {}
-Cannon::Cannon(Position pos, ColorEnum color) : Chess(pos, color, ChessEnum::Cannon) {}
-Soldier::Soldier(Position pos, ColorEnum color) : Chess(pos, color, ChessEnum::Soldier) {}
+General::General(Position pos, ColorEnum color, int uni) : Chess(pos, color, ChessEnum::General, uni) {}
+Advisor::Advisor(Position pos, ColorEnum color, int uni) : Chess(pos, color, ChessEnum::Advisor, uni) {}
+Elephant::Elephant(Position pos, ColorEnum color, int uni) : Chess(pos, color, ChessEnum::Elephant, uni) {}
+Chariot::Chariot(Position pos, ColorEnum color, int uni) : Chess(pos, color, ChessEnum::Chariot, uni) {}
+Horse::Horse(Position pos, ColorEnum color, int uni) : Chess(pos, color, ChessEnum::Horse, uni) {}
+Cannon::Cannon(Position pos, ColorEnum color, int uni) : Chess(pos, color, ChessEnum::Cannon, uni) {}
+Soldier::Soldier(Position pos, ColorEnum color, int uni) : Chess(pos, color, ChessEnum::Soldier, uni) {}
 
 
 void Chess::move(Board& board, Position fromPos, Position toPos) {

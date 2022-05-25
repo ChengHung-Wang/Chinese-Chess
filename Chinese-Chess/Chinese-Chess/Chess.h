@@ -14,10 +14,11 @@ public:
 	ChessEnum id;
 	std::string chessName;
 	std::string enName;
+	int uni;
 
 public:
 	Chess();
-	Chess(Position pos, ColorEnum color, ChessEnum id);
+	Chess(Position pos, ColorEnum color, ChessEnum id, int uni);
 
 	void move(Board& board, Position fromPos, Position toPos);
 
@@ -29,7 +30,7 @@ public:
 class  General :public Chess {
 
 public:
-	General(Position pos, ColorEnum color);
+	General(Position pos, ColorEnum color, int uni);
 
 	std::vector<Position> canMove(Board& board);
 	std::vector<Position> canEat(Board& board);
@@ -39,7 +40,7 @@ public:
 class Advisor :public Chess {
 
 public:
-	Advisor(Position pos, ColorEnum color);
+	Advisor(Position pos, ColorEnum color, int uni);
 
 	std::vector<Position> canMove(Board& board);
 	std::vector<Position> canEat(Board& board);
@@ -49,7 +50,7 @@ public:
 class Elephant :public Chess {
 
 public:
-	Elephant(Position pos, ColorEnum color);
+	Elephant(Position pos, ColorEnum color, int uni);
 
 	std::vector<Position> canMove(Board& board);
 	std::vector<Position> canEat(Board& board);
@@ -59,7 +60,7 @@ public:
 class Chariot :public Chess {
 
 public:
-	Chariot(Position pos, ColorEnum color);
+	Chariot(Position pos, ColorEnum color, int uni);
 
 	std::vector<Position> canMove(Board& board);
 	std::vector<Position> canEat(Board& board);
@@ -69,7 +70,7 @@ public:
 class Horse :public Chess {
 
 public:
-	Horse(Position pos, ColorEnum color);
+	Horse(Position pos, ColorEnum color, int uni);
 
 	std::vector<Position> canMove(Board& board);
 	std::vector<Position> canEat(Board& board);
@@ -79,7 +80,7 @@ public:
 class Cannon :public Chess {
 
 public:
-	Cannon(Position pos, ColorEnum color);
+	Cannon(Position pos, ColorEnum color, int uni);
 
 	std::vector<Position> canMove(Board& board);
 	std::vector<Position> canEat(Board& board);
@@ -89,7 +90,7 @@ public:
 class Soldier :public Chess {
 
 public:
-	Soldier(Position pos, ColorEnum color);
+	Soldier(Position pos, ColorEnum color, int uni);
 
 	std::vector<Position> canMove(Board& board);
 	std::vector<Position> canEat(Board& board);

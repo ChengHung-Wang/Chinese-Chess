@@ -150,25 +150,25 @@ bool GameManager::isStalemate(std::vector<Chess*> onBoard, ColorEnum color, Boar
 					switch (chess->id)
 					{
 					case ChessEnum::General:
-						cOnBoard.push_back(new General(chess->pos, chess->color));
+						cOnBoard.push_back(new General(chess->pos, chess->color, chess->uni));
 						break;
 					case ChessEnum::Advisor:
-						cOnBoard.push_back(new Advisor(chess->pos, chess->color));
+						cOnBoard.push_back(new Advisor(chess->pos, chess->color, chess->uni));
 						break;
 					case ChessEnum::Elephant:
-						cOnBoard.push_back(new Elephant(chess->pos, chess->color));
+						cOnBoard.push_back(new Elephant(chess->pos, chess->color, chess->uni));
 						break;
 					case ChessEnum::Chariot:
-						cOnBoard.push_back(new Chariot(chess->pos, chess->color));
+						cOnBoard.push_back(new Chariot(chess->pos, chess->color, chess->uni));
 						break;
 					case ChessEnum::Horse:
-						cOnBoard.push_back(new Horse(chess->pos, chess->color));
+						cOnBoard.push_back(new Horse(chess->pos, chess->color, chess->uni));
 						break;
 					case ChessEnum::Cannon:
-						cOnBoard.push_back(new Cannon(chess->pos, chess->color));
+						cOnBoard.push_back(new Cannon(chess->pos, chess->color, chess->uni));
 						break;
 					case ChessEnum::Soldier:
-						cOnBoard.push_back(new Soldier(chess->pos, chess->color));
+						cOnBoard.push_back(new Soldier(chess->pos, chess->color, chess->uni));
 						break;
 					}
 				}
@@ -259,25 +259,25 @@ void GameManager::addRecord(Chess* chess, Chess* eatChess, int fromX, int fromY,
 		switch (c->id)
 		{
 		case ChessEnum::General:
-			cOnBoard.push_back(new General(c->pos, c->color));
+			cOnBoard.push_back(new General(c->pos, c->color, c->uni));
 			break;
 		case ChessEnum::Advisor:
-			cOnBoard.push_back(new Advisor(c->pos, c->color));
+			cOnBoard.push_back(new Advisor(c->pos, c->color, c->uni));
 			break;
 		case ChessEnum::Elephant:
-			cOnBoard.push_back(new Elephant(c->pos, c->color));
+			cOnBoard.push_back(new Elephant(c->pos, c->color, c->uni));
 			break;
 		case ChessEnum::Chariot:
-			cOnBoard.push_back(new Chariot(c->pos, c->color));
+			cOnBoard.push_back(new Chariot(c->pos, c->color, c->uni));
 			break;
 		case ChessEnum::Horse:
-			cOnBoard.push_back(new Horse(c->pos, c->color));
+			cOnBoard.push_back(new Horse(c->pos, c->color, c->uni));
 			break;
 		case ChessEnum::Cannon:
-			cOnBoard.push_back(new Cannon(c->pos, c->color));
+			cOnBoard.push_back(new Cannon(c->pos, c->color, c->uni));
 			break;
 		case ChessEnum::Soldier:
-			cOnBoard.push_back(new Soldier(c->pos, c->color));
+			cOnBoard.push_back(new Soldier(c->pos, c->color, c->uni));
 			break;
 		}
 	}
