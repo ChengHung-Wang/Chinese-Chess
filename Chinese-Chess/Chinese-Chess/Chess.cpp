@@ -308,7 +308,17 @@ std::vector<Position> Chariot::canMove(Board& board) {
 			yAdd = 0;
 		}
 		while (board.applyMove(Position(pos.x + xAdd, pos.y + yAdd), this->color) && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
+			int check = 0;
 			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
+			if (this->color == ColorEnum::Black&&board.board[pos.y+yAdd][pos.x+xAdd]>0) {
+				check = 1;
+			}
+			if(this->color == ColorEnum::Red && board.board[pos.y + yAdd][pos.x + xAdd] < 0){
+				check = 1;
+			}
+			if (check == 1) {
+				break;
+			}
 			if (i == 0) {
 				yAdd--;
 			}
@@ -345,7 +355,14 @@ std::vector<Position> Chariot::canEat(Board& board) {
 			yAdd = 0;
 		}
 		while (board.applyEat(Position(pos.x + xAdd, pos.y + yAdd), this->color) && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
+			int check = 0;
 			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
+			if (this->color == ColorEnum::Black && board.board[pos.y + yAdd][pos.x + xAdd] > 0) {
+				check = 1;
+			}
+			if (this->color == ColorEnum::Red && board.board[pos.y + yAdd][pos.x + xAdd] < 0) {
+				check = 1;
+			}
 			if (i == 0) {
 				yAdd--;
 			}
