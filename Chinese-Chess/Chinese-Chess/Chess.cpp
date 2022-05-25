@@ -448,10 +448,9 @@ std::vector<Position> Horse::canEat(Board& board) {
 std::vector<Position> Cannon::canMove(Board& board) {
 	std::vector<Position> movePos;
 	for (int i = 0, xAdd = 0, yAdd = 0; i < 4; i++) {
-		int count = 2;
 		if (i == 0) {
 			xAdd = 0;
-			yAdd = 1;
+			yAdd = -1;
 		}
 		else if (i == 1) {
 			xAdd = 1;
@@ -459,27 +458,54 @@ std::vector<Position> Cannon::canMove(Board& board) {
 		}
 		else if (i == 2) {
 			xAdd = 0;
-			yAdd = -1;
+			yAdd = 1;
 		}
 		else if (i == 3) {
 			xAdd = -1;
 			yAdd = 0;
 		}
-		while (board.board[pos.y + yAdd][pos.x + xAdd] == 0) {
+		while (board.board[pos.y + yAdd][pos.x + xAdd] == 0 && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
 			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
-			xAdd *= count;
-			yAdd *= count;
-			count++;
+			if (i == 0) {
+				yAdd--;
+			}
+			else if (i == 1) {
+				xAdd++;
+			}
+			else if (i == 2) {
+				yAdd++;
+			}
+			else {
+				xAdd--;
+			}
 		}
-		count++;
-		xAdd *= count;
-		yAdd *= count;
-		while (board.board[pos.y + yAdd][pos.x + xAdd] == 0) {
-			xAdd *= count;
-			yAdd *= count;
-			count++;
+		if (i == 0) {
+			yAdd--;
 		}
-		if (board.applyMove(Position(pos.x + xAdd, pos.y + yAdd), this->color)) {
+		else if (i == 1) {
+			xAdd++;
+		}
+		else if (i == 2) {
+			yAdd++;
+		}
+		else {
+			xAdd--;
+		}
+		while (board.board[pos.y + yAdd][pos.x + xAdd] == 0 && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
+			if (i == 0) {
+				yAdd--;
+			}
+			else if (i == 1) {
+				xAdd++;
+			}
+			else if (i == 2) {
+				yAdd++;
+			}
+			else {
+				xAdd--;
+			}
+		}
+		if (board.applyMove(Position(pos.x + xAdd, pos.y + yAdd), this->color) && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
 			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
 		}
 	}
@@ -488,10 +514,9 @@ std::vector<Position> Cannon::canMove(Board& board) {
 std::vector<Position> Cannon::canEat(Board& board) {
 	std::vector<Position> movePos;
 	for (int i = 0, xAdd = 0, yAdd = 0; i < 4; i++) {
-		int count = 2;
 		if (i == 0) {
 			xAdd = 0;
-			yAdd = 1;
+			yAdd = -1;
 		}
 		else if (i == 1) {
 			xAdd = 1;
@@ -499,27 +524,54 @@ std::vector<Position> Cannon::canEat(Board& board) {
 		}
 		else if (i == 2) {
 			xAdd = 0;
-			yAdd = -1;
+			yAdd = 1;
 		}
 		else if (i == 3) {
 			xAdd = -1;
 			yAdd = 0;
 		}
-		while (board.board[pos.y + yAdd][pos.x + xAdd] == 0) {
+		while (board.board[pos.y + yAdd][pos.x + xAdd] == 0 && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
 			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
-			xAdd *= count;
-			yAdd *= count;
-			count++;
+			if (i == 0) {
+				yAdd--;
+			}
+			else if (i == 1) {
+				xAdd++;
+			}
+			else if (i == 2) {
+				yAdd++;
+			}
+			else {
+				xAdd--;
+			}
 		}
-		count++;
-		xAdd *= count;
-		yAdd *= count;
-		while (board.board[pos.y + yAdd][pos.x + xAdd] == 0) {
-			xAdd *= count;
-			yAdd *= count;
-			count++;
+		if (i == 0) {
+			yAdd--;
 		}
-		if (board.applyEat(Position(pos.x + xAdd, pos.y + yAdd), this->color)) {
+		else if (i == 1) {
+			xAdd++;
+		}
+		else if (i == 2) {
+			yAdd++;
+		}
+		else {
+			xAdd--;
+		}
+		while (board.board[pos.y + yAdd][pos.x + xAdd] == 0 && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
+			if (i == 0) {
+				yAdd--;
+			}
+			else if (i == 1) {
+				xAdd++;
+			}
+			else if (i == 2) {
+				yAdd++;
+			}
+			else {
+				xAdd--;
+			}
+		}
+		if (board.applyEat(Position(pos.x + xAdd, pos.y + yAdd), this->color) && (pos.x + xAdd) >= 0 && (pos.x + xAdd) <= 8 && (pos.y + yAdd) >= 0 && (pos.y + yAdd) <= 9) {
 			movePos.push_back(Position(pos.x + xAdd, pos.y + yAdd));
 		}
 	}
