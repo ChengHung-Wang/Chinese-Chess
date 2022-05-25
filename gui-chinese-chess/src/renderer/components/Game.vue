@@ -10,7 +10,7 @@
             <Board />
             <Flag
                 v-if="boardStore.init"
-                v-for="item in getFlags()"
+                v-for="item in flags"
                 :name="item.name"
                 :x="item.x" :y="item.y" :color="item.color"
                 :special-style="item.specialStyle"
@@ -164,9 +164,6 @@ export default defineComponent({
         })
       }
       return Array.from(new Set(result)); // bring each item is unique in Array by ES6
-    },
-    getFlags() {
-      return JSON.parse(JSON.stringify(this.flags));
     },
     // ************************************
     // *************** API ****************
