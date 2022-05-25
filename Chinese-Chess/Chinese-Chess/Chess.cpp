@@ -65,7 +65,7 @@ std::vector<Position> General::canMove(Board& board) {
 					if (board.board[0][x] == -1 || board.board[1][x] == -1 || board.board[2][x] == -1) {
 						int check = 0, yAdd = -1;
 						while (1) {
-							if (y + yAdd < 0) {
+							if (board.board[y + yAdd][x] == -1) {
 								break;
 							}
 							if (board.board[y + yAdd][x] != 0 && board.board[y + yAdd][x] != -1) {
@@ -90,61 +90,62 @@ std::vector<Position> General::canMove(Board& board) {
 					if (board.board[9][x] == 1 || board.board[8][x] == 1 || board.board[7][x] == 1) {
 						int check = 0, yAdd = 1;
 						while (1) {
-							if (y + yAdd > 9) {
+							if (board.board[y + yAdd][x] == 1) {
 								break;
 							}
 							if (board.board[y + yAdd][x] != 0 && board.board[y + yAdd][x] != 1) {
 								check = 1;
 								break;
 							}
-							yAdd--;
+							yAdd++;
 						}
 						if (check == 1) {
 							movePos.push_back(Position(x, y));
 						}
 					}
-					else
+					else {
 						movePos.push_back(Position(x, y));
+					}
 				}
 			}
 		}
 	}
 	if (this->color == ColorEnum::Red) {
 		if (board.board[0][pos.x] == -1 || board.board[1][pos.x] == -1 || board.board[2][pos.x] == -1) {
-			int check = 0;
-			int yAdd = -1;
+			int check1 = 0;
+			int yAdd1 = -1;
 			while (1) {
-				if (board.board[pos.y + yAdd][pos.x] != 0 && board.board[pos.y + yAdd][pos.x] != -1) {
-					check = 1;
+				if (board.board[pos.y + yAdd1][pos.x] != 0 && board.board[pos.y + yAdd1][pos.x] != -1) {
+					check1 = 1;
 					break;
 				}
-				if (board.board[pos.y + yAdd][pos.x] == -1) {
-					gen = pos.y + yAdd;
+				if (board.board[pos.y + yAdd1][pos.x] == -1) {
+					gen = pos.y + yAdd1;
 					break;
 				}
-				yAdd--;
+				yAdd1--;
 			}
-			if (check == 0) {
+			if (check1 == 0) {
 				movePos.push_back(Position(pos.x, gen));
 			}
 		}
 	}
 	else {
 		if (board.board[9][pos.x] == 1 || board.board[8][pos.x] == 1 || board.board[7][pos.x] == 1) {
-			int check = 0;
-			int yAdd = 1;
+			int check1 = 0;
+			int yAdd1 = 1;
 			while (1) {
-				if (board.board[pos.y + yAdd][pos.x] != 0 && board.board[pos.y + yAdd][pos.x] != -1) {
-					check = 1;
+				if (board.board[pos.y + yAdd1][pos.x] != 0 && board.board[pos.y + yAdd1][pos.x] != 1) {
+					check1 = 1;
 					break;
 				}
-				if (board.board[pos.y + yAdd][pos.x] == -1) {
-					gen = pos.y + yAdd;
+				if (board.board[pos.y + yAdd1][pos.x] == 1) {
+					gen = pos.y + yAdd1;
 					break;
 				}
-				yAdd++;
+				yAdd1++;
 			}
-			if (check == 0) {
+			if (check1 == 0) {
 				movePos.push_back(Position(pos.x, gen));
 			}
 		}
@@ -193,7 +194,7 @@ std::vector<Position> General::canEat(Board& board) {
 								check = 1;
 								break;
 							}
-							yAdd--;
+							yAdd++;
 						}
 						if (check == 1) {
 							movePos.push_back(Position(x, y));
@@ -207,40 +208,40 @@ std::vector<Position> General::canEat(Board& board) {
 	}
 	if (this->color == ColorEnum::Red) {
 		if (board.board[0][pos.x] == -1 || board.board[1][pos.x] == -1 || board.board[2][pos.x] == -1) {
-			int check = 0;
-			int yAdd = -1;
+			int check1 = 0;
+			int yAdd1 = -1;
 			while (1) {
-				if (board.board[pos.y + yAdd][pos.x] != 0 && board.board[pos.y + yAdd][pos.x] != -1) {
-					check = 1;
+				if (board.board[pos.y + yAdd1][pos.x] != 0 && board.board[pos.y + yAdd1][pos.x] != -1) {
+					check1 = 1;
 					break;
 				}
-				if (board.board[pos.y + yAdd][pos.x] == -1) {
-					gen = pos.y + yAdd;
+				if (board.board[pos.y + yAdd1][pos.x] == -1) {
+					gen = pos.y + yAdd1;
 					break;
 				}
-				yAdd--;
+				yAdd1--;
 			}
-			if (check == 0) {
+			if (check1 == 0) {
 				movePos.push_back(Position(pos.x, gen));
 			}
 		}
 	}
 	else {
 		if (board.board[9][pos.x] == 1 || board.board[8][pos.x] == 1 || board.board[7][pos.x] == 1) {
-			int check = 0;
-			int yAdd = 1;
+			int check1 = 0;
+			int yAdd1 = 1;
 			while (1) {
-				if (board.board[pos.y + yAdd][pos.x] != 0 && board.board[pos.y + yAdd][pos.x] != -1) {
-					check = 1;
+				if (board.board[pos.y + yAdd1][pos.x] != 0 && board.board[pos.y + yAdd1][pos.x] != 1) {
+					check1 = 1;
 					break;
 				}
-				if (board.board[pos.y + yAdd][pos.x] == -1) {
-					gen = pos.y + yAdd;
+				if (board.board[pos.y + yAdd1][pos.x] == 1) {
+					gen = pos.y + yAdd1;
 					break;
 				}
-				yAdd++;
+				yAdd1++;
 			}
-			if (check == 0) {
+			if (check1 == 0) {
 				movePos.push_back(Position(pos.x, gen));
 			}
 		}
