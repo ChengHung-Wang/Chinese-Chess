@@ -224,7 +224,7 @@ std::vector<Position> Elephant::canMove(Board& board) {
 			yAdd = 1;
 		}
 		if (this->color == ColorEnum::Black) {
-			if (pos.y + yAdd * 2 > 4) {
+			if (pos.y + yAdd * 2 > 4 || pos.y + yAdd * 2 < 0 || pos.x + xAdd * 2 < 0 || pos.x + xAdd * 2 > 8) {
 				continue;
 			}
 			if (board.applyMove(Position(pos.x + xAdd * 2, pos.y + yAdd * 2), this->color) && board.board[pos.y + yAdd][pos.x + xAdd] == 0) {
@@ -232,7 +232,7 @@ std::vector<Position> Elephant::canMove(Board& board) {
 			}
 		}
 		else {
-			if (pos.y + yAdd * 2 < 5) {
+			if (pos.y + yAdd * 2 < 5 || pos.y + yAdd * 2 > 9 || pos.x + xAdd * 2 < 0 || pos.x + xAdd * 2 > 8) {
 				continue;
 			}
 			if (board.applyMove(Position(pos.x + xAdd * 2, pos.y + yAdd * 2), this->color) && board.board[pos.y + yAdd][pos.x + xAdd] == 0) {
@@ -258,7 +258,7 @@ std::vector<Position> Elephant::canEat(Board& board) {
 			yAdd = 1;
 		}
 		if (this->color == ColorEnum::Black) {
-			if (pos.y + yAdd * 2 > 4) {
+			if (pos.y + yAdd * 2 > 4 || pos.y + yAdd * 2 < 0 || pos.x + xAdd * 2 < 0 || pos.x + xAdd * 2 > 8) {
 				continue;
 			}
 			if (board.applyEat(Position(pos.x + xAdd * 2, pos.y + yAdd * 2), this->color) && board.board[pos.y + yAdd][pos.x + xAdd] == 0) {
@@ -266,7 +266,7 @@ std::vector<Position> Elephant::canEat(Board& board) {
 			}
 		}
 		else {
-			if (pos.y + yAdd * 2 < 5) {
+			if (pos.y + yAdd * 2 < 5 || pos.y + yAdd * 2 > 9 || pos.x + xAdd * 2 < 0 || pos.x + xAdd * 2 > 8) {
 				continue;
 			}
 			if (board.applyEat(Position(pos.x + xAdd * 2, pos.y + yAdd * 2), this->color) && board.board[pos.y + yAdd][pos.x + xAdd] == 0) {
