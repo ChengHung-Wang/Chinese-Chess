@@ -70,5 +70,6 @@ public:
 	bool isCheckmate(std::vector<Chess*> onBoard, ColorEnum color, Board board);
 	bool isStalemate(std::vector<Chess*> onBoard, ColorEnum color, Board board);
 	Chess* eaten(Position eatPos);
+	void showBoard();
 
 };

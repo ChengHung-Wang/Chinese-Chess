@@ -308,3 +308,12 @@ Chess* GameManager::eaten(Position eatPos) {
 	}
 	return eatChess;
 }
+
+void GameManager::showBoard() {
+	for (size_t i = 0; i < 10; i++) {
+		for (size_t j = 0; j < 9; j++) {
+			std::cout << std::setw(2) << std::setfill(' ') << this->board.board[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+}
