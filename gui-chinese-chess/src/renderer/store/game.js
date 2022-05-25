@@ -68,6 +68,24 @@ export const useGameStore = defineStore('game', {
                 }
             })
             return result;
+        },
+        reset() {
+            this.flags =  ref([]);
+            this.moveAble =  null; // null || Array
+            this.replaceAble =  null;// null || Array
+            this.flagToken =  "";
+            this.hintToken =  "";
+            this.rTime =  0;
+            this.bTime =  0;
+            this.mate =  0;
+            this.displayHint =  false;
+            this.loading =  true;
+            this.actionAble =  0; // 0 => not set; 1 || 2 => member color
+            this.stop =  true; // It will turn to ture when the game being end or replaying log or landingPage
+            this.winner =  0; // 0 means the game hasn't stop.( 0 | 1 | 2 );
+            this.modal =  ""; // return by API
+            this.memePlay =  ref(false); // play meme background
+            this.selectedFlag =  ref({x: null, y: null}); // selected flag, {x: NULL, y: NULL} || {x: Number, y: Number}
         }
     }
 });

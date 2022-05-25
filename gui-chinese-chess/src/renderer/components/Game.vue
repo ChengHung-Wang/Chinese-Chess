@@ -103,6 +103,7 @@ export default defineComponent({
           }
           result.specialStyle.zIndex = 1;
           result.specialStyle.opacity = 1;
+          result.pointerEvents = "auto";
           return result;
         })
       }
@@ -225,6 +226,7 @@ export default defineComponent({
               const removeID = this.gameStore.getFlagIndex(response.delete.x, response.delete.y);
               this.flags[removeID].specialStyle.zIndex = -1;
               this.flags[removeID].specialStyle.opacity = 0;
+              this.flags[removeID].specialStyle.pointerEvents = "none";
             }
             // find target
             if (changeId > -1) {
@@ -359,6 +361,7 @@ export default defineComponent({
   },
   async beforeRouteLeave(to, from, next) {
     this.gameStore.stop = true;
+    this.gameStore.reset();
     clearInterval(this.loopEnv);
     await this.globalStore.waitAllReqCompleted(true);
     this.globalStore.process.stdout.removeAllListeners();
