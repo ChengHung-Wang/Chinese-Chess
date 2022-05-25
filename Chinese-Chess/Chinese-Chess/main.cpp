@@ -7,6 +7,11 @@ int main() {
 	GameManager gm;
 	std::string opt, hash;
 	while (std::cin >> opt) {
+		if (opt == "show") {
+			gm.showBoard();
+			continue;
+		}
+
 		std::cin >> hash;
 		if (opt == "save") {
 			std::cout << gm.save(hash);
