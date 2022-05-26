@@ -1,0 +1,8 @@
+Player: 1, Action: Chariot (0, 9) -> (0, 8)
+Player: 2, Action: Chariot (0, 0) -> (0, 1)
+Player: 1, Action: General (4, 9) -> (4, 8)
+Player: 2, Action: General (4, 0) -> (4, 1)
+Player: 1, Action: Chariot (0, 8) -> (3, 8)
+Player: 2, Action: Soldier (4, 3) -> (4, 4)
+Player: 1, Action: Chariot (3, 8) -> (3, 1)
+Player: 2, Action: Chariot (0, 1) -> (0, 2)
