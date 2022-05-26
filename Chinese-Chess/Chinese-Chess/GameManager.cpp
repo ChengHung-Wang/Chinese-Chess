@@ -179,8 +179,8 @@ bool GameManager::isStalemate(std::vector<Chess*> onBoard, ColorEnum color, Boar
 					}
 				}
 				for (auto& cc : cOnBoard) {
-					if (cc->pos.x == c->pos.x && cc->pos.y == cc->pos.y) {
-						cc->move(cBoard, c->pos, m);
+					if (cc->pos.x == c->pos.x && cc->pos.y == c->pos.y) {
+						cc->move(cBoard, cc->pos, m);
 					}
 				}
 				if (!isCheckmate(cOnBoard, color == ColorEnum::Red ? ColorEnum::Black : ColorEnum::Red, cBoard)) {
