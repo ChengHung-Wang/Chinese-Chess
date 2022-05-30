@@ -327,7 +327,12 @@ logs {hash}
                     "y": 0
                 },
                 // ...
-            ]
+            ],
+            "chessName": "馬",
+            "fromX": 0,
+            "fromY": 0,
+            "toX": 1,
+            "toY": 1
         },
         {
             "rTime": 580,
@@ -349,7 +354,11 @@ logs {hash}
                 },
                 // ...
             ],
-            // ...
+            "chessName": "馬",
+            "fromX": 0,
+            "fromY": 0,
+            "toX": 1,
+            "toY": 1
         },
     ],
     "hash": "hash"
