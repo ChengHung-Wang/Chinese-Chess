@@ -1,0 +1,166 @@
+* {
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+div {
+    position: relative;
+}
+p {
+    color: #606266;
+}
+.mt-15 {margin-top: 15px;}
+.ml-15 {margin-left: 15px;}
+.mr-15 {margin-right: 15px;}
+.mb-15 {margin-bottom: 15px;}
+
+.fsc {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.fec {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+.fcc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.flc {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.fec {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+.fac {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.fbc {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.word-break {
+    word-break: break-all!important;
+}
+
+.router-link-active {
+    color: red;
+}
+
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    transition: opacity .25s ease;
+}
+
+.fade-leave {}
+
+.fade-leave-active {
+    transition: opacity .25s ease;
+    opacity: 0;
+}
+.board-frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.flag {
+    position: absolute;
+    transition: .25s ease-in-out;
+    border-radius: 50%;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, .3);
+    backdrop-filter: blur(30px) saturate(180%);
+    user-select: none;
+}
+.flag:hover {
+    animation-play-state: paused!important;
+}
+@keyframes faceMeme {
+    0% {
+        background-image: url('../../assets/images/person1.png');
+    }
+    16.6666667% {
+        background-image: url('../../assets/images/person2.png');
+    }
+    33.3333334% {
+        background-image: url('../../assets/images/person3.png');
+    }
+    49.9999998% {
+        background-image: url('../../assets/images/person4.png');
+    }
+    66.6666666% {
+        background-image: url('../../assets/images/person5.png');
+    }
+    83.3333333% {
+        background-image: url('../../assets/images/person6.png');
+    }
+    100% {
+        background-image: url('../../assets/images/person6.png');
+    }
+}
+.op-0 {
+    opacity: 0!important;
+}
+.game {
+    background-size: cover;
+    background-color: white;
+}
+.play-meme {
+    background-image: url('../../assets/images/memeHotpot.gif') !important;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: transparent;
+}
+.play-meme::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .2)!important;
+}
+.play-meme .board {
+    border-color: white!important;
+}
+.play-meme .cube {
+    border-color: white!important;
+}
+.play-meme .center, .play-meme .center p {
+    color: white!important;
+}
+.w-33 {
+    width: 33.33333333% !important;
+}

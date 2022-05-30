@@ -1,0 +1,18 @@
+# ninja log v5
+2662	2770	1653480846515643877	Chinese_Chess	4c8e92f50609bbc9
+42	1884	1653480845627328226	CMakeFiles/Chinese_Chess.dir/main.cpp.o	941906c00f709e92
+4	1116	1653476112482920685	CMakeFiles/Chinese_Chess.dir/Chess.cpp.o	42f3f54d72f9e811
+1	123	1653567825330527349	build.ninja	b52c4a24bb7a9030
+8	1013	1653476112378613832	CMakeFiles/Chinese_Chess.dir/Record.cpp.o	8f49bb903ade77b1
+5	2266	1653478581848387465	CMakeFiles/Chinese_Chess.dir/Viewer.cpp.o	393f43af205f6d04
+2	43	1653246175752852417	CMakeFiles/Chinese_Chess.dir/Position.cpp.o	e2a619d0684e75e6
+41	2662	1653480846403399268	CMakeFiles/Chinese_Chess.dir/GameManager.cpp.o	f001e47a01e3f889
+3	52	1653246393349913167	CMakeFiles/Chinese_Chess.dir/Board.cpp.o	6125f6b45734f94d
+20	87	1653567829705709760	CMakeFiles/Chinese_Chess.dir/Position.cpp.o	f776917d5d8eb286
+24	101	1653567829719987626	CMakeFiles/Chinese_Chess.dir/Board.cpp.o	c56807f58ff1a7a5
+21	781	1653567830394167333	CMakeFiles/Chinese_Chess.dir/Record.cpp.o	c25ca242597d8285
+19	886	1653567830501292743	CMakeFiles/Chinese_Chess.dir/Chess.cpp.o	d58d86d09ce3160b
+20	1978	1653567831582524935	CMakeFiles/Chinese_Chess.dir/main.cpp.o	5a93fec513d71e3f
+22	2581	1653567832175240234	CMakeFiles/Chinese_Chess.dir/Viewer.cpp.o	2b4f5b8a7f900a1c
+20	2888	1653567832489168592	CMakeFiles/Chinese_Chess.dir/GameManager.cpp.o	412ebefd831bbce8
+2888	2976	1653567832588483356	Chinese_Chess	4c8e92f50609bbc9

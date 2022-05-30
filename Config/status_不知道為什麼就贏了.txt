@@ -1,0 +1,2 @@
+Player: 1, Action: Cannon (7, 7) -> (7, 0)
+Player: 2, Action: Elephant (6, 0) -> (8, 2)
