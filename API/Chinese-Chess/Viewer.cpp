@@ -111,7 +111,12 @@ std::string Viewer::logs(std::vector<Record> records, std::string hash) {
 	for (auto& r : records) {
 		json record = json::object({
 			{"rTime", r.rTime},
-			{"bTime", r.bTime}
+			{"bTime", r.bTime},
+			{"chessName", r.chess->chessName},
+			{"fromX", r.from.x},
+			{"fromY", r.from.y},
+			{"toX", r.to.x},
+			{"toY", r.to.y}
 			});
 		record["chess"] = json::array();
 		for (auto& c : r.onBoard) {
