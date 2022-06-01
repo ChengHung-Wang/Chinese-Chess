@@ -58,26 +58,10 @@ std::string GameManager::getRound(std::string hash) {
 	if (isCheckmate(this->onBoard, ColorEnum::Black, this->board)) {
 		checkmate = static_cast<int>(ColorEnum::Black);
 		modal = "Black Checkmate";
-		if (lastCheckmate == static_cast<int>(ColorEnum::Black)) {
-			winner = static_cast<int>(ColorEnum::Black);
-			modal = "Black Win!";
-		}
-		else if (this->currentPlayer == ColorEnum::Red) { //last player
-			winner = static_cast<int>(ColorEnum::Black);
-			modal = "Black Win!";
-		}
 	}
-	if (winner == 0 && isCheckmate(this->onBoard, ColorEnum::Red, this->board)) {
+	if ((modal == "" || this->currentPlayer == ColorEnum::Red) && isCheckmate(this->onBoard, ColorEnum::Red, this->board)) { //last player is red
 		checkmate = static_cast<int>(ColorEnum::Red);
 		modal = "Red Checkmate";
-		if (lastCheckmate == static_cast<int>(ColorEnum::Red)) {
-			winner = static_cast<int>(ColorEnum::Red);
-			modal = "Red Win!";
-		}
-		else if (this->currentPlayer == ColorEnum::Black) { //last player
-			winner = static_cast<int>(ColorEnum::Red);
-			modal = "Red Win!";
-		}
 	}
 
 	if (!this->newGame) {
@@ -87,33 +71,31 @@ std::string GameManager::getRound(std::string hash) {
 		this->newGame = false;
 	}
 
+	for (auto& c : onBoard) {
+		if (c->id == ChessEnum::General) {
+			winner += this->board.board[c->pos.y][c->pos.x];
+		}
+	}
 	if (winner == 0) {
-		for (auto& c : onBoard) {
-			if (c->id == ChessEnum::General) {
-				winner += this->board.board[c->pos.y][c->pos.x];
-			}
+		//Stalemate
+		if (isStalemate(this->onBoard, ColorEnum::Black, this->board)) {
+			winner = static_cast<int>(ColorEnum::Red);
+			modal = "Red Win!";
 		}
-		if (winner == 0) {
-			//Stalemate
-			if (isStalemate(this->onBoard, ColorEnum::Black, this->board)) {
-				winner = static_cast<int>(ColorEnum::Red);
-				modal = "Red Win!";
-			}
-			if (winner == 0 && isStalemate(this->onBoard, ColorEnum::Red, this->board)) {
-				winner = static_cast<int>(ColorEnum::Black);
-				modal = "Black Win!";
-			}
+		if (winner == 0 && isStalemate(this->onBoard, ColorEnum::Red, this->board)) {
+			winner = static_cast<int>(ColorEnum::Black);
+			modal = "Black Win!";
 		}
-		else {
-			//Die
-			if (winner == 1) {
-				modal = "Red Win!";
-				winner = 1;
-			}
-			else if (winner == -1) {
-				modal = "Black Win!";
-				winner = 2;
-			}
+	}
+	else {
+		//Die
+		if (winner == 1) {
+			modal = "Red Win!";
+			winner = 1;
+		}
+		else if (winner == -1) {
+			modal = "Black Win!";
+			winner = 2;
 		}
 	}
 
