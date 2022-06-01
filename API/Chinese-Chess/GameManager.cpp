@@ -210,6 +210,9 @@ std::string GameManager::getTime(std::string hash) {
 std::string GameManager::save(std::string hash) {
 	std::ostringstream ostr;
 	for (auto& r : this->records) {
+		if (r.chess == NULL) {
+			continue;
+		}
 		ostr << "Player: " << static_cast<int>(r.chess->color) << ", Action: " << r.chess->enName << " (" << r.from.x << ", " << r.from.y << ") -> (" << r.to.x << ", " << r.to.y << ")" << std::endl;
 	}
 	return this->viewer.save(ostr.str(), hash);
