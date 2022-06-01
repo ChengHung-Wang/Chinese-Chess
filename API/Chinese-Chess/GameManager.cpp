@@ -42,18 +42,8 @@ std::string GameManager::setNew(std::string hash) {
 
 std::string GameManager::getRound(std::string hash) {
 	std::string modal = "";
-	int lastCheckmate = 0;
 	int checkmate = 0;
 	int winner = 0;
-	if (this->records.size() > 1) {
-		Record last = this->records[this->records.size() - 2];
-		if (isCheckmate(last.onBoard, ColorEnum::Black, last.board)) {
-			lastCheckmate = static_cast<int>(ColorEnum::Black);
-		}
-		if (isCheckmate(last.onBoard, ColorEnum::Red, last.board)) {
-			lastCheckmate = static_cast<int>(ColorEnum::Red);
-		}
-	}
 	//only one checkmate
 	if (isCheckmate(this->onBoard, ColorEnum::Black, this->board)) {
 		checkmate = static_cast<int>(ColorEnum::Black);
@@ -301,8 +291,10 @@ std::string GameManager::moveRandom(std::string hash) {
 			for (auto& e : canEat) {
 				if (abs(this->board.board[e.y][e.x]) == abs(static_cast<int>(ChessEnum::General))) {
 					Chess* eatChess = this->eaten(e);
-					addRecord(c, eatChess, c->pos.x, c->pos.y, e.x, e.y);
+					int fromX = c->pos.x;
+					int fromY = c->pos.y;
 					c->move(this->board, c->pos, e);
+					addRecord(c, eatChess, fromX, fromY, e.x, e.y);
 					return this->getRound(hash);
 				}
 
@@ -358,9 +350,10 @@ std::string GameManager::moveRandom(std::string hash) {
 					if (this->board.board[m.y][m.x] != 0) {
 						eatChess = this->eaten(m);
 					}
-
-					addRecord(c, eatChess, c->pos.x, c->pos.y, m.x, m.y);
+					int fromX = c->pos.x;
+					int fromY = c->pos.y;
 					c->move(this->board, c->pos, m);
+					addRecord(c, eatChess, fromX, fromY, m.x, m.y);
 					return this->getRound(hash);
 				}
 			}
