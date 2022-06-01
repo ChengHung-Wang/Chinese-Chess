@@ -30,6 +30,7 @@ export const useFlagStore = defineStore('flag', {
             let width = result.width;
             let offset = this.getOffset + 'px';
             if (x > -1 && y > -1) {
+                result.position = "absolute";
                 result.left = `calc(((${width} + ${offset}) / 2) * (-1 + 2 * ${x}))`;
                 result.top = `calc(((${width} + ${offset}) / 2) * (-1 + 2 * ${y}))`;
             }else {

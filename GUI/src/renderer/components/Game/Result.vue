@@ -18,7 +18,9 @@
             <el-button @click="replay()" class="w-100" type="primary" icon="el-icon-refresh" plain>再來一局</el-button>
           </div>
           <div class="col-3">
-            <el-button class="w-100" type="primary" icon="el-icon-video-play" plain>重放遊戲</el-button>
+            <el-button @click="$emit('getLogs'); displayLogReplay = true" class="w-100" type="primary" icon="el-icon-video-play" plain>
+              重放遊戲
+            </el-button>
           </div>
           <div class="col-3">
             <el-button @click="$emit('save')" class="w-100" type="primary" icon="el-icon-download" plain>儲存狀態</el-button>
@@ -33,6 +35,7 @@
 </template>
 <script>
 import { defineComponent, ref } from 'vue-demi'
+import { storeToRefs } from 'pinia'
 import { useGameStore } from "../../store/game"
 import Flag from "./Flag";
 
@@ -40,8 +43,10 @@ export default defineComponent({
   name: "records",
   setup() {
     const gameStore = ref(useGameStore());
+    const { displayLogReplay } = storeToRefs(useGameStore());
     return {
-      gameStore
+      gameStore,
+      displayLogReplay
     }
   },
   components: {

@@ -34,6 +34,8 @@
         flagStore,
         selectedFlag
       }
+    },
+    created() {
     }
   })
 </script>

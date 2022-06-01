@@ -6,6 +6,7 @@ export const useGlobalStore = defineStore('global', {
         return {
             process: childProcess.exec("../API/Chinese-Chess/cmake-build-debug/Chinese_Chess", {}),
             responseStacks: [],
+            responseStringCache: "", // if c++ return a very long json
             apiTimeOut: 2000
         }
     },

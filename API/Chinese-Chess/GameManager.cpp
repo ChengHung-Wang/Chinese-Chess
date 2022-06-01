@@ -42,78 +42,50 @@ std::string GameManager::setNew(std::string hash) {
 
 std::string GameManager::getRound(std::string hash) {
 	std::string modal = "";
-	int lastCheckmate = 0;
 	int checkmate = 0;
 	int winner = 0;
-	if (this->records.size() > 1) {
-		Record last = this->records[this->records.size() - 2];
-		if (isCheckmate(last.onBoard, ColorEnum::Black, last.board)) {
-			lastCheckmate = static_cast<int>(ColorEnum::Black);
-		}
-		if (isCheckmate(last.onBoard, ColorEnum::Red, last.board)) {
-			lastCheckmate = static_cast<int>(ColorEnum::Red);
-		}
-	}
 	//only one checkmate
 	if (isCheckmate(this->onBoard, ColorEnum::Black, this->board)) {
 		checkmate = static_cast<int>(ColorEnum::Black);
 		modal = "Black Checkmate";
-		if (lastCheckmate == static_cast<int>(ColorEnum::Black)) {
-			winner = static_cast<int>(ColorEnum::Black);
-			modal = "Black Win!";
-		}
-		else if (this->currentPlayer == ColorEnum::Red) { //last player
-			winner = static_cast<int>(ColorEnum::Black);
-			modal = "Black Win!";
-		}
 	}
-	if (winner == 0 && isCheckmate(this->onBoard, ColorEnum::Red, this->board)) {
+	if ((modal == "" || this->currentPlayer == ColorEnum::Red) && isCheckmate(this->onBoard, ColorEnum::Red, this->board)) { //last player is red
 		checkmate = static_cast<int>(ColorEnum::Red);
 		modal = "Red Checkmate";
-		if (lastCheckmate == static_cast<int>(ColorEnum::Red)) {
-			winner = static_cast<int>(ColorEnum::Red);
-			modal = "Red Win!";
-		}
-		else if (this->currentPlayer == ColorEnum::Black) { //last player
-			winner = static_cast<int>(ColorEnum::Red);
-			modal = "Red Win!";
-		}
 	}
 
-	if (!newGame) {
+	if (!this->newGame) {
 		this->currentPlayer = this->currentPlayer == ColorEnum::Red ? ColorEnum::Black : ColorEnum::Red; //change current player
 	}
 	else {
 		this->newGame = false;
 	}
 
+	for (auto& c : onBoard) {
+		if (c->id == ChessEnum::General) {
+			winner += this->board.board[c->pos.y][c->pos.x];
+		}
+	}
 	if (winner == 0) {
-		for (auto& c : onBoard) {
-			if (c->id == ChessEnum::General) {
-				winner += this->board.board[c->pos.y][c->pos.x];
-			}
+		//Stalemate
+		if (isStalemate(this->onBoard, ColorEnum::Black, this->board)) {
+			winner = static_cast<int>(ColorEnum::Red);
+			modal = "Red Win!";
 		}
-		if (winner == 0) {
-			//Stalemate
-			if (isStalemate(this->onBoard, ColorEnum::Black, this->board)) {
-				winner = static_cast<int>(ColorEnum::Red);
-				modal = "Red Win!";
-			}
-			if (winner == 0 && isStalemate(this->onBoard, ColorEnum::Red, this->board)) {
-				winner = static_cast<int>(ColorEnum::Black);
-				modal = "Black Win!";
-			}
+		if (winner == 0 && isStalemate(this->onBoard, ColorEnum::Red, this->board)) {
+			winner = static_cast<int>(ColorEnum::Black);
+			modal = "Black Win!";
 		}
-		else {
-			//Die
-			if (winner == 1) {
-				modal = "Red Win!";
-				winner = 1;
-			}
-			else if (winner == -1) {
-				modal = "Black Win!";
-				winner = 2;
-			}
+	}
+	else {
+		//Die
+		if (winner == 1) {
+			modal = "Red Win!";
+			winner = 1;
+		}
+		else if (winner == -1) {
+			modal = "Black Win!";
+			winner = 2;
 		}
 	}
 
@@ -228,6 +200,9 @@ std::string GameManager::getTime(std::string hash) {
 std::string GameManager::save(std::string hash) {
 	std::ostringstream ostr;
 	for (auto& r : this->records) {
+		if (r.chess == NULL) {
+			continue;
+		}
 		ostr << "Player: " << static_cast<int>(r.chess->color) << ", Action: " << r.chess->enName << " (" << r.from.x << ", " << r.from.y << ") -> (" << r.to.x << ", " << r.to.y << ")" << std::endl;
 	}
 	return this->viewer.save(ostr.str(), hash);
@@ -298,6 +273,131 @@ std::string GameManager::move(int fromX, int fromY, int toX, int toY, std::strin
 			c->move(this->board, Position(fromX, fromY), Position(toX, toY));
 			addRecord(c, eatChess, fromX, fromY, toX, toY);
 			return this->viewer.move(action, hash);
+		}
+	}
+}
+
+std::string GameManager::moveRandom(std::string hash) {
+	std::vector<Position> canMove;
+	std::vector<Position> canEat;
+	std::random_device rd;
+	std::default_random_engine rng(rd());
+	std::shuffle(onBoard.begin(), onBoard.end(), rng);
+
+	//優先將死
+	for (auto& c : this->onBoard) {
+		if (c->color == this->currentPlayer) {
+			canEat = c->canEat(this->board);
+			std::shuffle(canEat.begin(), canEat.end(), rng);
+			for (auto& e : canEat) {
+				if (abs(this->board.board[e.y][e.x]) == abs(static_cast<int>(ChessEnum::General))) {
+					int eUni = -1;
+					for (auto eatC : onBoard) {
+						if (e.x == eatC->pos.x && e.y == eatC->pos.y) {
+							eUni = eatC->uni;
+						}
+					}
+					int fromX = c->pos.x;
+					int fromY = c->pos.y;
+					c->move(this->board, c->pos, e);
+					// 一定要先動才吃，否則疊代會移位
+					Chess* eatChess = NULL;
+					auto it = std::begin(this->onBoard);
+					while (it != std::end(this->onBoard)) {
+						if ((*it)->uni == eUni) {
+							eatChess = *it;
+							it = this->onBoard.erase(it);
+							break;
+						}
+						else {
+							++it;
+						}
+					}
+					addRecord(c, eatChess, fromX, fromY, e.x, e.y);
+					return this->getRound(hash);
+				}
+			}
+		}
+	}
+
+	for (auto& c : this->onBoard) {
+		if (c->color == this->currentPlayer) {
+			canMove = c->canMove(this->board);
+			std::shuffle(canMove.begin(), canMove.end(), rng);
+			for (auto& m : canMove) {
+				if (m.x < 0 || m.x > 8 || m.y < 0 || m.y > 9) {
+					continue;
+				}
+				std::vector<Chess*> cOnBoard;
+				for (auto chess : onBoard) {
+					switch (chess->id)
+					{
+					case ChessEnum::General:
+						cOnBoard.push_back(new General(chess->pos, chess->color, chess->uni));
+						break;
+					case ChessEnum::Advisor:
+						cOnBoard.push_back(new Advisor(chess->pos, chess->color, chess->uni));
+						break;
+					case ChessEnum::Elephant:
+						cOnBoard.push_back(new Elephant(chess->pos, chess->color, chess->uni));
+						break;
+					case ChessEnum::Chariot:
+						cOnBoard.push_back(new Chariot(chess->pos, chess->color, chess->uni));
+						break;
+					case ChessEnum::Horse:
+						cOnBoard.push_back(new Horse(chess->pos, chess->color, chess->uni));
+						break;
+					case ChessEnum::Cannon:
+						cOnBoard.push_back(new Cannon(chess->pos, chess->color, chess->uni));
+						break;
+					case ChessEnum::Soldier:
+						cOnBoard.push_back(new Soldier(chess->pos, chess->color, chess->uni));
+						break;
+					}
+				}
+				Board cBoard;
+				for (int i = 0; i < 10; i++) {
+					for (int j = 0; j < 9; j++) {
+						cBoard.board[i][j] = board.board[i][j];
+					}
+				}
+				for (auto& cc : cOnBoard) {
+					if (cc->pos.x == c->pos.x && cc->pos.y == c->pos.y) {
+						cc->move(cBoard, cc->pos, m);
+					}
+				}
+				if (!isCheckmate(cOnBoard, this->currentPlayer == ColorEnum::Red ? ColorEnum::Black : ColorEnum::Red, cBoard)) {
+					int eUni = -1;
+					if (this->board.board[m.y][m.x] != 0) {
+						for (auto eatC : onBoard) {
+							if (m.x == eatC->pos.x && m.y == eatC->pos.y) {
+								eUni = eatC->uni;
+							}
+						}
+					}
+
+					int fromX = c->pos.x;
+					int fromY = c->pos.y;
+					c->move(this->board, c->pos, m);
+					// 一定要先動才吃，否則疊代會移位
+					Chess* eatChess = NULL;
+					if (eUni != -1) {
+						auto it = std::begin(this->onBoard);
+						while (it != std::end(this->onBoard)) {
+							if ((*it)->uni == eUni) {
+								eatChess = *it;
+								it = this->onBoard.erase(it);
+								break;
+							}
+							else {
+								++it;
+							}
+						}
+					}
+					addRecord(c, eatChess, fromX, fromY, m.x, m.y);
+					return this->getRound(hash);
+				}
+			}
 		}
 	}
 }

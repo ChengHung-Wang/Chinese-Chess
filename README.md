@@ -327,7 +327,12 @@ logs {hash}
                     "y": 0
                 },
                 // ...
-            ]
+            ],
+            "chessName": "馬",
+            "fromX": 0,
+            "fromY": 0,
+            "toX": 1,
+            "toY": 1
         },
         {
             "rTime": 580,
@@ -349,7 +354,11 @@ logs {hash}
                 },
                 // ...
             ],
-            // ...
+            "chessName": "馬",
+            "fromX": 0,
+            "fromY": 0,
+            "toX": 1,
+            "toY": 1
         },
     ],
     "hash": "hash"
@@ -371,6 +380,34 @@ show
  0  6  0  0  0  0  0  6  0
  0  0  0  0  0  0  0  0  0
  5  4  3  2  1  2  3  4  5
+```
+
+### AI移動當前回合的玩家的棋子(如果使用這個指令後不需要打 getRound)
+
+moveRandom {hash}
+
+```json
+{
+    "color": 1|2|0,
+    "checkmate": 1|2|0, //將軍
+    "winner": 0|1|2,
+    "modal": ""|"將軍"|"勝利",
+    "move": {
+        "id": 2,
+        "fromX": 0,
+        "fromY": 0,
+        "toX": 1,
+        "toY": 1,
+        "uni": 1
+    },
+    "delete": {
+        "id": 2,
+        "x": 3,
+        "y": 0,
+        "uni": 1
+    },
+    "hash": "hash"
+}
 ```
 
 ## 流程

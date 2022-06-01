@@ -2,36 +2,46 @@
   <div id="content" class="fcc">
     <div class="container">
       <div class="row">
-        <div class="col-12 fcc word-break">
-          <h1 class="text-center w-100">
+        <div class="col-12 fsc word-break">
+          <h1 class="text-left w-100">
             歡迎！
           </h1>
-          <p class="text-center">您希望怎麼開始遊戲？</p>
+          <p class="text-left">您希望怎麼開始遊戲？</p>
         </div>
-        <div class="col-6" @click="selected = true; hasConfig = true">
-          <el-badge :value="'已選'" class="badge-item w-100" type="success" :hidden="!(selected && hasConfig)">
-            <el-card class="box-card w-100" :shadow="selected && hasConfig ? 'always' : 'hover'">
-              <h4 class="text-center mb-3">從上次的地方開始</h4>
+        <div class="col-4" @click="selected = true; hasConfig = true; smartBattle = false;">
+          <el-badge :value="'已選'" class="badge-item w-100" type="success" :hidden="!(selected && hasConfig && !smartBattle)">
+            <el-card class="fst box-card w-100 el-card-1" :shadow="selected && hasConfig && !smartBattle ? 'always' : 'hover'">
+              <h4 class="text-left mb-4">從上次的地方開始</h4>
               <el-upload
-                  class="fcc"
+                  class="fsc"
                   ref="upload-sql"
                   action=''
                   accept=".txt,.sql, .js"
                   :auto-upload="false"
                   :on-change="changeFile"
                   :http-request="uploadHandler">
-                <el-button class="w-100" plain slot="trigger" size="small">
-                  <i class="el-icon-upload mr-1 font-size-14"></i>上傳Config
+                <el-button type="warning" class="w-100" plain slot="trigger">
+                  <i class="el-icon-upload mr-1 font-size-14"></i>上傳Running Config
                 </el-button>
               </el-upload>
             </el-card>
           </el-badge>
         </div>
-        <div class="col-6" @click="selected = true; hasConfig = false;">
-          <el-badge :value="'已選'" class="badge-item w-100" type="success" :hidden="!(selected && !hasConfig)">
-            <el-card class="box-card w-100" :shadow="selected && !hasConfig ? 'always' : 'hover'"  >
-              <h4 class="text-center mb-5">開始新的遊戲</h4>
-              <el-button type="primary" plain><i class="el-icon-right el-text-primary"></i></el-button>
+        <div class="col-4" @click="selected = true; hasConfig = false; smartBattle = false">
+          <el-badge :value="'已選'" class="badge-item w-100" type="success" :hidden="!(selected && !hasConfig && !smartBattle)">
+            <el-card class="box-card w-100 el-card-2" :shadow="selected && !hasConfig && !smartBattle ? 'always' : 'hover'"  >
+              <h4 class="text-left mb-3">開始新的遊戲</h4>
+              <span style="font-size: 25px; font-weight: 400; color: #409EFF">新的開始<br/>全由您來做主</span>
+            </el-card>
+          </el-badge>
+        </div>
+        <div class="col-4" @click="selected = true; hasConfig = false; smartBattle = true">
+          <el-badge :value="'已選'" class="badge-item w-100" type="success" :hidden="!(selected && !hasConfig && smartBattle)">
+            <el-card class="box-card w-100 el-card-3" :shadow="selected && !hasConfig && smartBattle ? 'always' : 'hover'"  >
+              <div class="fsc mb-3">
+                <h4 class="text-left mb-0 mr-3 w-auto">智能對戰</h4>
+              </div>
+              <span style="font-size: 25px; font-weight: 400; color: #67C23A">強大的威力<br/>來至強大的智能引擎</span>
             </el-card>
           </el-badge>
         </div>
@@ -45,11 +55,11 @@
     </div>
   </div>
 </template>
-
 <script>
   import { ref, defineComponent } from 'vue-demi'
   import { useGlobalStore } from "../store/global";
   import { useGameStore } from "../store/game";
+  import {storeToRefs} from "pinia";
 
   export default defineComponent({
     name: 'landing-page',
@@ -57,15 +67,19 @@
       return {
         configText: '',
         hasConfig: false,
-        selected: false
+        selected: false,
+        smartBattle: false
       }
     },
     setup() {
       const globalStore = ref(useGlobalStore());
-      const gameStore = ref(useGameStore());
+      const gameStore = ref(useGameStore())
+      const smartMode = storeToRefs(useGameStore());
+
       return {
         globalStore,
-        gameStore
+        gameStore,
+        smartMode
       }
     },
     created() {
@@ -123,7 +137,6 @@
           this.globalStore.responseStacks[thisResponseIndex].completed = true;
           this.globalStore.responseStacks[thisResponseIndex].callback(data);
         }
-        console.log('receiveData in LandingPage');
       },
       // ************************************
       // *************** API ****************
@@ -159,6 +172,9 @@
                 this.gameStore.flags = response.chess;
                 this.gameStore.rTime = response.rTime;
                 this.gameStore.bTime = response.bTime;
+                if (this.smartBattle) {
+                  this.gameStore.smartMode = true;
+                }
                 this.$router.push("/game");
               }
             });
@@ -202,11 +218,20 @@
     height: 100vh;
   }
   .el-card {
-    border: 2px solid #c6e2ff;
+    border: 2px solid #dddddd;
     height: 200px;
+    background-position: right;
+    background-size: contain;
+    background-repeat: no-repeat;
   }
-  button {
-    width: 100%!important;
+  .el-card-1 {
+    background-image: url("../assets/images/corner-1.png");
+  }
+  .el-card-2 {
+    background-image: url("../assets/images/corner-2.png");
+  }
+  .el-card-3 {
+    background-image: url("../assets/images/corner-3.png");
   }
 </style>
 <style>

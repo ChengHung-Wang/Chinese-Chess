@@ -4,6 +4,8 @@
 #include <vector>
 #include <regex>
 #include <sstream>
+#include <algorithm>
+#include <random>
 #include "Chess.h"
 #include "Viewer.h"
 #include "Record.h"
@@ -55,6 +57,8 @@ public:
 		onBoard.push_back(new Soldier(Position(4, 6), ColorEnum::Red, 30));
 		onBoard.push_back(new Soldier(Position(6, 6), ColorEnum::Red, 31));
 		onBoard.push_back(new Soldier(Position(8, 6), ColorEnum::Red, 32));
+
+		this->addRecord(NULL, NULL, 0, 0, 0, 0); //新增初始紀錄
 	}
 
 	std::string setFile(std::string hash);
@@ -66,6 +70,7 @@ public:
 	std::string giveUp(std::string hash);
 	std::string logs(std::string hash);
 	std::string move(int fromX, int fromY, int toX, int toY, std::string hash);
+	std::string moveRandom(std::string hash);
 	void addRecord(Chess* chess, Chess* eatChess, int fromX, int fromY, int toX, int toY);
 	bool isCheckmate(std::vector<Chess*> onBoard, ColorEnum color, Board board);
 	bool isStalemate(std::vector<Chess*> onBoard, ColorEnum color, Board board);
