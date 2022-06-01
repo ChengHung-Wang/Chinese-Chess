@@ -55,6 +55,9 @@ public:
 		onBoard.push_back(new Soldier(Position(4, 6), ColorEnum::Red, 30));
 		onBoard.push_back(new Soldier(Position(6, 6), ColorEnum::Red, 31));
 		onBoard.push_back(new Soldier(Position(8, 6), ColorEnum::Red, 32));
+
+		Record r(this->onBoard, this->board, NULL, NULL, Position(00, 0), Position(0, 0), this->rTime, this->bTime);
+		records.push_back(r);
 	}
 
 	std::string setFile(std::string hash);
