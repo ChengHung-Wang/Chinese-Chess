@@ -22,6 +22,8 @@ public:
 
 public:
 	GameManager() {
+		srand(time(NULL));
+
 		onBoard.push_back(new General(Position(4, 0), ColorEnum::Black, 1));
 		onBoard.push_back(new Advisor(Position(3, 0), ColorEnum::Black, 2));
 		onBoard.push_back(new Advisor(Position(5, 0), ColorEnum::Black, 3));
@@ -69,6 +71,7 @@ public:
 	std::string giveUp(std::string hash);
 	std::string logs(std::string hash);
 	std::string move(int fromX, int fromY, int toX, int toY, std::string hash);
+	std::string moveRandom(std::string hash);
 	void addRecord(Chess* chess, Chess* eatChess, int fromX, int fromY, int toX, int toY);
 	bool isCheckmate(std::vector<Chess*> onBoard, ColorEnum color, Board board);
 	bool isStalemate(std::vector<Chess*> onBoard, ColorEnum color, Board board);

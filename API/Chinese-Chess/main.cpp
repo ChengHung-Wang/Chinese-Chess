@@ -46,5 +46,8 @@ int main() {
 		else if (opt == "logs") {
 			std::cout << gm.logs(hash);
 		}
+		else if (opt == "moveRandom") {
+			std::cout << gm.moveRandom(hash);
+		}
 	}
 }

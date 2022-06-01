@@ -80,7 +80,7 @@ std::string GameManager::getRound(std::string hash) {
 		}
 	}
 
-	if (!newGame) {
+	if (!this->newGame) {
 		this->currentPlayer = this->currentPlayer == ColorEnum::Red ? ColorEnum::Black : ColorEnum::Red; //change current player
 	}
 	else {
@@ -300,6 +300,75 @@ std::string GameManager::move(int fromX, int fromY, int toX, int toY, std::strin
 			return this->viewer.move(action, hash);
 		}
 	}
+}
+
+std::string GameManager::moveRandom(std::string hash) {
+	bool move = false;
+	std::vector<Position> canMove;
+	std::random_shuffle(onBoard.begin(), onBoard.end());
+	for (auto& c : this->onBoard) {
+		if (move) {
+			break;
+		}
+		if (c->color == this->currentPlayer) {
+			canMove = c->canMove(this->board);
+			if (canMove.size() != 0) { //一定有，否則在之前 getRound 遊戲就會結束了
+				std::random_shuffle(canMove.begin(), canMove.end());
+				for (auto& m : canMove) {
+					std::vector<Chess*> cOnBoard;
+					for (auto chess : onBoard) {
+						switch (chess->id)
+						{
+						case ChessEnum::General:
+							cOnBoard.push_back(new General(chess->pos, chess->color, chess->uni));
+							break;
+						case ChessEnum::Advisor:
+							cOnBoard.push_back(new Advisor(chess->pos, chess->color, chess->uni));
+							break;
+						case ChessEnum::Elephant:
+							cOnBoard.push_back(new Elephant(chess->pos, chess->color, chess->uni));
+							break;
+						case ChessEnum::Chariot:
+							cOnBoard.push_back(new Chariot(chess->pos, chess->color, chess->uni));
+							break;
+						case ChessEnum::Horse:
+							cOnBoard.push_back(new Horse(chess->pos, chess->color, chess->uni));
+							break;
+						case ChessEnum::Cannon:
+							cOnBoard.push_back(new Cannon(chess->pos, chess->color, chess->uni));
+							break;
+						case ChessEnum::Soldier:
+							cOnBoard.push_back(new Soldier(chess->pos, chess->color, chess->uni));
+							break;
+						}
+					}
+					Board cBoard;
+					for (int i = 0; i < 10; i++) {
+						for (int j = 0; j < 9; j++) {
+							cBoard.board[i][j] = board.board[i][j];
+						}
+					}
+					for (auto& cc : cOnBoard) {
+						if (cc->pos.x == c->pos.x && cc->pos.y == c->pos.y) {
+							cc->move(cBoard, cc->pos, m);
+						}
+					}
+					if (!isCheckmate(cOnBoard, this->currentPlayer == ColorEnum::Red ? ColorEnum::Black : ColorEnum::Red, cBoard)) {
+						move = true;
+						Chess* eatChess = NULL;
+						if (this->board.board[m.y][m.x] != 0) {
+							eatChess = this->eaten(m);
+						}
+
+						c->move(this->board, c->pos, m);
+						addRecord(c, eatChess, c->pos.x, c->pos.y, m.x, m.y);
+						break;
+					}
+				}
+			}
+		}
+	}
+	return this->getRound(hash);
 }
 
 Chess* GameManager::eaten(Position eatPos) {
