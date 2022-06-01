@@ -241,22 +241,7 @@ export default defineComponent({
         token: token,
         result: null,
         callback: async (response) => {
-          /*
-            move": {
-              "id": 2,
-              "fromX": 0,
-              "fromY": 0,
-              "toX": 1,
-              "toY": 1,
-              "uni": 1
-            },
-            "delete": {
-              "id": 2,
-              "x": 3,
-              "y": 0,
-              "uni": 1
-            }
-          */
+          console.log(response, "getRound");
           // remove flag
           if (response.delete) {
             this.gameStore.flags = JSON.parse(JSON.stringify(this.gameStore.flags.map(flag => {
@@ -289,7 +274,7 @@ export default defineComponent({
               showClose: true
             });
           }
-          if (this.smartMode && this.gameStore.actionAble === 2) {
+          if (this.smartMode && this.gameStore.actionAble === 2 && this.gameStore.winner === 0) {
             this.gameStore.loadingText = "智能引擎思考中"
             this.loading = true;
             setTimeout(async () => {
@@ -307,19 +292,9 @@ export default defineComponent({
       await this.globalStore.waitAllReqCompleted();
       const thisFlag = this.gameStore.flags[this.gameStore.getFlagIndex(position.x, position.y, position.uni)];
       if (this.gameStore.actionAble == 0 || thisFlag.color != this.gameStore.getNumColor(this.gameStore.actionAble)) {
-        // this.$notify({
-        //   title: 'flag not valid in gatMove',
-        //   message: `thisFlag.color: ${thisFlag.color}, getNumColor: ${this.gameStore.getNumColor(this.gameStore.actionAble)}, actionAble: ${this.gameStore.actionAble}`,
-        //   position: 'bottom-left'
-        // });
         this.$message.error("不可移動的棋子");
         return ;
       }else {
-        // this.$notify({
-        //   title: 'getMove debug',
-        //   message: `(${position.x}, ${position.y}) uni: ${position.uni}`,
-        //   position: 'bottom-left'
-        // });
         this.gameStore.selectedFlag = {
           x: position.x,
           y: position.y,
