@@ -287,12 +287,14 @@ std::string GameManager::move(int fromX, int fromY, int toX, int toY, std::strin
 std::string GameManager::moveRandom(std::string hash) {
 	std::vector<Position> canMove;
 	std::vector<Position> canEat;
-	std::random_shuffle(onBoard.begin(), onBoard.end());
+	std::random_device rd;
+	std::default_random_engine rng(rd());
+	std::shuffle(onBoard.begin(), onBoard.end(), rng);
 
 	for (auto& c : this->onBoard) {
 		if (c->color == this->currentPlayer) {
 			canEat = c->canEat(this->board);
-			std::random_shuffle(canEat.begin(), canEat.end());
+			std::shuffle(canEat.begin(), canEat.end(), rng);
 			for (auto& e : canEat) {
 				if (abs(this->board.board[e.y][e.x]) == abs(static_cast<int>(ChessEnum::General))) {
 					Chess* eatChess = this->eaten(e);
@@ -308,7 +310,7 @@ std::string GameManager::moveRandom(std::string hash) {
 	for (auto& c : this->onBoard) {
 		if (c->color == this->currentPlayer) {
 			canMove = c->canMove(this->board);
-			std::random_shuffle(canMove.begin(), canMove.end());
+			std::shuffle(canMove.begin(), canMove.end(), rng);
 			for (auto& m : canMove) {
 				std::vector<Chess*> cOnBoard;
 				for (auto chess : onBoard) {

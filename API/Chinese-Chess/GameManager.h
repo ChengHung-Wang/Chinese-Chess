@@ -4,6 +4,8 @@
 #include <vector>
 #include <regex>
 #include <sstream>
+#include <algorithm>
+#include <random>
 #include "Chess.h"
 #include "Viewer.h"
 #include "Record.h"
@@ -22,8 +24,6 @@ public:
 
 public:
 	GameManager() {
-		srand(time(NULL));
-
 		onBoard.push_back(new General(Position(4, 0), ColorEnum::Black, 1));
 		onBoard.push_back(new Advisor(Position(3, 0), ColorEnum::Black, 2));
 		onBoard.push_back(new Advisor(Position(5, 0), ColorEnum::Black, 3));
