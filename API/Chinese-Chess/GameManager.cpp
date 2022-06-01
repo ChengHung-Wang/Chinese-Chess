@@ -291,10 +291,28 @@ std::string GameManager::moveRandom(std::string hash) {
 			std::shuffle(canEat.begin(), canEat.end(), rng);
 			for (auto& e : canEat) {
 				if (abs(this->board.board[e.y][e.x]) == abs(static_cast<int>(ChessEnum::General))) {
-					Chess* eatChess = this->eaten(e);
+					int eUni = -1;
+					for (auto eatC : onBoard) {
+						if (e.x == eatC->pos.x && e.y == eatC->pos.y) {
+							eUni = eatC->uni;
+						}
+					}
 					int fromX = c->pos.x;
 					int fromY = c->pos.y;
 					c->move(this->board, c->pos, e);
+					// 一定要先動才吃，否則疊代會移位
+					Chess* eatChess = NULL;
+					auto it = std::begin(this->onBoard);
+					while (it != std::end(this->onBoard)) {
+						if ((*it)->uni == eUni) {
+							eatChess = *it;
+							it = this->onBoard.erase(it);
+							break;
+						}
+						else {
+							++it;
+						}
+					}
 					addRecord(c, eatChess, fromX, fromY, e.x, e.y);
 					return this->getRound(hash);
 				}
@@ -349,13 +367,33 @@ std::string GameManager::moveRandom(std::string hash) {
 					}
 				}
 				if (!isCheckmate(cOnBoard, this->currentPlayer == ColorEnum::Red ? ColorEnum::Black : ColorEnum::Red, cBoard)) {
-					Chess* eatChess = NULL;
+					int eUni = -1;
 					if (this->board.board[m.y][m.x] != 0) {
-						eatChess = this->eaten(m);
+						for (auto eatC : onBoard) {
+							if (m.x == eatC->pos.x && m.y == eatC->pos.y) {
+								eUni = eatC->uni;
+							}
+						}
 					}
+
 					int fromX = c->pos.x;
 					int fromY = c->pos.y;
 					c->move(this->board, c->pos, m);
+					// 一定要先動才吃，否則疊代會移位
+					Chess* eatChess = NULL;
+					if (eUni != -1) {
+						auto it = std::begin(this->onBoard);
+						while (it != std::end(this->onBoard)) {
+							if ((*it)->uni == eUni) {
+								eatChess = *it;
+								it = this->onBoard.erase(it);
+								break;
+							}
+							else {
+								++it;
+							}
+						}
+					}
 					addRecord(c, eatChess, fromX, fromY, m.x, m.y);
 					return this->getRound(hash);
 				}
