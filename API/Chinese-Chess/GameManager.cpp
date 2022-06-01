@@ -294,7 +294,7 @@ std::string GameManager::moveRandom(std::string hash) {
 			canEat = c->canEat(this->board);
 			std::random_shuffle(canEat.begin(), canEat.end());
 			for (auto& e : canEat) {
-				if (this->board.board[e.y][e.x] == abs(static_cast<int>(ChessEnum::General))) {
+				if (abs(this->board.board[e.y][e.x]) == abs(static_cast<int>(ChessEnum::General))) {
 					Chess* eatChess = this->eaten(e);
 					addRecord(c, eatChess, c->pos.x, c->pos.y, e.x, e.y);
 					c->move(this->board, c->pos, e);
