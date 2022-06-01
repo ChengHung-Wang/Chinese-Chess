@@ -284,6 +284,7 @@ std::string GameManager::moveRandom(std::string hash) {
 	std::default_random_engine rng(rd());
 	std::shuffle(onBoard.begin(), onBoard.end(), rng);
 
+	//Àu¥ý±N¦º
 	for (auto& c : this->onBoard) {
 		if (c->color == this->currentPlayer) {
 			canEat = c->canEat(this->board);
@@ -297,7 +298,6 @@ std::string GameManager::moveRandom(std::string hash) {
 					addRecord(c, eatChess, fromX, fromY, e.x, e.y);
 					return this->getRound(hash);
 				}
-
 			}
 		}
 	}
@@ -307,6 +307,9 @@ std::string GameManager::moveRandom(std::string hash) {
 			canMove = c->canMove(this->board);
 			std::shuffle(canMove.begin(), canMove.end(), rng);
 			for (auto& m : canMove) {
+				if (m.x < 0 || m.x > 8 || m.y < 0 || m.y > 9) {
+					continue;
+				}
 				std::vector<Chess*> cOnBoard;
 				for (auto chess : onBoard) {
 					switch (chess->id)
