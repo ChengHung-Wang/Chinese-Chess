@@ -19,10 +19,10 @@
       <i class="el-icon-download"></i>
       <span slot="title">儲存狀態</span>
     </el-menu-item>
-    <el-menu-item index="5">
-      <i class="el-icon-refresh-right"></i>
-      <span slot="title">查看日誌</span>
-    </el-menu-item>
+<!--    <el-menu-item index="5">-->
+<!--      <i class="el-icon-refresh-right"></i>-->
+<!--      <span slot="title">查看日誌</span>-->
+<!--    </el-menu-item>-->
     <hr>
     <el-menu-item index="6">
       <el-switch

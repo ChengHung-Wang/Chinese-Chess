@@ -15,7 +15,11 @@ p {
 .ml-15 {margin-left: 15px;}
 .mr-15 {margin-right: 15px;}
 .mb-15 {margin-bottom: 15px;}
-
+.fst {
+    display: flex;
+    align-items: start;
+    justify-content: flex-start;
+}
 .fsc {
     display: flex;
     align-items: center;
@@ -163,4 +167,12 @@ p {
 }
 .w-33 {
     width: 33.33333333% !important;
+}
+
+#window-records {
+    height: 95vh!important;
+    margin-top: 5px;
+}
+.el-switch__core {
+    height: 20.01px!important;
 }

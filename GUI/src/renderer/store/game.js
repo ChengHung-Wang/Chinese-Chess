@@ -16,13 +16,16 @@ export const useGameStore = defineStore('game', {
         bTime: 0,
         mate: 0,
         displayHint: false,
-        loading: true,
+        loading: ref(true),
         actionAble: 0, // 0 => not set, 1 || 2 => member color
         stop: true, // It will turn to ture when the game being end or replaying log or landingPage
         winner: 0, // 0 means the game hasn't stop.( 0 | 1 | 2 ),
         modal: "", // return by API,
         memePlay: ref(false), // play meme background
-        selectedFlag: ref({x: null, y: null, uni: null}) // selected flag, {x: NULL, y: NULL} || {x: Number, y: Number, uni: Number}
+        selectedFlag: ref({x: null, y: null, uni: null}), // selected flag, {x: NULL, y: NULL} || {x: Number, y: Number, uni: Number}
+        displayLogReplay: ref(false),
+        smartMode: ref(false),
+        loadingText: "正在為您的環境生成最佳配置"
     }),
     getters: {
         flagsHasInit: (state) => { // check flag has init
@@ -92,6 +95,8 @@ export const useGameStore = defineStore('game', {
             this.modal =  ""; // return by API
             this.memePlay =  ref(false); // play meme background
             this.selectedFlag =  ref({x: null, y: null, uni: null}); // selected flag, {x: NULL, y: NULL} || {x: Number, y: Number}
+            this.smartMode =  ref(false);
+            this.loadingText = "正在為您的環境生成最佳配置";
         }
     }
 });

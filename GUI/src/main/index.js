@@ -25,7 +25,7 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
-    }
+    },
   })
 
   mainWindow.loadURL(winURL)
@@ -33,6 +33,7 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+  mainWindow.webContents.closeDevTools();
 }
 
 app.on('ready', createWindow)

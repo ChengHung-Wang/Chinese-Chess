@@ -1,9 +1,12 @@
 <template>
   <div id="content">
-    <div class="container-fluid game" v-loading="gameStore.loading" v-bind:class="{'play-meme': memePlay}">
+    <div class="container-fluid game"
+         v-loading="gameStore.loading"
+         v-bind:class="{'play-meme': memePlay}"
+         :element-loading-text="gameStore.loadingText">
       <div class="row">
         <div class="col-3">
-          <Menu @giveUp="giveUp" @save="save"/>
+          <Menu @giveUp="giveUp" @save="save" />
         </div>
         <div class="col-9 board-frame">
           <div>
@@ -22,7 +25,10 @@
                 :visible.sync="gameStore.winner != 0"
                 :show-close="false"
                 width="80%">
-              <Result @save="save" />
+              <Result @save="save" @getLogs="getLogs" />
+            </el-dialog>
+            <el-dialog title="Log Replay" :visible.sync="displayLogReplay" :fullscreen="true">
+              <Records />
             </el-dialog>
           </div>
         </div>
@@ -44,10 +50,12 @@ import Board from "./Game/Board";
 import Flag from "./Game/Flag";
 import Hint from "./Game/Hint";
 import Result from "./Game/Result";
+import Records from "./Game/Records";
 import { storeToRefs } from 'pinia';
 import { useGlobalStore } from "../store/global";
 import { useGameStore } from "../store/game";
 import { useBoardStore } from "../store/Game/board";
+import { useRecordsStore } from "../store/Game/records";
 import { defineComponent, ref } from 'vue-demi';
 
 export default defineComponent({
@@ -61,12 +69,19 @@ export default defineComponent({
     const globalStore = ref(useGlobalStore());
     const gameStore = ref(useGameStore());
     const boardStore = ref(useBoardStore());
-    const { memePlay } = storeToRefs(useGameStore());
+    const recordsStore = ref(useRecordsStore());
+    const { memePlay, displayLogReplay, smartMode, loading } = storeToRefs(useGameStore());
+    const { logs } = storeToRefs(useRecordsStore());
     return {
       globalStore,
       gameStore,
       boardStore,
+      recordsStore,
       memePlay,
+      displayLogReplay,
+      logs,
+      loading,
+      smartMode
     }
   },
   components: {
@@ -74,7 +89,8 @@ export default defineComponent({
     Menu,
     Flag,
     Hint,
-    Result
+    Result,
+    Records
   },
   created() {
     this.gameStore.loading = true;
@@ -126,18 +142,22 @@ export default defineComponent({
         this.gameStore.stop = false;
         this.loopEvent();
         await this.getRound();
-      }, 1000);
+      }, 2000);
     }
   },
   methods: {
     // I don't have any more time to plan the architecture
     receiveData(response) {
-      const data = JSON.parse(response);
-      let thisResponseIndex = this.globalStore.responseStacks.map(e => e.token).indexOf(data.hash);
-      if (thisResponseIndex > -1 && !this.globalStore.responseStacks[thisResponseIndex].completed) {
-        this.globalStore.responseStacks[thisResponseIndex].completed = true;
-        this.globalStore.responseStacks[thisResponseIndex].callback(data);
-        console.log(data);
+      try {
+        const data = JSON.parse(this.globalStore.responseStringCache + response);
+        let thisResponseIndex = this.globalStore.responseStacks.map(e => e.token).indexOf(data.hash);
+        if (thisResponseIndex > -1 && !this.globalStore.responseStacks[thisResponseIndex].completed) {
+          this.globalStore.responseStringCache = "";
+          this.globalStore.responseStacks[thisResponseIndex].completed = true;
+          this.globalStore.responseStacks[thisResponseIndex].callback(data);
+        }
+      }catch (e) {
+        this.globalStore.responseStringCache += response; // push some json string to cache
       }
     },
     loopEvent() {
@@ -173,7 +193,9 @@ export default defineComponent({
     async getTime() {
       let token = this.globalStore.getHash();
       let commend = `getTime ${token}`;
-      console.log(commend);
+
+      await this.globalStore.waitAllReqCompleted();
+
       this.globalStore.process.stdin.write(commend + '\n');
       this.gameStore.flagToken = token;
       this.globalStore.responseStacks.push({
@@ -191,7 +213,6 @@ export default defineComponent({
     async giveUp() {
       let token = this.globalStore.getHash();
       let commend = `giveUp ${token}`;
-      console.log(commend);
 
       await this.globalStore.waitAllReqCompleted();
 
@@ -210,7 +231,6 @@ export default defineComponent({
     async getRound() {
       let token = this.globalStore.getHash();
       let commend = `getRound ${token}`;
-      console.log(commend);
 
       await this.globalStore.waitAllReqCompleted();
 
@@ -220,7 +240,7 @@ export default defineComponent({
         completed: false,
         token: token,
         result: null,
-        callback: (response) => {
+        callback: async (response) => {
           /*
             move": {
               "id": 2,
@@ -269,8 +289,16 @@ export default defineComponent({
               showClose: true
             });
           }
-          // hide loading animation
-          this.gameStore.loading = false;
+          if (this.smartMode && this.gameStore.actionAble === 2) {
+            this.gameStore.loadingText = "智能引擎思考中"
+            this.loading = true;
+            setTimeout(async () => {
+              await this.smartMove();
+            }, 1500);
+          }else {
+            // hide loading animation
+            this.loading = false;
+          }
         }
       });
     },
@@ -301,9 +329,6 @@ export default defineComponent({
       let token = this.globalStore.getHash();
       // let commend = `getMove ${token} ${thisFlag.x} ${thisFlag.y}`;
       let commend = `getMove ${token} ${position.uni}`;
-      console.log(commend);
-
-
       this.globalStore.process.stdin.write(commend + '\n');
       this.gameStore.flagToken = token;
       this.globalStore.responseStacks.push({
@@ -311,7 +336,6 @@ export default defineComponent({
             token: token,
             result: null,
             callback: (response) => {
-              // console.log('run getMove callback');
               this.gameStore.moveAble = response.canMove;
               this.gameStore.replaceAble = response.canEat;
             }
@@ -321,21 +345,16 @@ export default defineComponent({
       let beforePosition = this.gameStore.selectedFlag;
       let token = this.globalStore.getHash();
       let commend = `move ${token} ${beforePosition.x} ${beforePosition.y} ${position.x} ${position.y}`;
-      console.log(commend);
+
       await this.globalStore.waitAllReqCompleted();
+
       this.globalStore.process.stdin.write(commend + '\n');
-      // this.$notify({
-      //   title: 'move debug',
-      //   message: `move ${token} ${beforePosition.x} ${beforePosition.y} ${position.x} ${position.y}`,
-      //   position: 'bottom-left'
-      // });
       this.gameStore.flagToken = token;
       this.globalStore.responseStacks.push({
         completed: false,
         token: token,
         result: null,
         callback: async (response) => {
-          console.log(response, 'move callback')
           await this.getRound();
           this.gameStore.moveAble = [];
           this.gameStore.replaceAble = [];
@@ -345,7 +364,6 @@ export default defineComponent({
     async save() {
       let token = this.globalStore.getHash();
       let commend = `save ${token}`;
-      console.log(commend);
 
       await this.globalStore.waitAllReqCompleted();
 
@@ -364,6 +382,73 @@ export default defineComponent({
               type: 'success'
             });
           }
+        }
+      });
+    },
+    async getLogs() {
+      let token = this.globalStore.getHash();
+      let commend = `logs ${token}`;
+
+      await this.globalStore.waitAllReqCompleted();
+
+      this.globalStore.process.stdin.write(commend + '\n');
+      this.globalStore.responseStacks.push({
+        completed: false,
+        token: token,
+        result: null,
+        callback: async (response) => {
+          this.logs = response.logs;
+        }
+      });
+    },
+    async smartMove() {
+      this.gameStore.loading = true;
+      let token = this.globalStore.getHash();
+      let commend = `moveRandom ${token}`;
+
+      await this.globalStore.waitAllReqCompleted();
+
+      this.globalStore.process.stdin.write(commend + '\n');
+      this.globalStore.responseStacks.push({
+        completed: false,
+        token: token,
+        result: null,
+        callback: async (response) => {
+          console.log(response);
+          // remove flag
+          if (response.delete) {
+            this.gameStore.flags = JSON.parse(JSON.stringify(this.gameStore.flags.map(flag => {
+              if (flag.uni === response.delete.uni) {
+                flag.disabled = true;
+              }
+              return flag;
+            })));
+          }
+
+          // change flag position
+          if (response.move) {
+            this.gameStore.flags[this.gameStore.flags.map(e => e.uni).indexOf(response.move.uni)].x = response.move.toX;
+            this.gameStore.flags[this.gameStore.flags.map(e => e.uni).indexOf(response.move.uni)].y = response.move.toY;
+            this.gameStore.selectedFlag = {x: null, y: null, uni: null};
+          }
+
+          // update actionAble
+          this.gameStore.actionAble = response.color;
+          // update winner
+          this.gameStore.winner = response.winner;
+          // update modal
+          this.gameStore.modal = response.modal;
+          // update mate
+          this.gameStore.mate = response.checkmate;
+          if (this.gameStore.mate > 0) {
+            this.$message({
+              message: `${this.gameStore.modal}`,
+              type: 'warning',
+              showClose: true
+            });
+          }
+          // hide loading animation
+          this.gameStore.loading = false;
         }
       });
     }
