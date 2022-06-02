@@ -241,7 +241,6 @@ export default defineComponent({
         token: token,
         result: null,
         callback: async (response) => {
-          console.log(response, "getRound");
           // remove flag
           if (response.delete) {
             this.gameStore.flags = JSON.parse(JSON.stringify(this.gameStore.flags.map(flag => {
@@ -389,7 +388,6 @@ export default defineComponent({
         token: token,
         result: null,
         callback: async (response) => {
-          console.log(response);
           // remove flag
           if (response.delete) {
             this.gameStore.flags = JSON.parse(JSON.stringify(this.gameStore.flags.map(flag => {
