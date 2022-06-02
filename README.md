@@ -2,14 +2,54 @@
 
 ## 前言
 
-由於我們的前端架構做的太複雜了，在我的電腦上也不容易建置，僅能在開發的同學的 Mac 上測試執行，因此如果助教想要測試我們程式的正確性，可以透過以下提供的資訊來開啟 Visual Studio 用 CLI 來測試。
+為了您的使用體驗，本專案的GUI限制於只能在macOS中運行，但API則不在此限。
+使用方式請遵循下方的描述。
 
-### Script 流程
+
+## Preview
+
+<img src="./Preview/landing_page.png">
+<img src="./Preview/截屏2022-05-26 15.12.26.png" alt="">
+
+
+## API
+
+API由Visual Studio開發與編譯，由JetBrain所出品的CLion產出可供macOS執行的Binary檔案。
+如果不希望在CLion上運行，可以使用Visual Studio對c++ API偵錯。
+
+
+## GUI
+
+使用electron-vue開發，目前沒有辦法打包成macOS的執行檔（Apple的安全政策限制），為了確保使用體驗，所以限制該專案僅能在macOS運行。
+
+### macOS GUI開發環境啟動方法
+
+安裝軟件、插件清單
+- Command Line Tools for Xcode
+- nodeJS (建議版本為14.4的版本)
+
+在GUI資料夾下方輸入以下指令（建議先刪除node_modules後操作）
+```bash
+npm install
+```
+如果在此之中出現什麼報錯，通常可以在爬文後得到解答
+
+
+```bash
+npm run dev
+```
+接著，您的計算機應該就會自動為您開啟GUI的窗口。
+
+---
+
+## API 調用流程
 
 ```text
 show 顯示目前棋盤的布置
 
 對局流程 setNew | setFile -> getRound -> getMove -> move -> (回到 getRound -> getMove ....)
+
+AI 對局流程 setNew -> getRound -> getMove -> move -> (getRound -> moveRandom )-> (getMove -> move) -> (getRound -> moveRandom)-> (getMove -> move)...
 
 giveUp 投降，直接顯示勝負結果
 
@@ -70,7 +110,7 @@ show
 
 ```
 
-## 定義
+## API定義
 
 ### 棋的名稱
 
