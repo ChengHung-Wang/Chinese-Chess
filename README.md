@@ -7,6 +7,7 @@
 
 
 ## Preview
+<iframe width="560" height="315" src="https://www.youtube.com/embed/tx577Rz8QVY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <img src="./Preview/landing_page.png">
 <img src="./Preview/截屏2022-05-26 15.12.26.png" alt="">
